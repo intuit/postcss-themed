@@ -128,13 +128,8 @@
   },
   "auto": {
     "plugins": [
-      [
-        "npm",
-        {
-          "setRcToken": false
-        },
-        "released"
-      ]
+      "npm",
+      "released"
     ]
   },
   "prettier": {
