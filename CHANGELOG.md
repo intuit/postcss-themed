@@ -1,3 +1,22 @@
+# v1.0.0 (Thu Nov 07 2019)
+
+#### 💥  Breaking Change
+
+- add badges [#1](https://github.com/intuit/postcss-themed/pull/1) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### ⚠️  Pushed to master
+
+- fix lint and add debug logger  ([@hipstersmoothie](https://github.com/hipstersmoothie))
+- unscope  ([@hipstersmoothie](https://github.com/hipstersmoothie))
+- fix test  ([@hipstersmoothie](https://github.com/hipstersmoothie))
+- add lock file  ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v0.3.0 (Fri Oct 25 2019)
 
 #### 🚀 Enhancement
