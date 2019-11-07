@@ -1,6 +1,15 @@
-# PostCSS Themed
+<div align="center">
+  <h1>postcss-themed</h1>
+  <p>
+    PostCSS plugin for adding multiple themes to CSS files
+  </p>
+  <div> 
+    <a href="https://circleci.com/gh/intuit/postcss-themed"><img src="https://circleci.com/gh/intuit/postcss-themed.svg?style=svg"></a>
+    <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="styled with prettier" /></a>
+  </div>
+</div>
 
-[PostCSS] plugin for adding multiple themes to CSS files.
+<br />
 
 Will create class overrides for legacy browsers and use CSS variables for modern browsers.
 

@@ -17,11 +17,11 @@
   },
   "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/design-systems/postcss-themed",
+  "repository": "https://github.com/intuit/postcss-themed",
   "bugs": {
-    "url": "https://github.com/design-systems/postcss-themed/issues"
+    "url": "https://github.com/intuit/postcss-themed/issues"
   },
-  "homepage": "https://github.com/design-systems/postcss-themed",
+  "homepage": "https://github.com/intuit/postcss-themed",
   "dependencies": {
     "browserslist": "^4.7.0",
     "caniuse-api": "^3.0.0",
@@ -128,13 +128,8 @@
   },
   "auto": {
     "plugins": [
-      [
-        "npm",
-        {
-          "setRcToken": false
-        },
-        "released"
-      ]
+      "npm",
+      "released"
     ]
   },
   "prettier": {

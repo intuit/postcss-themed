@@ -4,5 +4,4 @@ yarn-error.log
 .vscode/
 dist/
 coverage/
-# wtf jenkins
-roleFile 
+.env
