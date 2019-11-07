@@ -20,7 +20,7 @@ export default function localizeIdentifier(
         localIdentName,
         { content: name }
       ) // For `[hash]` placeholder
-      .replace(/^((-?[0-9])|--)/, '_$1')
+      .replace(/^((-?\d)|--)/, '_$1')
       .replace(filenameReservedRegex, '-')
       .replace(reControlChars, '-')
       .replace(reRelativePath, '-')

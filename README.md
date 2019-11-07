@@ -225,6 +225,16 @@ postcss([
 ]);
 ```
 
+## Debug
+
+This package uses the npm package [debug](https://www.npmjs.com/package/debug) to log errors while it's running.
+
+Simply set the `DEBUG` environment variable to `postcss-themed`.
+
+```sh
+DEBUG=postcss-themed postcss input.css -o output.css
+```
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):

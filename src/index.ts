@@ -1,11 +1,14 @@
 import postcss from 'postcss';
 import path from 'path';
+import debug from 'debug';
 import merge from 'deepmerge';
 import * as caniuse from 'caniuse-api';
 import browserslist from 'browserslist';
 import * as tsNode from 'ts-node';
 
 import localizeIdentifier from './localize-identifier';
+
+const log = debug('postcss-themed');
 
 tsNode.register({
   compilerOptions: { module: 'commonjs' },
@@ -77,6 +80,7 @@ function configForComponent(
       'default' in componentConfig ? componentConfig.default : componentConfig;
     return fn(rootTheme);
   } catch (error) {
+    log(error);
     return {};
   }
 }
@@ -92,7 +96,7 @@ function replaceThemeVariables(
   const hasMultiple = (decl.value.match(/@theme/g) || []).length > 1;
 
   // Found a theme reference
-  while (decl.value.indexOf('@theme') !== -1) {
+  while (decl.value.includes('@theme')) {
     const themeKey = parseThemeKey(decl.value);
 
     // Check for issues with theme
@@ -108,7 +112,8 @@ function replaceThemeVariables(
       if (decl.value === 'undefined') {
         decl.remove();
       }
-    } catch (e) {
+    } catch (error) {
+      log(error);
       throw decl.error(`Theme '${theme}' does not contain key '${themeKey}'`, {
         plugin: 'postcss-themed'
       });
@@ -155,7 +160,7 @@ const createNewRule = (
     s => `${themeClass} ${s}`
   );
 
-  if (originalSelector.indexOf(':theme-root') > -1) {
+  if (originalSelector.includes(':theme-root')) {
     rule.selector = replaceThemeRoot(rule.selector);
 
     if (rule.selector === '*') {
@@ -348,7 +353,7 @@ const modernTheme = (
     rule.selector = replaceThemeRoot(rule.selector);
 
     rule.walkDecls(decl => {
-      while (decl.value.indexOf('@theme') !== -1) {
+      while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
         decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
         usage.add(key);
