@@ -1,0 +1,151 @@
+{
+  "name": "@cgds/postcss-themed",
+  "version": "0.3.0",
+  "main": "dist/index.js",
+  "description": "PostCSS plugin for adding multiple themes to CSS files",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "theme"
+  ],
+  "scripts": {
+    "build": "tsc -P tsconfig.build.json",
+    "test": "jest",
+    "lint": "eslint src/*.ts --fix",
+    "release": "auto shipit"
+  },
+  "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/design-systems/postcss-themed",
+  "bugs": {
+    "url": "https://github.com/design-systems/postcss-themed/issues"
+  },
+  "homepage": "https://github.com/design-systems/postcss-themed",
+  "dependencies": {
+    "browserslist": "^4.7.0",
+    "caniuse-api": "^3.0.0",
+    "cssesc": "^3.0.0",
+    "deepmerge": "^3.2.0",
+    "loader-utils": "^1.2.3",
+    "postcss": "^7.0.14",
+    "ts-node": "^8.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.4.3",
+    "@babel/preset-typescript": "^7.3.3",
+    "@logux/eslint-config": "^28.0.0",
+    "@types/browserslist": "^4.4.0",
+    "@types/caniuse-api": "^3.0.0",
+    "@types/cssesc": "^3.0.0",
+    "@types/jest": "^24.0.11",
+    "@types/loader-utils": "^1.1.3",
+    "@types/node": "^11.13.1",
+    "@types/postcss-nested": "^4.1.0",
+    "@types/webpack": "^4.39.2",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
+    "all-contributors-cli": "^6.9.1",
+    "auto": "^7.2.2",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.10.0",
+    "eslint-config-postcss": "^3.0.7",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-config-xo": "^0.26.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-import-helpers": "^0.1.4",
+    "eslint-plugin-jest": "^22.4.1",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prefer-let": "^1.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^4.0.0",
+    "husky": "^1.3.1",
+    "jest": "^24.7.1",
+    "lint-staged": "^8.1.5",
+    "postcss-nested": "^4.1.2",
+    "prettier": "^1.16.4",
+    "tapable": "^1.1.3",
+    "typescript": "^3.6.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "plugin:@typescript-eslint/recommended",
+      "eslint-config-postcss",
+      "xo",
+      "prettier",
+      "prettier/@typescript-eslint"
+    ],
+    "plugins": [
+      "jest",
+      "@typescript-eslint"
+    ],
+    "env": {
+      "jest/globals": true
+    },
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json",
+      "sourceType": "module"
+    },
+    "rules": {
+      "max-len": 0,
+      "valid-jsdoc": 0,
+      "max-params": 0,
+      "prefer-const": 1,
+      "func-style": 0,
+      "prefer-let/prefer-let": 0,
+      "node/no-unsupported-features/es-syntax": 0,
+      "guard-for-in": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
+      "consistent-return": 0
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "lcov"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "test-component-themes",
+      "test-utils"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ]
+  },
+  "engines": {
+    "node": ">=7.5.0"
+  },
+  "auto": {
+    "plugins": [
+      [
+        "npm",
+        {
+          "setRcToken": false
+        },
+        "released"
+      ]
+    ]
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

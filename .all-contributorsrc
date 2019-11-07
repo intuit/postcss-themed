@@ -1,0 +1,42 @@
+{
+  "projectName": "postcss-themed",
+  "projectOwner": "intuit",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "commitConvention": "none",
+  "contributors": [
+    {
+      "login": "tylerkrupicka",
+      "name": "Tyler Krupicka",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5761061?v=4",
+      "profile": "http://tylerkrupicka.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hipstersmoothie",
+      "name": "Andrew Lisowski",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1192452?v=4",
+      "profile": "http://hipstersmoothie.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "adierkens",
+      "name": "Adam Dierkens",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/13004162?v=4",
+      "profile": "https://adamdierkens.com",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
