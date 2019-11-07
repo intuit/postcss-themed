@@ -1,16 +1,6 @@
 import { run } from './test-utils';
 
-jest.mock('browserslist', () => () => [
-  'and_chr 76',
-  'and_uc 12.12',
-  'chrome 76',
-  'chrome 75',
-  'edge 18',
-  'firefox 68',
-  'ios_saf 12.2-12.3',
-  'safari 12.1',
-  'samsung 9.2'
-]);
+jest.mock('browserslist', () => () => ['chrome 76']);
 
 it('Creates a simple css variable based theme', () => {
   const config = {
