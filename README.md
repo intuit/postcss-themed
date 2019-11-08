@@ -5,6 +5,7 @@
   </p>
   <div> 
     <a href="https://circleci.com/gh/intuit/postcss-themed"><img src="https://circleci.com/gh/intuit/postcss-themed.svg?style=svg"></a>
+    <a href="https://www.npmjs.com/package/postcss-themed"><img src="https://img.shields.io/npm/v/postcss-themed.svg?style=flat-square&logo=npm" alt="npm" /></a>
     <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="styled with prettier" /></a>
   </div>
 </div>
