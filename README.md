@@ -1,7 +1,7 @@
 <div align="center">
   <h1>postcss-themed</h1>
   <p>
-    PostCSS plugin for adding multiple themes to CSS files
+    PostCSS plugin for adding multiple themes to CSS files.
   </p>
   <div> 
     <a href="https://circleci.com/gh/intuit/postcss-themed"><img src="https://circleci.com/gh/intuit/postcss-themed.svg?style=svg"></a>
