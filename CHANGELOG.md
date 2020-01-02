@@ -1,3 +1,20 @@
+# v1.0.1 (Thu Jan 02 2020)
+
+#### 🐛  Bug Fix
+
+- Fix color scheme overrides [#4](https://github.com/intuit/postcss-themed/pull/4) ([@adierkens](https://github.com/adierkens))
+
+#### 📝  Documentation
+
+- add version badge [#2](https://github.com/intuit/postcss-themed/pull/2) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 2
+
+- Adam Dierkens ([@adierkens](https://github.com/adierkens))
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v1.0.0 (Thu Nov 07 2019)
 
 #### 💥  Breaking Change
