@@ -379,12 +379,12 @@ const modernTheme = (
     ) {
       rules.push(
         createModernTheme(
-          isDefault ? rootClass : `${rootClass} .light`,
+          isDefault ? rootClass : `${rootClass}.light`,
           filterUsed('light'),
           localize
         ),
         createModernTheme(
-          isDefault ? '.dark' : `${rootClass} .dark`,
+          isDefault ? '.dark' : `${rootClass}.dark`,
           filterUsed('dark'),
           localize
         )
