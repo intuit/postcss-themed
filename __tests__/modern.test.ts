@@ -88,11 +88,11 @@ it('Creates a simple css variable based theme with light and dark', () => {
         --color: teal
       }
 
-      .chair .light {
+      .chair.light {
         --color: beige
       }
 
-      .chair .dark {
+      .chair.dark {
         --color: darkpurple
       }
     `,
