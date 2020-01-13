@@ -217,6 +217,24 @@ postcss([
 ]);
 ```
 
+You can also supply your own function for scoping variable names, again following the API from CSS Modules.
+
+```js
+postcss([
+  require('postcss-themed')({
+    config,
+    modules: (name: string, filename: string, css: string) => {
+      const hash = crypto
+        .createHash('md5')
+        .update(css)
+        .digest('hex')
+        .slice(0, 6);
+      return `${filename}-${name}-${hash}`;
+    }
+  })
+]);
+```
+
 ### defaultTheme
 
 An optional parameter to change the name of the _default_ theme (where no extra classes are added to the selector). It defaults to `default`, and also corresponds to the only required key in your `theme.ts` files.
