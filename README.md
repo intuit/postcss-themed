@@ -217,19 +217,19 @@ postcss([
 ]);
 ```
 
-You can also supply your own function for scoping variable names, again following the API from CSS Modules.
+You can also supply your own function for scoping variable names, again following the API from CSS Modules. If PostCSS does not have a path for the file both the path and css will return an empty string.
 
 ```js
 postcss([
   require('postcss-themed')({
     config,
-    modules: (name: string, filename: string, css: string) => {
+    modules: (name: string, filePath: string, css: string) => {
       const hash = crypto
         .createHash('md5')
         .update(css)
         .digest('hex')
         .slice(0, 6);
-      return `${filename}-${name}-${hash}`;
+      return `${filePath}-${name}-${hash}`;
     }
   })
 ]);
