@@ -16,7 +16,9 @@
       "avatar_url": "https://avatars1.githubusercontent.com/u/5761061?v=4",
       "profile": "http://tylerkrupicka.com",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "doc"
       ]
     },
     {
@@ -25,7 +27,9 @@
       "avatar_url": "https://avatars3.githubusercontent.com/u/1192452?v=4",
       "profile": "http://hipstersmoothie.com",
       "contributions": [
-        "code"
+        "code",
+        "test",
+        "doc"
       ]
     },
     {
