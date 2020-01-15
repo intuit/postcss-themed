@@ -1,5 +1,6 @@
 import postcss from 'postcss';
 import path from 'path';
+import fs from 'fs';
 import debug from 'debug';
 import merge from 'deepmerge';
 import * as caniuse from 'caniuse-api';
@@ -30,6 +31,12 @@ type PostcssStrictThemeConfig = Config<LightDarkTheme>;
 export type ComponentTheme = (theme: PostcssThemeConfig) => PostcssThemeConfig;
 export type ThemeResolver = (path: string) => ComponentTheme;
 
+type ScopedNameFunction = (
+  name: string,
+  filename: string,
+  css: string
+) => string;
+
 export interface PostcssThemeOptions {
   /** Configuration given to the postcss plugin */
   config?: PostcssThemeConfig;
@@ -40,7 +47,7 @@ export interface PostcssThemeOptions {
   /** The name of the default theme */
   defaultTheme?: string;
   /** Transform CSS variable names similar to CSS-Modules */
-  modules?: string;
+  modules?: string | ScopedNameFunction;
 }
 
 /** Get the theme variable name from a string */
@@ -335,6 +342,25 @@ const createModernTheme = (
   return rule;
 };
 
+const getLocalizeFunction = (
+  modules: string | ScopedNameFunction | undefined,
+  resourcePath: string | undefined
+) => {
+  if (typeof modules === 'function') {
+    let fileContents = '';
+    if (resourcePath) {
+      fileContents = fs.readFileSync(resourcePath, 'utf8');
+    }
+
+    return (name: string) => {
+      return modules(name, resourcePath || '', fileContents);
+    };
+  }
+
+  return (name: string) =>
+    localizeIdentifier({ resourcePath }, modules || '[local]', name);
+};
+
 /** Accomplish theming by creating CSS variable overrides  */
 const modernTheme = (
   root: postcss.Root,
@@ -345,9 +371,7 @@ const modernTheme = (
   const usage = new Set<string>();
   const defaultTheme = options.defaultTheme || 'default';
   const resourcePath = root.source ? root.source.input.file : '';
-  const localize = (name: string) =>
-    localizeIdentifier({ resourcePath }, options.modules || '[local]', name);
-
+  const localize = getLocalizeFunction(options.modules, resourcePath);
   // 1. Walk each declaration and replace theme vars with CSS vars
   root.walkRules(rule => {
     rule.selector = replaceThemeRoot(rule.selector);

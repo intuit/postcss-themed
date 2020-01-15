@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import { run } from './test-utils';
 
 jest.mock('browserslist', () => () => ['chrome 76']);
@@ -183,5 +185,50 @@ it('scoped variable names', () => {
       modules: '[folder]-[name]-[local]'
     },
     '/app/foo.css'
+  );
+});
+
+it('scoped variable names with custom function', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    light: {
+      color: 'white'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--test-color-d41d8c);
+        background-image: linear-gradient(to right, var(--test-color-d41d8c), var(--test-color-d41d8c))
+      }
+
+      :root {
+        --test-color-d41d8c: purple
+      }
+
+      .light {
+        --test-color-d41d8c: white
+      }
+    `,
+    {
+      config,
+      modules: (name: string, filename: string, css: string) => {
+        const hash = crypto
+          .createHash('md5')
+          .update(css)
+          .digest('hex')
+          .slice(0, 6);
+        return `${filename || 'test'}-${name}-${hash}`;
+      }
+    }
   );
 });

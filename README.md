@@ -217,6 +217,24 @@ postcss([
 ]);
 ```
 
+You can also supply your own function for scoping variable names, again following the API from CSS Modules. If PostCSS does not have a path for the file both the path and css will return an empty string.
+
+```js
+postcss([
+  require('postcss-themed')({
+    config,
+    modules: (name: string, filePath: string, css: string) => {
+      const hash = crypto
+        .createHash('md5')
+        .update(css)
+        .digest('hex')
+        .slice(0, 6);
+      return `${filePath}-${name}-${hash}`;
+    }
+  })
+]);
+```
+
 ### defaultTheme
 
 An optional parameter to change the name of the _default_ theme (where no extra classes are added to the selector). It defaults to `default`, and also corresponds to the only required key in your `theme.ts` files.
@@ -254,9 +272,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="http://tylerkrupicka.com"><img src="https://avatars1.githubusercontent.com/u/5761061?v=4" width="100px;" alt="Tyler Krupicka"/><br /><sub><b>Tyler Krupicka</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Code">💻</a></td>
-    <td align="center"><a href="http://hipstersmoothie.com"><img src="https://avatars3.githubusercontent.com/u/1192452?v=4" width="100px;" alt="Andrew Lisowski"/><br /><sub><b>Andrew Lisowski</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Code">💻</a></td>
-    <td align="center"><a href="https://adamdierkens.com"><img src="https://avatars1.githubusercontent.com/u/13004162?v=4" width="100px;" alt="Adam Dierkens"/><br /><sub><b>Adam Dierkens</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=adierkens" title="Code">💻</a></td>
+    <td align="center"><a href="http://tylerkrupicka.com"><img src="https://avatars1.githubusercontent.com/u/5761061?v=4" width="100px;" alt=""/><br /><sub><b>Tyler Krupicka</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://hipstersmoothie.com"><img src="https://avatars3.githubusercontent.com/u/1192452?v=4" width="100px;" alt=""/><br /><sub><b>Andrew Lisowski</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://adamdierkens.com"><img src="https://avatars1.githubusercontent.com/u/13004162?v=4" width="100px;" alt=""/><br /><sub><b>Adam Dierkens</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=adierkens" title="Code">💻</a></td>
   </tr>
 </table>
 
