@@ -1,3 +1,24 @@
+# v1.1.0 (Wed Jan 15 2020)
+
+#### 🚀  Enhancement
+
+- Variable Hashing [#5](https://github.com/intuit/postcss-themed/pull/5) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### 📝  Documentation
+
+- Update README.md [#3](https://github.com/intuit/postcss-themed/pull/3) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### ⚠️  Pushed to master
+
+- disable tsignore lint rule  ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 2
+
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v1.0.1 (Thu Jan 02 2020)
 
 #### 🐛  Bug Fix
