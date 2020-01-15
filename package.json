@@ -103,6 +103,7 @@
       "node/no-unsupported-features/es-syntax": 0,
       "guard-for-in": 0,
       "@typescript-eslint/explicit-function-return-type": 0,
+      "@typescript-eslint/ban-ts-ignore": 0,
       "consistent-return": 0
     }
   },
