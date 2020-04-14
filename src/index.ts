@@ -328,7 +328,7 @@ const createModernTheme = (
   const rule = postcss.rule({ selector });
   const decls = Object.entries(theme).map(([prop, value]) =>
     postcss.decl({
-      prop: `--${transform(prop)}`,
+      prop: `--${transform(prop).toLowerCase()}`,
       value: `${value}`
     })
   );
@@ -379,7 +379,10 @@ const modernTheme = (
     rule.walkDecls(decl => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
-        decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+        decl.value = replaceTheme(
+          decl.value,
+          `var(--${localize(key).toLowerCase()})`
+        );
         usage.add(key);
       }
     });

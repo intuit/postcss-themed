@@ -8,7 +8,8 @@ it('Creates a simple css variable based theme', () => {
   const config = {
     default: {
       color: 'purple',
-      extras: 'black'
+      extras: 'black',
+      otherColor: 'blue'
     },
     mint: {
       color: 'teal'
@@ -19,17 +20,20 @@ it('Creates a simple css variable based theme', () => {
     `
       .test {
         color: @theme color;
+        background-color: @theme otherColor;
         background-image: linear-gradient(to right, @theme color, @theme color)
       }
     `,
     `
       .test {
         color: var(--color);
+        background-color: var(--othercolor);
         background-image: linear-gradient(to right, var(--color), var(--color))
       }
 
       :root {
-        --color: purple
+        --color: purple;
+        --othercolor: blue
       }
 
       .mint {
