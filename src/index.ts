@@ -264,7 +264,10 @@ const legacyTheme = (
   componentConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
-  const defaultTheme = options.defaultTheme || 'default';
+  const {
+    defaultTheme = 'default',
+    forceSingleTheme = false,
+  } = options;
   let newRules: postcss.Rule[] = [];
 
   root.walkRules(rule => {
@@ -287,10 +290,16 @@ const legacyTheme = (
       }
     });
 
-    newRules = [
-      ...newRules,
-      ...createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
-    ];
+    let createNewThemeRules: postcss.Rule[] = [];
+        if(forceSingleTheme) {
+            createNewThemeRules;
+        } else {
+            createNewThemeRules = createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
+        }
+        newRules = [
+            ...newRules,
+            ...createNewThemeRules
+        ];
   });
 
   if (options.forceEmptyThemeSelectors) {
