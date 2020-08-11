@@ -293,9 +293,9 @@ const legacyTheme = (
       }
     });
 
-    let createNewThemeRules: postcss.Rule[] = [];
+    let createNewThemeRules: postcss.Rule[];
     if(forceSingleTheme) {
-      createNewThemeRules;
+      createNewThemeRules = [];
     } else {
       createNewThemeRules = createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
     }
