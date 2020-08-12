@@ -742,6 +742,43 @@ it('overrides themes to single theme', () => {
   });
 });
 
+it('when theme = light , forceSingleTheme = true, single selector is generated', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      width: '1px'
+    },
+    light: {
+      color: 'white',
+      width: '10px'
+    },
+    dark : {
+      color: 'black',
+      width: '20px'
+    }
+  };
+
+  return run(
+    `
+      .expanded, .foo {
+        color: @theme color;
+        width: @theme width;
+      }
+    `,
+    `
+      .expanded, .foo {
+        color: white;
+        width: 10px;
+      }
+    `,
+    {
+      config,
+      defaultTheme: 'light',
+      forceSingleTheme: true,
+    }
+  );
+});
+
 it('when theme = light , forceSingleTheme = false, multiple selectors are generated', () => {
   const config = {
     default: {
@@ -783,43 +820,6 @@ it('when theme = light , forceSingleTheme = false, multiple selectors are genera
       config,
       defaultTheme: 'light',
       forceSingleTheme: false,
-    }
-  );
-});
-
-it('when theme = light , forceSingleTheme = true, single selector is generated', () => {
-  const config = {
-    default: {
-      color: 'purple',
-      width: '1px'
-    },
-    light: {
-      color: 'white',
-      width: '10px'
-    },
-    dark : {
-      color: 'black',
-      width: '20px'
-    }
-  };
-
-  return run(
-    `
-      .expanded, .foo {
-        color: @theme color;
-        width: @theme width;
-      }
-    `,
-    `
-      .expanded, .foo {
-        color: white;
-        width: 10px;
-      }
-    `,
-    {
-      config,
-      defaultTheme: 'light',
-      forceSingleTheme: true,
     }
   );
 });
