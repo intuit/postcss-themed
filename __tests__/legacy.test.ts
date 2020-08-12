@@ -713,3 +713,31 @@ it('dark themes', () => {
     }
   );
 });
+
+it('overrides themes to single theme', () => {
+  const config = {
+    newDefault: {
+      color: 'black'
+    },
+    shinyNewProduct: {
+      color: 'red',
+      width: '1rem'
+    }
+  };
+
+  const input = `
+  .test {
+    background-color: @theme color;
+    width: @theme width;
+  }
+  `;
+
+  // @ts-ignore
+  return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: true })])
+    .process(input, { from: undefined })
+    .catch(e => {
+      expect(e.message).toContain(
+        "Theme 'quickBooks' does not contain key 'color'"
+      );
+  });
+});
