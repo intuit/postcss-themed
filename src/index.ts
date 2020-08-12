@@ -299,6 +299,7 @@ const legacyTheme = (
     } else {
       createNewThemeRules = createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
     }
+
     newRules = [
       ...newRules,
       ...createNewThemeRules

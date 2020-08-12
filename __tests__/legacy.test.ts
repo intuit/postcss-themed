@@ -732,7 +732,6 @@ it('overrides themes to single theme', () => {
   }
   `;
 
-  // @ts-ignore
   return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: true })])
     .process(input, { from: undefined })
     .catch(e => {
