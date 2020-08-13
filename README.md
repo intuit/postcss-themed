@@ -303,8 +303,10 @@ postcss([
 }
 ```
 
+**Note**
+
 ```
-Note: To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
+To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
 ```
 
 ## Debug
