@@ -303,6 +303,10 @@ postcss([
 }
 ```
 
+```
+Note: To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
+```
+
 ## Debug
 
 This package uses the npm package [debug](https://www.npmjs.com/package/debug) to log errors while it's running.
