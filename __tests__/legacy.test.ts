@@ -713,3 +713,112 @@ it('dark themes', () => {
     }
   );
 });
+
+it('overrides themes to single theme', () => {
+  const config = {
+    newDefault: {
+      color: 'black'
+    },
+    shinyNewProduct: {
+      color: 'red',
+      width: '1rem'
+    }
+  };
+
+  const input = `
+  .test {
+    background-color: @theme color;
+    width: @theme width;
+  }
+  `;
+
+  return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: true })])
+    .process(input, { from: undefined })
+    .catch(e => {
+      expect(e.message).toContain(
+        "Theme 'quickBooks' does not contain key 'color'"
+      );
+  });
+});
+
+it('when theme = light , forceSingleTheme = true, single selector is generated', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      width: '1px'
+    },
+    light: {
+      color: 'white',
+      width: '10px'
+    },
+    dark : {
+      color: 'black',
+      width: '20px'
+    }
+  };
+
+  return run(
+    `
+      .expanded, .foo {
+        color: @theme color;
+        width: @theme width;
+      }
+    `,
+    `
+      .expanded, .foo {
+        color: white;
+        width: 10px;
+      }
+    `,
+    {
+      config,
+      defaultTheme: 'light',
+      forceSingleTheme: true,
+    }
+  );
+});
+
+it('when theme = light , forceSingleTheme = false, multiple selectors are generated', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      width: '1px'
+    },
+    light: {
+      color: 'white',
+      width: '10px'
+    },
+    dark : {
+      color: 'black',
+      width: '20px'
+    }
+  };
+
+  return run(
+    `
+      .expanded, .foo {
+        width: @theme width;
+        color: @theme color;
+      }
+    `,
+    `
+      .expanded, .foo {
+        width: 10px;
+        color: white;
+      }
+      .default .expanded,.default  .foo {
+        width: 1px;
+        color: purple;
+      }
+      .dark .expanded,.dark  .foo {
+        width: 20px;
+        color: black;
+      }
+    `,
+    {
+      config,
+      defaultTheme: 'light',
+      forceSingleTheme: false,
+    }
+  );
+});

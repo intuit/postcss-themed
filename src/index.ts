@@ -48,6 +48,8 @@ export interface PostcssThemeOptions {
   defaultTheme?: string;
   /** Transform CSS variable names similar to CSS-Modules */
   modules?: string | ScopedNameFunction;
+  /** Determines if we want to use all themes or individual themes */
+  forceSingleTheme?: boolean;
 }
 
 /** Get the theme variable name from a string */
@@ -264,7 +266,11 @@ const legacyTheme = (
   componentConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
-  const defaultTheme = options.defaultTheme || 'default';
+  const {
+    defaultTheme = 'default',
+    forceSingleTheme = false,
+    forceEmptyThemeSelectors,
+  } = options;
   let newRules: postcss.Rule[] = [];
 
   root.walkRules(rule => {
@@ -287,13 +293,20 @@ const legacyTheme = (
       }
     });
 
+    let createNewThemeRules: postcss.Rule[];
+    if(forceSingleTheme) {
+      createNewThemeRules = [];
+    } else {
+      createNewThemeRules = createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
+    }
+
     newRules = [
       ...newRules,
-      ...createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
+      ...createNewThemeRules
     ];
   });
 
-  if (options.forceEmptyThemeSelectors) {
+  if (forceEmptyThemeSelectors) {
     const themes = Object.keys(componentConfig);
     const extra = new Set<string>();
 
@@ -313,7 +326,7 @@ const legacyTheme = (
   }
 
   newRules.forEach(r => {
-    if (options.forceEmptyThemeSelectors || (r.nodes && r.nodes.length > 0)) {
+    if (forceEmptyThemeSelectors || (r.nodes && r.nodes.length > 0)) {
       root.append(r);
     }
   });

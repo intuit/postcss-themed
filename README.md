@@ -253,6 +253,60 @@ postcss([
 ]);
 ```
 
+### forceSingleTheme - only legacy
+
+By default this plugin will generate multiple themes when the component configuration is set to default. forceSingleTheme enables to override that and generate seperate themes. (ex: you have 3 themes but your component only uses 1, then only 1 extra set of theme is produced).
+
+You can use the `forceSingleTheme` to force these single themes to be generated.
+
+### Usage
+
+```js
+postcss([
+  require('postcss-themed')({
+    config,
+    defaultTheme: 'light',
+    forceSingleTheme: true
+  })
+]);
+```
+
+**Input**
+
+```css
+.light {
+  color: white;
+  border: 10px solid white;
+}
+
+.dark {
+  color: black;
+  border: 10px solid black;
+}
+```
+
+**Run**
+
+```css
+.light {
+  color: @theme color;
+  border: @theme border-width solid @theme color;
+}
+```
+
+**Output**
+
+```css
+.light {
+  color: white;
+  border: 10px solid white;
+}
+```
+
+```
+NOTE: To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
+```
+
 ## Debug
 
 This package uses the npm package [debug](https://www.npmjs.com/package/debug) to log errors while it's running.
