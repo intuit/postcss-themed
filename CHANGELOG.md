@@ -1,3 +1,16 @@
+# v1.1.1 (Fri Aug 14 2020)
+
+#### 🐛  Bug Fix
+
+- feat: generating single theme [#9](https://github.com/intuit/postcss-themed/pull/9) (Akshita_Ramanan@intuit.com [@akshitaramanan](https://github.com/akshitaramanan))
+
+#### Authors: 2
+
+- Ramanan, Akshita (Akshita_Ramanan@intuit.com)
+- [@akshitaramanan](https://github.com/akshitaramanan)
+
+---
+
 # v1.1.0 (Wed Jan 15 2020)
 
 #### 🚀  Enhancement
