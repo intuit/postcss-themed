@@ -112,7 +112,7 @@ See [PostCSS] docs for examples for your environment.
 
 ### Component themes
 
-Define a component level them in either commonjs or typescript. A file names `themes.(js|ts)` must be co-located with the themeable CSS file.
+Define a component level theme in either commonjs or typescript. A file names `themes.(js|ts)` must be co-located with the themeable CSS file.
 
 **themes.js**
 
