@@ -1,3 +1,15 @@
+# v1.1.2 (Thu Aug 20 2020)
+
+#### 📝  Documentation
+
+- Fix theme spelling. [#10](https://github.com/intuit/postcss-themed/pull/10) ([@GauravKesarwani](https://github.com/GauravKesarwani))
+
+#### Authors: 1
+
+- Gaurav Kesarwani ([@GauravKesarwani](https://github.com/GauravKesarwani))
+
+---
+
 # v1.1.1 (Fri Aug 14 2020)
 
 #### 🐛  Bug Fix
