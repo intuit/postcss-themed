@@ -1,3 +1,15 @@
+# v1.1.3 (Thu Sep 03 2020)
+
+#### 🐛  Bug Fix
+
+- fix bug where root themes dark mode would be overridden by next theme [#11](https://github.com/intuit/postcss-themed/pull/11) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v1.1.2 (Thu Aug 20 2020)
 
 #### 📝  Documentation
