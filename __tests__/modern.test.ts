@@ -86,7 +86,7 @@ it('Creates a simple css variable based theme with light and dark', () => {
         --color: black
       }
 
-      .mint {
+      .mint.light {
         --color: teal
       }
 

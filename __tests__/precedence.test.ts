@@ -36,7 +36,7 @@ it('Overrides all themes from default', () => {
         --color: blue;
       }
 
-      .mint {
+      .mint.light {
         --color: teal;
       }
     `,

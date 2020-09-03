@@ -374,6 +374,12 @@ const getLocalizeFunction = (
     localizeIdentifier({ resourcePath }, modules || '[local]', name);
 };
 
+/** Determine if a theme has dark mode enabled */
+const hasDarkMode = (theme: Theme) =>
+  Boolean(
+    Object.keys(theme.dark).length > 0 && Object.keys(theme.light).length > 0
+  );
+
 /** Accomplish theming by creating CSS variable overrides  */
 const modernTheme = (
   root: postcss.Root,
@@ -399,6 +405,12 @@ const modernTheme = (
   });
 
   // 2. Create variable declaration blocks
+  const defaultThemeConfig = Object.entries(componentConfig).find(
+    ([theme]) => theme === defaultTheme
+  );
+  const hasRootDarkMode =
+    defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
+
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
     const rules: (postcss.Rule | undefined)[] = [];
     const isDefault = theme === defaultTheme;
@@ -410,10 +422,7 @@ const modernTheme = (
         )
         .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
 
-    if (
-      Object.keys(themeConfig.dark).length > 0 &&
-      Object.keys(themeConfig.light).length > 0
-    ) {
+    if (hasDarkMode(themeConfig)) {
       rules.push(
         createModernTheme(
           isDefault ? rootClass : `${rootClass}.light`,
@@ -423,6 +432,14 @@ const modernTheme = (
         createModernTheme(
           isDefault ? '.dark' : `${rootClass}.dark`,
           filterUsed('dark'),
+          localize
+        )
+      );
+    } else if (hasRootDarkMode) {
+      rules.push(
+        createModernTheme(
+          isDefault ? rootClass : `${rootClass}.light`,
+          filterUsed('light'),
           localize
         )
       );
