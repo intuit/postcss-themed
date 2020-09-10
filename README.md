@@ -263,6 +263,25 @@ In practice, we use this to generate extra CSS files for teams that only need a 
 ### Usage
 
 ```js
+const config = {
+  default: {
+    light: {
+      color: 'purple'
+    },
+    dark: {
+      color: 'black'
+    }
+  },
+  chair: {
+    light: {
+      color: 'beige'
+    },
+    dark: {
+      color: 'dark-purple'
+    }
+  }
+};
+
 postcss([
   require('postcss-themed')({
     config,
@@ -275,38 +294,29 @@ postcss([
 **Input**
 
 ```css
-.light {
-  color: white;
-  border: 10px solid white;
-}
-
-.dark {
-  color: black;
-  border: 10px solid black;
-}
-```
-
-**Run**
-
-```css
-.light {
+.test {
   color: @theme color;
-  border: @theme border-width solid @theme color;
 }
 ```
 
 **Output**
 
 ```css
-.light {
-  color: white;
-  border: 10px solid white;
+.test {
+  color: var(--color);
+}
+
+:root {
+  --color: beige;
+}
+
+.dark {
+  --color: darkpurple;
 }
 ```
 
-```
-NOTE: To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
-```
+As you can see in the above example, the second theme is completely ignored.
+If only a light theme is specified, we don't even need to specify CSS variables to add the theme.
 
 ## Debug
 
