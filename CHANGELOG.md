@@ -1,3 +1,15 @@
+# v1.2.0 (Thu Sep 10 2020)
+
+#### 🚀  Enhancement
+
+- Force Single Theme in Modern Parser [#13](https://github.com/intuit/postcss-themed/pull/13) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 1
+
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+---
+
 # v1.1.3 (Thu Sep 03 2020)
 
 #### 🐛  Bug Fix
