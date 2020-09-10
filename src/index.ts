@@ -269,7 +269,7 @@ const legacyTheme = (
   const {
     defaultTheme = 'default',
     forceSingleTheme = false,
-    forceEmptyThemeSelectors,
+    forceEmptyThemeSelectors
   } = options;
   let newRules: postcss.Rule[] = [];
 
@@ -294,16 +294,18 @@ const legacyTheme = (
     });
 
     let createNewThemeRules: postcss.Rule[];
-    if(forceSingleTheme) {
+    if (forceSingleTheme) {
       createNewThemeRules = [];
     } else {
-      createNewThemeRules = createNewRules(componentConfig, rule, themedDeclarations, defaultTheme)
+      createNewThemeRules = createNewRules(
+        componentConfig,
+        rule,
+        themedDeclarations,
+        defaultTheme
+      );
     }
 
-    newRules = [
-      ...newRules,
-      ...createNewThemeRules
-    ];
+    newRules = [...newRules, ...createNewThemeRules];
   });
 
   if (forceEmptyThemeSelectors) {
@@ -389,6 +391,7 @@ const modernTheme = (
 ) => {
   const usage = new Set<string>();
   const defaultTheme = options.defaultTheme || 'default';
+  const singleTheme = options.forceSingleTheme || false;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
   // 1. Walk each declaration and replace theme vars with CSS vars
