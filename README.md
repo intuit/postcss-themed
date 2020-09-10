@@ -253,15 +253,35 @@ postcss([
 ]);
 ```
 
-### forceSingleTheme - only legacy
+### forceSingleTheme
 
-By default this plugin will generate multiple themes when the component configuration is set to default. forceSingleTheme enables to override that and generate seperate themes. (ex: you have 3 themes but your component only uses 1, then only 1 extra set of theme is produced).
-
-You can use the `forceSingleTheme` to force these single themes to be generated.
+This is a niche option which only inserts the `defaultTheme` and ignores any others.
+At first glance, this may seem strange because this plugin primarily allows you to support _many_ themes in a single CSS file.
+This option helps if you want to generate _many_ CSS files, each with their own theme. You'll run PostCSS multiple times, switching the default theme while enabling `forceSingleTheme`.
+In practice, we use this to generate extra CSS files for teams that only need a single theme. The main CSS file still has all of them, but teams can optionally use the one that only has the theme they need.
 
 ### Usage
 
 ```js
+const config = {
+  default: {
+    light: {
+      color: 'purple'
+    },
+    dark: {
+      color: 'black'
+    }
+  },
+  chair: {
+    light: {
+      color: 'beige'
+    },
+    dark: {
+      color: 'dark-purple'
+    }
+  }
+};
+
 postcss([
   require('postcss-themed')({
     config,
@@ -274,38 +294,29 @@ postcss([
 **Input**
 
 ```css
-.light {
-  color: white;
-  border: 10px solid white;
-}
-
-.dark {
-  color: black;
-  border: 10px solid black;
-}
-```
-
-**Run**
-
-```css
-.light {
+.test {
   color: @theme color;
-  border: @theme border-width solid @theme color;
 }
 ```
 
 **Output**
 
 ```css
-.light {
-  color: white;
-  border: 10px solid white;
+.test {
+  color: var(--color);
+}
+
+:root {
+  --color: beige;
+}
+
+.dark {
+  --color: darkpurple;
 }
 ```
 
-```
-NOTE: To generate the remaining themes, specify the theme you want to generate using defaultTheme option.
-```
+As you can see in the above example, the second theme is completely ignored.
+If only a light theme is specified, we don't even need to specify CSS variables to add the theme.
 
 ## Debug
 

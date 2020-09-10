@@ -104,6 +104,90 @@ it('Creates a simple css variable based theme with light and dark', () => {
   );
 });
 
+it('Produces a single theme', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'purple'
+      },
+      dark: {
+        color: 'black'
+      }
+    },
+    mint: {
+      color: 'teal'
+    },
+    chair: {
+      light: {
+        color: 'beige'
+      },
+      dark: {
+        color: 'darkpurple'
+      }
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: beige;
+      }
+
+      .dark {
+        --color: darkpurple;
+      }
+    `,
+    {
+      config,
+      defaultTheme: 'chair',
+      forceSingleTheme: true
+    }
+  );
+});
+
+it('Produces a single theme without variables if possible', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'purple'
+      },
+      dark: {
+        color: 'black'
+      }
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: teal;
+      }
+    `,
+    {
+      config,
+      defaultTheme: 'mint',
+      forceSingleTheme: true
+    }
+  );
+});
+
 it('works with nested', () => {
   const config = {
     default: {
