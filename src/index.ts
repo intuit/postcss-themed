@@ -394,6 +394,13 @@ const modernTheme = (
   const singleTheme = options.forceSingleTheme || false;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
+
+  const defaultThemeConfig = Object.entries(componentConfig).find(
+    ([theme]) => theme === defaultTheme
+  );
+  const hasRootDarkMode =
+    defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
+
   // 1. Walk each declaration and replace theme vars with CSS vars
   root.walkRules(rule => {
     rule.selector = replaceThemeRoot(rule.selector);
@@ -401,40 +408,73 @@ const modernTheme = (
     rule.walkDecls(decl => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
-        decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+        if (singleTheme && !hasRootDarkMode && defaultThemeConfig) {
+          // If we are only building a single theme with light mode, just insert the value
+          decl.value = replaceTheme(
+            decl.value,
+            defaultThemeConfig[1].light[key]
+          );
+        } else {
+          decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+        }
+
         usage.add(key);
       }
     });
   });
 
   // 2. Create variable declaration blocks
-  const defaultThemeConfig = Object.entries(componentConfig).find(
-    ([theme]) => theme === defaultTheme
-  );
-  const hasRootDarkMode =
-    defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
 
+  const filterUsed = (
+    colorScheme: ColorScheme,
+    theme: string,
+    themeConfig: LightDarkTheme
+  ): SimpleTheme =>
+    Object.entries(themeConfig[colorScheme])
+      .filter(
+        ([name]) => usage.has(name) || !globalConfig[theme][colorScheme][name]
+      )
+      .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
+
+  // 2a. If generating a single theme, simply generate the default
+  if (singleTheme) {
+    const rules: (postcss.Rule | undefined)[] = [];
+
+    if (hasRootDarkMode && defaultThemeConfig) {
+      rules.push(
+        createModernTheme(
+          ':root',
+          filterUsed('light', defaultTheme, defaultThemeConfig[1]),
+          localize
+        ),
+        createModernTheme(
+          '.dark',
+          filterUsed('dark', defaultTheme, defaultThemeConfig[1]),
+          localize
+        )
+      );
+    }
+
+    root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
+    return;
+  }
+
+  // 2b. Under normal operation, generate CSS variable blocks for each theme
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
     const rules: (postcss.Rule | undefined)[] = [];
     const isDefault = theme === defaultTheme;
     const rootClass = isDefault ? ':root' : `.${theme}`;
-    const filterUsed = (colorScheme: ColorScheme): SimpleTheme =>
-      Object.entries(themeConfig[colorScheme])
-        .filter(
-          ([name]) => usage.has(name) || !globalConfig[theme][colorScheme][name]
-        )
-        .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
 
     if (hasDarkMode(themeConfig)) {
       rules.push(
         createModernTheme(
           isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light'),
+          filterUsed('light', theme, themeConfig),
           localize
         ),
         createModernTheme(
           isDefault ? '.dark' : `${rootClass}.dark`,
-          filterUsed('dark'),
+          filterUsed('dark', theme, themeConfig),
           localize
         )
       );
@@ -442,12 +482,18 @@ const modernTheme = (
       rules.push(
         createModernTheme(
           isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light'),
+          filterUsed('light', theme, themeConfig),
           localize
         )
       );
     } else {
-      rules.push(createModernTheme(rootClass, filterUsed('light'), localize));
+      rules.push(
+        createModernTheme(
+          rootClass,
+          filterUsed('light', theme, themeConfig),
+          localize
+        )
+      );
     }
 
     root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
