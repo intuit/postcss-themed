@@ -317,8 +317,52 @@ postcss([
 }
 ```
 
-As you can see in the above example, the second theme is completely ignored.
-If only a light theme is specified, we don't even need to specify CSS variables to add the theme.
+As you can see in the above example, only one theme will be generated using this option.
+
+### optimizeSingleTheme
+
+This option should only be used in conjunction with `forceSingleTheme`.
+By default `forceSingleTheme` will always add CSS variables, since many users still want to be able to modify and override them.
+However, if you are not going to be modifying them, we can optimize the single theme further by removing variables when possible.
+If only a light theme is specified, this config option will just do in-place replacement of the theme variables.
+
+### Usage
+
+```js
+const config = {
+  default: {
+    color: 'purple'
+  },
+  chair: {
+    color: 'beige'
+  }
+};
+
+postcss([
+  require('postcss-themed')({
+    config,
+    defaultTheme: 'default',
+    forceSingleTheme: 'chair',
+    optimizeSingleTheme: true
+  })
+]);
+```
+
+**Input**
+
+```css
+.test {
+  color: @theme color;
+}
+```
+
+**Output**
+
+```css
+.test {
+  color: beige;
+}
+```
 
 ## Debug
 

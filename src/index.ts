@@ -48,6 +48,8 @@ export interface PostcssThemeOptions {
   defaultTheme?: string;
   /** Attempt to substitute only a single theme */
   forceSingleTheme?: string;
+  /** Remove CSS Variables when possible */
+  optimizeSingleTheme?: boolean;
   /** Transform CSS variable names similar to CSS-Modules */
   modules?: string | ScopedNameFunction;
 }
@@ -405,6 +407,7 @@ const modernTheme = (
   const usage = new Set<string>();
   const defaultTheme = options.defaultTheme || 'default';
   const singleTheme = options.forceSingleTheme || undefined;
+  const optimizeSingleTheme = options.optimizeSingleTheme;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
@@ -441,8 +444,8 @@ const modernTheme = (
     rule.walkDecls(decl => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
-        if (singleTheme && !hasMergedDarkMode) {
-          // If we are only building a single theme with light mode, just insert the value
+        if (singleTheme && !hasMergedDarkMode && optimizeSingleTheme) {
+          // If we are only building a single theme with light mode, we can optionally insert the value
           if (mergedSingleThemeConfig.light[key]) {
             decl.value = replaceTheme(
               decl.value,
@@ -459,7 +462,6 @@ const modernTheme = (
   });
 
   // 2. Create variable declaration blocks
-
   const filterUsed = (
     colorScheme: ColorScheme,
     theme: string,
@@ -485,6 +487,14 @@ const modernTheme = (
         createModernTheme(
           '.dark',
           filterUsed('dark', singleTheme, mergedSingleThemeConfig),
+          localize
+        )
+      );
+    } else if (!optimizeSingleTheme) {
+      rules.push(
+        createModernTheme(
+          ':root',
+          filterUsed('light', singleTheme, mergedSingleThemeConfig),
           localize
         )
       );

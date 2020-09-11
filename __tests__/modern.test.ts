@@ -194,7 +194,39 @@ it('Produces a single theme with dark mode if default has it', () => {
   );
 });
 
-it('Produces a single theme without variables if possible', () => {
+it('Produces a single theme with variables by default', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
+it('Optimizes single theme by removing variables', () => {
   const config = {
     default: {
       color: 'purple'
@@ -217,7 +249,8 @@ it('Produces a single theme without variables if possible', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
+      optimizeSingleTheme: true
     }
   );
 });

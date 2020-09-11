@@ -146,7 +146,43 @@ it('Merges missing variables from single theme', () => {
   );
 });
 
-it('Merges single theme but omits variables when possible', () => {
+it('Merges single theme but leaves variables by default', () => {
+  const config = {
+    default: {
+      color: 'red',
+      bgColor: 'orange'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-color: @theme bgColor;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+        background-color: var(--bgColor);
+      }
+
+      :root {
+        --color: teal;
+        --bgColor: orange;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
+it('Merges single theme but omits variables when optimized', () => {
   const config = {
     default: {
       color: 'red',
@@ -172,7 +208,8 @@ it('Merges single theme but omits variables when possible', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
+      optimizeSingleTheme: true
     }
   );
 });
