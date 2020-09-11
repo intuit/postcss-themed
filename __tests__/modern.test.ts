@@ -148,13 +148,12 @@ it('Produces a single theme', () => {
     `,
     {
       config,
-      defaultTheme: 'chair',
-      forceSingleTheme: true
+      forceSingleTheme: 'chair'
     }
   );
 });
 
-it('Produces a single theme without variables if possible', () => {
+it('Produces a single theme with dark mode if default has it', () => {
   const config = {
     default: {
       light: {
@@ -177,13 +176,81 @@ it('Produces a single theme without variables if possible', () => {
     `,
     `
       .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: teal;
+      }
+
+      .dark {
+        --color: black;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
+it('Produces a single theme with variables by default', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
+it('Optimizes single theme by removing variables', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
         color: teal;
       }
     `,
     {
       config,
-      defaultTheme: 'mint',
-      forceSingleTheme: true
+      forceSingleTheme: 'mint',
+      optimizeSingleTheme: true
     }
   );
 });
