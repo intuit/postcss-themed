@@ -255,10 +255,12 @@ postcss([
 
 ### forceSingleTheme
 
-This is a niche option which only inserts the `defaultTheme` and ignores any others.
-At first glance, this may seem strange because this plugin primarily allows you to support _many_ themes in a single CSS file.
-This option helps if you want to generate _many_ CSS files, each with their own theme. You'll run PostCSS multiple times, switching the default theme while enabling `forceSingleTheme`.
+This is a niche option which only inserts a single theme.
+At first glance, this may seem strange because this plugin primarily allows you to support _many_ themes in a _single_ CSS file.
+This option helps if you want to generate _many_ CSS files, each with their own theme. You'll run PostCSS multiple times, switching the single theme.
 In practice, we use this to generate extra CSS files for teams that only need a single theme. The main CSS file still has all of them, but teams can optionally use the one that only has the theme they need.
+
+It is still recommended to set defaultTheme with this option, as any missing variables will be merged with the default.
 
 ### Usage
 
@@ -285,8 +287,8 @@ const config = {
 postcss([
   require('postcss-themed')({
     config,
-    defaultTheme: 'light',
-    forceSingleTheme: true
+    defaultTheme: 'default',
+    forceSingleTheme: 'chair'
   })
 ]);
 ```
@@ -311,7 +313,7 @@ postcss([
 }
 
 .dark {
-  --color: darkpurple;
+  --color: dark-purple;
 }
 ```
 

@@ -46,10 +46,10 @@ export interface PostcssThemeOptions {
   forceEmptyThemeSelectors?: boolean;
   /** The name of the default theme */
   defaultTheme?: string;
+  /** Attempt to substitute only a single theme */
+  forceSingleTheme?: string;
   /** Transform CSS variable names similar to CSS-Modules */
   modules?: string | ScopedNameFunction;
-  /** Determines if we want to use all themes or individual themes */
-  forceSingleTheme?: boolean;
 }
 
 /** Get the theme variable name from a string */
@@ -268,7 +268,7 @@ const legacyTheme = (
 ) => {
   const {
     defaultTheme = 'default',
-    forceSingleTheme = false,
+    forceSingleTheme = undefined,
     forceEmptyThemeSelectors
   } = options;
   let newRules: postcss.Rule[] = [];
@@ -382,6 +382,19 @@ const hasDarkMode = (theme: Theme) =>
     Object.keys(theme.dark).length > 0 && Object.keys(theme.light).length > 0
   );
 
+/** Merge a given theme with a base theme */
+const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
+  const merged = defaultTheme;
+
+  for (const [colorScheme, values] of Object.entries(theme)) {
+    for (const [key, value] of Object.entries(values)) {
+      merged[colorScheme as ColorScheme][key] = value;
+    }
+  }
+
+  return merged;
+};
+
 /** Accomplish theming by creating CSS variable overrides  */
 const modernTheme = (
   root: postcss.Root,
@@ -391,7 +404,7 @@ const modernTheme = (
 ) => {
   const usage = new Set<string>();
   const defaultTheme = options.defaultTheme || 'default';
-  const singleTheme = options.forceSingleTheme || false;
+  const singleTheme = options.forceSingleTheme || undefined;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
@@ -401,6 +414,26 @@ const modernTheme = (
   const hasRootDarkMode =
     defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
 
+  // For single theme mode, we need to handle themes that may be incomplete
+  // In that case, we merge the theme with default so all variables are present
+  const singleThemeConfig = Object.entries(componentConfig).find(
+    ([theme]) => theme === singleTheme
+  );
+
+  let mergedSingleThemeConfig = defaultThemeConfig
+    ? defaultThemeConfig[1]
+    : { light: {}, dark: {} };
+
+  if (defaultThemeConfig && singleThemeConfig && defaultTheme !== singleTheme) {
+    mergedSingleThemeConfig = mergeConfigs(
+      singleThemeConfig[1],
+      defaultThemeConfig[1]
+    );
+  }
+
+  const hasMergedDarkMode =
+    mergedSingleThemeConfig && hasDarkMode(mergedSingleThemeConfig);
+
   // 1. Walk each declaration and replace theme vars with CSS vars
   root.walkRules(rule => {
     rule.selector = replaceThemeRoot(rule.selector);
@@ -408,12 +441,14 @@ const modernTheme = (
     rule.walkDecls(decl => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
-        if (singleTheme && !hasRootDarkMode && defaultThemeConfig) {
+        if (singleTheme && !hasMergedDarkMode) {
           // If we are only building a single theme with light mode, just insert the value
-          decl.value = replaceTheme(
-            decl.value,
-            defaultThemeConfig[1].light[key]
-          );
+          if (mergedSingleThemeConfig.light[key]) {
+            decl.value = replaceTheme(
+              decl.value,
+              mergedSingleThemeConfig.light[key]
+            );
+          }
         } else {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
         }
@@ -440,16 +475,16 @@ const modernTheme = (
   if (singleTheme) {
     const rules: (postcss.Rule | undefined)[] = [];
 
-    if (hasRootDarkMode && defaultThemeConfig) {
+    if (hasMergedDarkMode) {
       rules.push(
         createModernTheme(
           ':root',
-          filterUsed('light', defaultTheme, defaultThemeConfig[1]),
+          filterUsed('light', singleTheme, mergedSingleThemeConfig),
           localize
         ),
         createModernTheme(
           '.dark',
-          filterUsed('dark', defaultTheme, defaultThemeConfig[1]),
+          filterUsed('dark', singleTheme, mergedSingleThemeConfig),
           localize
         )
       );
