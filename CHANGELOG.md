@@ -1,3 +1,15 @@
+# v2.0.0 (Fri Sep 11 2020)
+
+#### 💥  Breaking Change
+
+- Merge Single Theme [#15](https://github.com/intuit/postcss-themed/pull/15) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 1
+
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+---
+
 # v1.2.0 (Thu Sep 10 2020)
 
 #### 🚀  Enhancement
