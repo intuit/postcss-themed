@@ -1,3 +1,15 @@
+# v2.0.1 (Wed Sep 16 2020)
+
+#### 🐛  Bug Fix
+
+- optimizeSingleTheme: Detect missing keys and provide warning. [#16](https://github.com/intuit/postcss-themed/pull/16) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 1
+
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+---
+
 # v2.0.0 (Fri Sep 11 2020)
 
 #### 💥  Breaking Change
