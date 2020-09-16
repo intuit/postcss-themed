@@ -451,6 +451,14 @@ const modernTheme = (
               decl.value,
               mergedSingleThemeConfig.light[key]
             );
+          } else {
+            root.warn(
+              root.toResult(),
+              `Could not find key ${key} in theme configuration. Removing declaration.`,
+              { node: decl }
+            );
+            decl.remove();
+            break;
           }
         } else {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
