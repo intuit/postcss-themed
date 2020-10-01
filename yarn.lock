@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@auto-it/all-contributors@^9.54.0":
+"@auto-it/all-contributors@^9.53.1":
   version "9.54.0"
   resolved "https://registry.yarnpkg.com/@auto-it/all-contributors/-/all-contributors-9.54.0.tgz#1152b5bcc8a486bcf22697220a78878b0049d34e"
   integrity sha512-eL+dgUbhPkyRqnLgSuH88jkJBIqo1iKpjCM6BTvdMT9HfbDzuw5WvtSSIzJNmHd6LCVELZiDNIUsodnFXWn85w==

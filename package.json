@@ -33,7 +33,7 @@
     "ts-node": "^8.0.3"
   },
   "devDependencies": {
-    "@auto-it/all-contributors": "^9.54.0",
+    "@auto-it/all-contributors": "^9.53.1",
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.7.7",
