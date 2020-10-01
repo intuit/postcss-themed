@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="images/logo.gif">
+  <img src="images/logo2.gif">
   <h1>postcss-themed</h1>
   <p>
     PostCSS plugin for adding multiple themes to CSS files.
