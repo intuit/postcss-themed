@@ -1,5 +1,5 @@
-<img src="https://i.imgur.com/EL9OJOU.gif">
 <div align="center">
+  <img src="https://i.imgur.com/EL9OJOU.gif">
   <h1>postcss-themed</h1>
   <p>
     PostCSS plugin for adding multiple themes to CSS files.
