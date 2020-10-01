@@ -1,3 +1,4 @@
+<img src="https://i.imgur.com/EL9OJOU.gif">
 <div align="center">
   <h1>postcss-themed</h1>
   <p>
