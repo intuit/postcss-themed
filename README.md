@@ -1,3 +1,5 @@
+<img src="images/logo-primary.png" alt="PostCSS logo" width="220" height="220">
+
 <div align="center">
   <h1>postcss-themed</h1>
   <p>
