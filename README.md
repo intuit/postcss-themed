@@ -1,6 +1,7 @@
 <div align="center">
   <img src="images/logo-primary.png" alt="PostCSS logo" width="220" height="220">
   <p>
+  </br>
     PostCSS plugin for adding multiple themes to CSS files.
   </p>
   <div> 
