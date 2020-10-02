@@ -388,6 +388,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://hipstersmoothie.com"><img src="https://avatars3.githubusercontent.com/u/1192452?v=4" width="100px;" alt="Andrew Lisowski"/><br /><sub><b>Andrew Lisowski</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Documentation">📖</a></td>
     <td align="center"><a href="https://adamdierkens.com"><img src="https://avatars1.githubusercontent.com/u/13004162?v=4" width="100px;" alt="Adam Dierkens"/><br /><sub><b>Adam Dierkens</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=adierkens" title="Code">💻</a></td>
     <td align="center"><a href="https://christyjacob4.github.io"><img src="https://avatars1.githubusercontent.com/u/20852629?v=4" width="100px;" alt="Christy Jacob"/><br /><sub><b>Christy Jacob</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=christyjacob4" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Sharps"><img src="https://avatars2.githubusercontent.com/u/8174841?v=4" width="100px;" alt="Sharps"/><br /><sub><b>Sharps</b></sub></a><br /><a href="#design-Sharps" title="Design">🎨</a></td>
   </tr>
 </table>
 
