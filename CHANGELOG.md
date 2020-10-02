@@ -1,3 +1,15 @@
+# v2.0.3 (Fri Oct 02 2020)
+
+#### 📝  Documentation
+
+- chore: added all contributors plugin to auto [#29](https://github.com/intuit/postcss-themed/pull/29) ([@christyjacob4](https://github.com/christyjacob4))
+
+#### Authors: 1
+
+- Christy Jacob ([@christyjacob4](https://github.com/christyjacob4))
+
+---
+
 # v2.0.2 (Fri Oct 02 2020)
 
 #### 📝  Documentation
