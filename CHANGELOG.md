@@ -1,3 +1,27 @@
+# v2.0.3 (Fri Oct 02 2020)
+
+#### 📝  Documentation
+
+- chore: added all contributors plugin to auto [#29](https://github.com/intuit/postcss-themed/pull/29) ([@christyjacob4](https://github.com/christyjacob4))
+
+#### Authors: 1
+
+- Christy Jacob ([@christyjacob4](https://github.com/christyjacob4))
+
+---
+
+# v2.0.2 (Fri Oct 02 2020)
+
+#### 📝  Documentation
+
+- Adding logo [#28](https://github.com/intuit/postcss-themed/pull/28) ([@mandyellow](https://github.com/mandyellow))
+
+#### Authors: 1
+
+- Amanda Yoshiizumi ([@mandyellow](https://github.com/mandyellow))
+
+---
+
 # v2.0.1 (Wed Sep 16 2020)
 
 #### 🐛  Bug Fix

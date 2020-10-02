@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@auto-it/all-contributors@^7.2.2":
+  version "7.17.0"
+  resolved "https://registry.yarnpkg.com/@auto-it/all-contributors/-/all-contributors-7.17.0.tgz#210bb7a1f6749b8e3904c6e0f7737a84360d3154"
+  integrity sha512-n7qsCpTKCscXnE+qmniX7F2yrZRWF6ZJUg+IcW/g0Smrye2o1Xj7RMTYzYYjO4/jWQf/M96GuXw2mDvzlfMzIw==
+  dependencies:
+    "@auto-it/core" "^7.17.0"
+    anymatch "^3.1.1"
+    tslib "1.10.0"
+
 "@auto-it/core@^7.12.8":
   version "7.12.8"
   resolved "https://registry.yarnpkg.com/@auto-it/core/-/core-7.12.8.tgz#7ec3292f9f44747b28127593062be0ab288d0479"
@@ -12,6 +21,36 @@
     "@octokit/plugin-retry" "^2.2.0"
     "@octokit/plugin-throttling" "^2.6.0"
     "@octokit/rest" "16.34.1"
+    await-to-js "^2.1.1"
+    cosmiconfig "6.0.0"
+    dedent "^0.7.0"
+    deepmerge "^4.0.0"
+    dotenv "^8.0.0"
+    enquirer "^2.3.0"
+    env-ci "^4.1.1"
+    gitlog "^3.1.2"
+    https-proxy-agent "^3.0.0"
+    import-cwd "^3.0.0"
+    lodash.chunk "^4.2.0"
+    node-fetch "2.6.0"
+    semver "^6.0.0"
+    signale "^1.4.0"
+    tapable "^2.0.0-beta.2"
+    tinycolor2 "^1.4.1"
+    tslib "1.10.0"
+    typescript-memoize "^1.0.0-alpha.3"
+    url-join "^4.0.0"
+
+"@auto-it/core@^7.17.0":
+  version "7.17.0"
+  resolved "https://registry.yarnpkg.com/@auto-it/core/-/core-7.17.0.tgz#4b0496472481226337dcb58dbef2639e5cb463fa"
+  integrity sha512-bjgAmb7dna70pUYghfyMPZWk5ArSnwPOpa9V3ZsgE/7JxTCxM/GBOubywDA5htOCgNBxfWezWERf5ZjgYm28hA==
+  dependencies:
+    "@octokit/graphql" "^4.0.0"
+    "@octokit/plugin-enterprise-compatibility" "1.1.1"
+    "@octokit/plugin-retry" "^2.2.0"
+    "@octokit/plugin-throttling" "^2.6.0"
+    "@octokit/rest" "16.35.0"
     await-to-js "^2.1.1"
     cosmiconfig "6.0.0"
     dedent "^0.7.0"
@@ -1106,6 +1145,24 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
+"@octokit/rest@16.35.0":
+  version "16.35.0"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-16.35.0.tgz#7ccc1f802f407d5b8eb21768c6deca44e7b4c0d8"
+  integrity sha512-9ShFqYWo0CLoGYhA1FdtdykJuMzS/9H6vSbbQWDX4pWr4p9v+15MsH/wpd/3fIU+tSxylaNO48+PIHqOkBRx3w==
+  dependencies:
+    "@octokit/request" "^5.2.0"
+    "@octokit/request-error" "^1.0.2"
+    atob-lite "^2.0.0"
+    before-after-hook "^2.0.0"
+    btoa-lite "^1.0.0"
+    deprecation "^2.0.0"
+    lodash.get "^4.4.2"
+    lodash.set "^4.3.2"
+    lodash.uniq "^4.5.0"
+    octokit-pagination-methods "^1.1.0"
+    once "^1.4.0"
+    universal-user-agent "^4.0.0"
+
 "@octokit/types@^2.0.0":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@octokit/types/-/types-2.0.1.tgz#0caf0364e010296265621593ac9a37f40ef75dad"
@@ -1516,6 +1573,14 @@ anymatch@^2.0.0:
   dependencies:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
+
+anymatch@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.1.tgz#c55ecf02185e2469259399310c173ce31233b142"
+  integrity sha512-mM8522psRCqzV+6LhomX5wgp25YVibjh8Wj23I5RPkPppSVSjyKD2A2mBJmWGa+KN7f2D6LNh9jkBCeyLktzjg==
+  dependencies:
+    normalize-path "^3.0.0"
+    picomatch "^2.0.4"
 
 aproba@^1.0.3:
   version "1.2.0"
@@ -4823,6 +4888,11 @@ normalize-path@^2.1.1:
   dependencies:
     remove-trailing-separator "^1.0.1"
 
+normalize-path@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-3.0.0.tgz#0dcd69ff23a1c9b11fd0978316644a0388216a65"
+  integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
+
 npm-bundled@^1.0.1:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/npm-bundled/-/npm-bundled-1.0.6.tgz#e7ba9aadcef962bb61248f91721cd932b3fe6bdd"
@@ -5223,6 +5293,11 @@ performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
+
+picomatch@^2.0.4:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/picomatch/-/picomatch-2.2.2.tgz#21f333e9b6b8eaff02468f5146ea406d345f4dad"
+  integrity sha512-q0M/9eZHzmr0AulXyPwNfZjtwZ/RBZlbN3K3CErVrk50T2ASYI7Bye0EvekFY3IP1Nt2DHu0re+V2ZHIpMkuWg==
 
 pify@^2.0.0:
   version "2.3.0"

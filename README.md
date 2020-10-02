@@ -1,6 +1,7 @@
 <div align="center">
-  <h1>postcss-themed</h1>
+  <img src="images/logo-primary.png" alt="PostCSS logo" width="220" height="220">
   <p>
+  </br>
     PostCSS plugin for adding multiple themes to CSS files.
   </p>
   <div>
@@ -386,13 +387,15 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://tylerkrupicka.com"><img src="https://avatars1.githubusercontent.com/u/5761061?v=4" width="100px;" alt="Tyler Krupicka"/><br /><sub><b>Tyler Krupicka</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=tylerkrupicka" title="Documentation">📖</a></td>
     <td align="center"><a href="http://hipstersmoothie.com"><img src="https://avatars3.githubusercontent.com/u/1192452?v=4" width="100px;" alt="Andrew Lisowski"/><br /><sub><b>Andrew Lisowski</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=hipstersmoothie" title="Documentation">📖</a></td>
     <td align="center"><a href="https://adamdierkens.com"><img src="https://avatars1.githubusercontent.com/u/13004162?v=4" width="100px;" alt="Adam Dierkens"/><br /><sub><b>Adam Dierkens</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=adierkens" title="Code">💻</a></td>
+    <td align="center"><a href="https://christyjacob4.github.io"><img src="https://avatars1.githubusercontent.com/u/20852629?v=4" width="100px;" alt="Christy Jacob"/><br /><sub><b>Christy Jacob</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=christyjacob4" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Sharps"><img src="https://avatars2.githubusercontent.com/u/8174841?v=4" width="100px;" alt="Sharps"/><br /><sub><b>Sharps</b></sub></a><br /><a href="#design-Sharps" title="Design">🎨</a></td>
+    <td align="center"><a href="https://www.behance.net/amandayoshiizumi"><img src="https://avatars0.githubusercontent.com/u/30158643?v=4" width="100px;" alt="Amanda Yoshiizumi"/><br /><sub><b>Amanda Yoshiizumi</b></sub></a><br /><a href="#design-mandyellow" title="Design">🎨</a></td>
     <td align="center"><a href="https://github.com/ratnamal"><img src="https://avatars0.githubusercontent.com/u/36140652?v=4" width="100px;" alt="Ratnamala Korlepara"/><br /><sub><b>Ratnamala Korlepara</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=ratnamal" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

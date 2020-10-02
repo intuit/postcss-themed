@@ -1,6 +1,6 @@
 {
   "name": "postcss-themed",
-  "version": "2.0.1",
+  "version": "2.0.3",
   "main": "dist/index.js",
   "description": "PostCSS plugin for adding multiple themes to CSS files",
   "keywords": [
@@ -33,6 +33,7 @@
     "ts-node": "^8.0.3"
   },
   "devDependencies": {
+    "@auto-it/all-contributors": "^7.2.2",
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.7.7",
@@ -130,7 +131,8 @@
   "auto": {
     "plugins": [
       "npm",
-      "released"
+      "released",
+      "all-contributors"
     ]
   },
   "prettier": {
