@@ -478,7 +478,7 @@ it('multiple themes + theme-root', () => {
       .light.expanded {
         width: 10px;
       }
-      .dark.expanded { 
+      .dark.expanded {
         width: 100px;
       }
     `,
@@ -517,7 +517,7 @@ it('multiple themes + fallback', () => {
       .light.expanded {
         border: 1px solid white;
       }
-      .dark.expanded { 
+      .dark.expanded {
         border: 1px solid black;
       }
     `,
@@ -641,7 +641,7 @@ it('multiple selectors - theme root', () => {
         background: @theme color;
         width: @theme width;
       }
-    }    
+    }
     `,
     `
       .item {
@@ -689,7 +689,7 @@ it('dark themes', () => {
     `
       .item {
         color: @theme color;
-      }    
+      }
     `,
     `
       .item {
@@ -732,7 +732,7 @@ it('overrides themes to single theme', () => {
   }
   `;
 
-  return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: true })])
+  return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: 'true' })])
     .process(input, { from: undefined })
     .catch(e => {
       expect(e.message).toContain(
@@ -773,7 +773,7 @@ it('when theme = light , forceSingleTheme = true, single selector is generated',
     {
       config,
       defaultTheme: 'light',
-      forceSingleTheme: true,
+      forceSingleTheme: 'true',
     }
   );
 });
@@ -806,19 +806,45 @@ it('when theme = light , forceSingleTheme = false, multiple selectors are genera
         width: 10px;
         color: white;
       }
-      .default .expanded,.default  .foo {
-        width: 1px;
-        color: purple;
-      }
-      .dark .expanded,.dark  .foo {
-        width: 20px;
-        color: black;
-      }
     `,
     {
       config,
       defaultTheme: 'light',
-      forceSingleTheme: false,
+      forceSingleTheme: 'false',
+    }
+  );
+});
+
+it('Adding empty selectors to final output. Part of legacy code', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    light: {
+      color: 'white'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: purple;
+      }
+      .light .test {
+        color: white;
+      }
+      .default {}
+      .light {}
+      .dark {}
+    `,
+    {
+      config,
+      forceEmptyThemeSelectors: true
     }
   );
 });

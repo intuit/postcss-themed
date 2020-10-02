@@ -383,3 +383,32 @@ it('scoped variable names with custom function', () => {
     }
   );
 });
+
+it('Wrong key mentioned in theme configuration', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    light: {
+      color: 'white'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        background-color: @theme background-color;
+      }
+    `,
+    `
+      .test {
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint',
+      optimizeSingleTheme: true
+    }
+  );
+});
+
