@@ -4,7 +4,7 @@
   </br>
     PostCSS plugin for adding multiple themes to CSS files.
   </p>
-  <div> 
+  <div>
     <a href="https://circleci.com/gh/intuit/postcss-themed"><img src="https://circleci.com/gh/intuit/postcss-themed.svg?style=svg"></a>
     <a href="https://www.npmjs.com/package/postcss-themed"><img src="https://img.shields.io/npm/v/postcss-themed.svg?style=flat-square&logo=npm" alt="npm" /></a>
     <a href="https://github.com/prettier/prettier"><img src="https://img.shields.io/badge/styled_with-prettier-ff69b4.svg" alt="styled with prettier" /></a>
@@ -390,6 +390,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://christyjacob4.github.io"><img src="https://avatars1.githubusercontent.com/u/20852629?v=4" width="100px;" alt="Christy Jacob"/><br /><sub><b>Christy Jacob</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=christyjacob4" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Sharps"><img src="https://avatars2.githubusercontent.com/u/8174841?v=4" width="100px;" alt="Sharps"/><br /><sub><b>Sharps</b></sub></a><br /><a href="#design-Sharps" title="Design">🎨</a></td>
     <td align="center"><a href="https://www.behance.net/amandayoshiizumi"><img src="https://avatars0.githubusercontent.com/u/30158643?v=4" width="100px;" alt="Amanda Yoshiizumi"/><br /><sub><b>Amanda Yoshiizumi</b></sub></a><br /><a href="#design-mandyellow" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/ratnamal"><img src="https://avatars0.githubusercontent.com/u/36140652?v=4" width="100px;" alt="Ratnamala Korlepara"/><br /><sub><b>Ratnamala Korlepara</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=ratnamal" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
