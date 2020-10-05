@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 import debug from 'debug';
 import merge from 'deepmerge';
+import crypto from 'crypto';
 import * as caniuse from 'caniuse-api';
 import browserslist from 'browserslist';
 import * as tsNode from 'ts-node';
@@ -359,18 +360,32 @@ const createModernTheme = (
   return rule;
 };
 
+const defaultLocalizeFunction = (
+  name: string,
+  filePath: string,
+  css: string
+) => {
+  const hash = crypto
+    .createHash('md5')
+    .update(css)
+    .digest('hex')
+    .slice(0, 6);
+  return `${filePath || 'default'}-${name}-${hash}`;
+}
+
 const getLocalizeFunction = (
   modules: string | ScopedNameFunction | undefined,
   resourcePath: string | undefined
 ) => {
-  if (typeof modules === 'function') {
+  if (typeof modules === 'function' || modules === 'default') {
     let fileContents = '';
     if (resourcePath) {
       fileContents = fs.readFileSync(resourcePath, 'utf8');
     }
 
+    const localize = typeof modules === 'function' ? modules : defaultLocalizeFunction;
     return (name: string) => {
-      return modules(name, resourcePath || '', fileContents);
+      return localize(name, resourcePath || '', fileContents);
     };
   }
 

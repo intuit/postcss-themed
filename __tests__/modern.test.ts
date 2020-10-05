@@ -358,28 +358,66 @@ it('scoped variable names with custom function', () => {
     `,
     `
       .test {
-        color: var(--test-color-d41d8c);
-        background-image: linear-gradient(to right, var(--test-color-d41d8c), var(--test-color-d41d8c))
+        color: var(--test-color-da3);
+        background-image: linear-gradient(to right, var(--test-color-da3), var(--test-color-da3))
       }
 
       :root {
-        --test-color-d41d8c: purple
+        --test-color-da3: purple
       }
 
       .light {
-        --test-color-d41d8c: white
+        --test-color-da3: white
       }
     `,
     {
       config,
       modules: (name: string, filename: string, css: string) => {
         const hash = crypto
-          .createHash('md5')
+          .createHash('sha1')
           .update(css)
           .digest('hex')
-          .slice(0, 6);
+          .slice(0, 3);
         return `${filename || 'test'}-${name}-${hash}`;
       }
+    }
+  );
+});
+
+it('scoped variable names with default function', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    light: {
+      color: 'white'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--default-color-d41d8c);
+        background-image: linear-gradient(to right, var(--default-color-d41d8c), var(--default-color-d41d8c))
+      }
+
+      :root {
+        --default-color-d41d8c: purple
+      }
+
+      .light {
+        --default-color-d41d8c: white
+      }
+    `,
+    {
+      config,
+      modules: 'default'
     }
   );
 });
@@ -411,4 +449,3 @@ it('Wrong key mentioned in theme configuration', () => {
     }
   );
 });
-

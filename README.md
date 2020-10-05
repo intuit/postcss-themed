@@ -218,6 +218,23 @@ postcss([
 ]);
 ```
 
+Another option is to use the default function for scoping variable names. The default function combines the filepath, name and hashed css into a single string and uses it as a variable name.
+
+```js
+const defaultLocalizeFunction = (
+  name: string,
+  filePath: string,
+  css: string
+) => {
+  const hash = crypto
+    .createHash('md5')
+    .update(css)
+    .digest('hex')
+    .slice(0, 6);
+  return `${filePath || 'default'}-${name}-${hash}`;
+};
+```
+
 You can also supply your own function for scoping variable names, again following the API from CSS Modules. If PostCSS does not have a path for the file both the path and css will return an empty string.
 
 ```js
@@ -226,10 +243,10 @@ postcss([
     config,
     modules: (name: string, filePath: string, css: string) => {
       const hash = crypto
-        .createHash('md5')
+        .createHash('sha1')
         .update(css)
         .digest('hex')
-        .slice(0, 6);
+        .slice(0, 3);
       return `${filePath}-${name}-${hash}`;
     }
   })
@@ -396,6 +413,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
