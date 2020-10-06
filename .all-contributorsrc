@@ -77,6 +77,16 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "EnzoZafra",
+      "name": "Enzo Zafra",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/10554785?v=4",
+      "profile": "http://enzozafra.com/",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
