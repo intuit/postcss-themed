@@ -218,7 +218,20 @@ postcss([
 ]);
 ```
 
-Another option is to use the default function for scoping variable names. The default function combines the filepath, name and hashed css into a single string and uses it as a variable name.
+Another option is to use the default function for scoping variable names.
+
+To use the default function:
+
+```js
+postcss([
+  require('postcss-themed')({
+    config,
+    modules: 'default'
+  })
+]);
+```
+
+The default function combines the filepath, name and hashed css into a single string and uses it as a variable name.
 
 ```js
 const defaultLocalizeFunction = (
