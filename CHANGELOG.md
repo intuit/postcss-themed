@@ -1,3 +1,25 @@
+# v2.1.0 (Tue Oct 06 2020)
+
+#### 🚀  Enhancement
+
+- add ability to use a default function for modules [#34](https://github.com/intuit/postcss-themed/pull/34) ([@EnzoZafra](https://github.com/EnzoZafra))
+
+#### 🐛  Bug Fix
+
+- Added new test cases to increase code coverage [#31](https://github.com/intuit/postcss-themed/pull/31) (Ratnamala_Korlepara@intuit.com)
+
+#### 📝  Documentation
+
+- Second Logo and Contributors [#33](https://github.com/intuit/postcss-themed/pull/33) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 3
+
+- Ratnamala Korlepara ([@ratnamal](https://github.com/ratnamal))
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+- Enzo Zafra ([@EnzoZafra](https://github.com/EnzoZafra))
+
+---
+
 # v2.0.3 (Fri Oct 02 2020)
 
 #### 📝  Documentation
