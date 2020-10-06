@@ -423,13 +423,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/ratnamal"><img src="https://avatars0.githubusercontent.com/u/36140652?v=4" width="100px;" alt="Ratnamala Korlepara"/><br /><sub><b>Ratnamala Korlepara</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=ratnamal" title="Tests">⚠️</a></td>
   </tr>
   <tr>
-    <td align="center"><a href="http://enzozafra.com/"><img src="https://avatars1.githubusercontent.com/u/10554785?v=4" width="100px;" alt="Enzo Zafra"/><br /><sub><b>Enzo Zafra</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://enzozafra.com/"><img src="https://avatars1.githubusercontent.com/u/10554785?v=4" width="100px;" alt="Enzo Zafra"/><br /><sub><b>Enzo Zafra</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Documentation">📖</a> <a href="#infra-EnzoZafra" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

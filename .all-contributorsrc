@@ -85,7 +85,9 @@
       "profile": "http://enzozafra.com/",
       "contributions": [
         "code",
-        "doc"
+        "doc",
+        "infra",
+        "test"
       ]
     }
   ],
