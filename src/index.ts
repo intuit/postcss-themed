@@ -54,13 +54,13 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   root: postcss.Root,
   result: postcss.Result
 ) => {
-  const { config, resolveTheme } = options;
-
   // Postcss-modules runs twice and we only ever want to process the CSS once
   // @ts-ignore
   if (root.source.processed) {
     return;
   }
+
+  const { config, resolveTheme } = options;
 
   if (!config) {
     throw Error('No config provided to postcss-themed');

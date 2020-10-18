@@ -7,13 +7,13 @@ import { ColorScheme, PostcssStrictThemeConfig, PostcssThemeOptions } from '../t
 const log = debug('postcss-themed');
 
 /** Find all the theme variables in a CSS value and replace them with the configured theme values */
-function replaceThemeVariables(
+const replaceThemeVariables = (
   config: PostcssStrictThemeConfig,
   theme: string,
   decl: postcss.Declaration,
   colorScheme: 'light' | 'dark' = 'light',
   defaultTheme = 'default',
-) {
+) => {
   const hasMultiple = (decl.value.match(/@theme/g) || []).length > 1;
 
   // Found a theme reference
@@ -43,7 +43,7 @@ function replaceThemeVariables(
 }
 
 /** Apply a transformation to a selector */
-function applyToSelectors(selector: string, fn: (selector: string) => string) {
+const applyToSelectors = (selector: string, fn: (selector: string) => string) => {
   return selector
     .replace(/\n/gm, '')
     .split(',')
@@ -116,12 +116,12 @@ const createNewRule = (
 };
 
 /** Create theme override rule for every theme */
-function createNewRules(
+const createNewRules = (
   componentConfig: PostcssStrictThemeConfig,
   rule: postcss.Rule,
   themedDeclarations: postcss.Declaration[],
   defaultTheme: string
-) {
+) => {
   // Need to remember original selector because we overwrite rule.selector
   // once :theme-root is found. If we don't remember the original value then
   // multiple themes break
