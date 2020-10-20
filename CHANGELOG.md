@@ -1,3 +1,15 @@
+# v2.2.0 (Tue Oct 20 2020)
+
+#### 🚀  Enhancement
+
+- add theme file to dependencies to get webpack reloading working [#36](https://github.com/intuit/postcss-themed/pull/36) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.1.0 (Tue Oct 06 2020)
 
 #### 🚀  Enhancement
