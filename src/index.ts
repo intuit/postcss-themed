@@ -66,6 +66,11 @@ function replaceTheme(value: string, replace: string) {
   return value.replace(/@theme ([a-zA-Z-_0-9]+)/, replace);
 }
 
+/** Get the location of the theme file */
+function getThemeFilename(cssFile: string) {
+  return path.join(path.dirname(cssFile), 'theme');
+}
+
 /** Try to load component theme from same directory as css file */
 function configForComponent(
   cssFile: string | undefined,
@@ -82,7 +87,7 @@ function configForComponent(
     if (resolveTheme) {
       componentConfig = resolveTheme(cssFile);
     } else {
-      const theme = path.join(path.dirname(cssFile), 'theme');
+      const theme = getThemeFilename(cssFile);
       delete require.cache[require.resolve(theme)];
       // eslint-disable-next-line security/detect-non-literal-require, global-require
       componentConfig = require(theme);
@@ -570,7 +575,8 @@ const modernTheme = (
 
 /** Generate a theme */
 const themeFile = (options: PostcssThemeOptions = {}) => (
-  root: postcss.Root
+  root: postcss.Root,
+  result: postcss.Result
 ) => {
   const { config, resolveTheme } = options;
 
@@ -602,6 +608,18 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
 
   // @ts-ignore
   root.source.processed = true;
+
+  if (!resolveTheme && root.source.input.file) {
+    const themeFilename = getThemeFilename(root.source.input.file)
+
+    if (fs.existsSync(themeFilename)) {
+      result.messages.push({
+        plugin: 'postcss-themed',
+        type: "dependency",
+        file: themeFilename
+      });
+    }
+  }
 };
 
 export default postcss.plugin('postcss-themed', themeFile);
