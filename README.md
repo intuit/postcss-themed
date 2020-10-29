@@ -425,6 +425,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://enzozafra.com/"><img src="https://avatars1.githubusercontent.com/u/10554785?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Enzo Zafra</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Documentation">📖</a> <a href="#infra-EnzoZafra" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/intuit/postcss-themed/commits?author=EnzoZafra" title="Tests">⚠️</a></td>
     <td align="center"><a href="https://twitter.com/hellonehha"><img src="https://avatars3.githubusercontent.com/u/61655?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Neha Sharma</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=Neha" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/nehapatwardhan6490"><img src="https://avatars0.githubusercontent.com/u/56652882?v=4?s=100" width="100px;" alt=""/><br /><sub><b>nehapatwardhan6490</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=nehapatwardhan6490" title="Code">💻</a></td>
   </tr>
 </table>
 
