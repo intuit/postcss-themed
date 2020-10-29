@@ -8,10 +8,11 @@ import * as caniuse from 'caniuse-api';
 import browserslist from 'browserslist';
 import * as tsNode from 'ts-node';
 import Declaration from 'postcss/lib/declaration';
-import localizeIdentifier from './localize-identifier';
 import Root from 'postcss/lib/root';
 import rule from 'postcss/lib/rule';
 import Result from 'postcss/lib/result';
+
+import localizeIdentifier from './localize-identifier';
 
 const log = debug('postcss-themed');
 
@@ -109,32 +110,32 @@ function configForComponent(
 function replaceThemeVariables(
   config: PostcssStrictThemeConfig,
   theme: string,
-  decl: Declaration,
+  declaration: Declaration,
   colorScheme: 'light' | 'dark' = 'light',
   defaultTheme = 'default'
 ) {
-  const hasMultiple = (decl.value.match(/@theme/g) || []).length > 1;
+  const hasMultiple = (declaration.value.match(/@theme/g) || []).length > 1;
 
   // Found a theme reference
-  while (decl.value.includes('@theme')) {
-    const themeKey = parseThemeKey(decl.value);
+  while (declaration.value.includes('@theme')) {
+    const themeKey = parseThemeKey(declaration.value);
 
     // Check for issues with theme
     try {
       const themeDefault = config[defaultTheme][colorScheme][themeKey];
       const newValue = config[theme][colorScheme][themeKey];
 
-      decl.value = replaceTheme(
-        decl.value,
+      declaration.value = replaceTheme(
+        declaration.value,
         hasMultiple ? newValue || themeDefault : newValue
       );
 
-      if (decl.value === 'undefined') {
-        decl.remove();
+      if (declaration.value === 'undefined') {
+        declaration.remove();
       }
     } catch (error) {
       log(error);
-      throw decl.error(`Theme '${theme}' does not contain key '${themeKey}'`, {
+      throw declaration.error(`Theme '${theme}' does not contain key '${themeKey}'`, {
         plugin: 'postcss-themed'
       });
     }
@@ -157,7 +158,7 @@ const replaceThemeRoot = (selector: string) =>
 /** Create a new rule by inject injecting theme vars into a class with theme usage */
 const createNewRule = (
   componentConfig: PostcssStrictThemeConfig,
-  rule: Rule,
+  existingRule: Rule,
   themedDeclarations: Declaration[],
   originalSelector: string,
   defaultTheme: string
@@ -181,18 +182,18 @@ const createNewRule = (
   );
 
   if (originalSelector.includes(':theme-root')) {
-    rule.selector = replaceThemeRoot(rule.selector);
+    existingRule.selector = replaceThemeRoot(existingRule.selector);
 
-    if (rule.selector === '*') {
-      newSelector = applyToSelectors(rule.selector, s => `${s}${themeClass}`);
+    if (existingRule.selector === '*') {
+      newSelector = applyToSelectors(existingRule.selector, s => `${s}${themeClass}`);
     } else {
-      newSelector = applyToSelectors(rule.selector, s => `${themeClass}${s}`);
+      newSelector = applyToSelectors(existingRule.selector, s => `${themeClass}${s}`);
     }
   }
 
   if (themedDeclarations.length > 0) {
     // Add theme to selector, clone to retain source maps
-    const newRule = rule.clone({
+    const newRule = existingRule.clone({
       selector: newSelector
     });
 
@@ -221,14 +222,14 @@ const createNewRule = (
 /** Create theme override rule for every theme */
 function createNewRules(
   componentConfig: PostcssStrictThemeConfig,
-  rule: Rule,
+  existingRule: Rule,
   themedDeclarations: Declaration[],
   defaultTheme: string
 ) {
   // Need to remember original selector because we overwrite rule.selector
   // once :theme-root is found. If we don't remember the original value then
   // multiple themes break
-  const originalSelector = rule.selector;
+  const originalSelector = existingRule.selector;
   const themes = Object.keys(componentConfig);
   const rules: Rule[] = [];
 
@@ -237,7 +238,7 @@ function createNewRules(
     const theme = componentConfig[themeKey];
     const themeRule = createNewRule(
       componentConfig,
-      rule,
+      existingRule,
       themedDeclarations,
       originalSelector,
       defaultTheme
@@ -284,20 +285,20 @@ const legacyTheme = (
   } = options;
   let newRules: Rule[] = [];
 
-  root.walkRules(rule => {
+  root.walkRules(walkRule => {
     const themedDeclarations: Declaration[] = [];
 
     // Walk each declaration and find themed values
-    rule.walkDecls(decl => {
-      const { value } = decl;
+    walkRule.walkDecls(walkDecl => {
+      const { value } = walkDecl;
 
       if (value.includes('@theme')) {
-        themedDeclarations.push(decl.clone());
+        themedDeclarations.push(walkDecl.clone());
         // Replace defaults in original CSS rule
         replaceThemeVariables(
           componentConfig,
           defaultTheme,
-          decl,
+          walkDecl,
           'light',
           defaultTheme
         );
@@ -310,7 +311,7 @@ const legacyTheme = (
     } else {
       createNewThemeRules = createNewRules(
         componentConfig,
-        rule,
+        walkRule,
         themedDeclarations,
         defaultTheme
       );
@@ -334,6 +335,7 @@ const legacyTheme = (
     }
 
     extra.forEach(selector =>
+      // eslint-disable-next-line new-cap
       newRules.push(new rule({ selector: `.${selector}` }))
     );
   }
@@ -351,6 +353,7 @@ const createModernTheme = (
   theme: SimpleTheme,
   transform: (value: string) => string
 ) => {
+  // eslint-disable-next-line new-cap
   const newRule = new rule({ selector });
   const decls = Object.entries(theme).map(([prop, value]) =>
     decl({
@@ -461,30 +464,30 @@ const modernTheme = (
     mergedSingleThemeConfig && hasDarkMode(mergedSingleThemeConfig);
 
   // 1. Walk each declaration and replace theme vars with CSS vars
-  root.walkRules(rule => {
-    rule.selector = replaceThemeRoot(rule.selector);
+  root.walkRules(walkRule => {
+    walkRule.selector = replaceThemeRoot(walkRule.selector);
 
-    rule.walkDecls(decl => {
-      while (decl.value.includes('@theme')) {
-        const key = parseThemeKey(decl.value);
+    walkRule.walkDecls(walkDecl => {
+      while (walkDecl.value.includes('@theme')) {
+        const key = parseThemeKey(walkDecl.value);
         if (singleTheme && !hasMergedDarkMode && optimizeSingleTheme) {
           // If we are only building a single theme with light mode, we can optionally insert the value
           if (mergedSingleThemeConfig.light[key]) {
-            decl.value = replaceTheme(
-              decl.value,
+            walkDecl.value = replaceTheme(
+              walkDecl.value,
               mergedSingleThemeConfig.light[key]
             );
           } else {
             root.warn(
               root.toResult(),
               `Could not find key ${key} in theme configuration. Removing declaration.`,
-              { node: decl }
+              { node: walkDecl }
             );
-            decl.remove();
+            walkDecl.remove();
             break;
           }
         } else {
-          decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+          walkDecl.value = replaceTheme(walkDecl.value, `var(--${localize(key)})`);
         }
 
         usage.add(key);
