@@ -90,6 +90,15 @@
         "infra",
         "test"
       ]
+    },
+    {
+      "login": "Neha",
+      "name": "Neha Sharma",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/61655?v=4",
+      "profile": "https://twitter.com/hellonehha",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
