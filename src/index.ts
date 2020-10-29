@@ -1,4 +1,4 @@
-import { decl, Rule } from 'postcss';
+import postcss from 'postcss';
 import path from 'path';
 import fs from 'fs';
 import debug from 'debug';
@@ -7,11 +7,8 @@ import crypto from 'crypto';
 import * as caniuse from 'caniuse-api';
 import browserslist from 'browserslist';
 import * as tsNode from 'ts-node';
-import Declaration from 'postcss/lib/declaration';
+
 import localizeIdentifier from './localize-identifier';
-import Root from 'postcss/lib/root';
-import rule from 'postcss/lib/rule';
-import Result from 'postcss/lib/result';
 
 const log = debug('postcss-themed');
 
@@ -109,7 +106,7 @@ function configForComponent(
 function replaceThemeVariables(
   config: PostcssStrictThemeConfig,
   theme: string,
-  decl: Declaration,
+  decl: postcss.Declaration,
   colorScheme: 'light' | 'dark' = 'light',
   defaultTheme = 'default'
 ) {
@@ -157,8 +154,8 @@ const replaceThemeRoot = (selector: string) =>
 /** Create a new rule by inject injecting theme vars into a class with theme usage */
 const createNewRule = (
   componentConfig: PostcssStrictThemeConfig,
-  rule: Rule,
-  themedDeclarations: Declaration[],
+  rule: postcss.Rule,
+  themedDeclarations: postcss.Declaration[],
   originalSelector: string,
   defaultTheme: string
 ) => (theme: string, colorScheme: ColorScheme) => {
@@ -200,7 +197,7 @@ const createNewRule = (
 
     // Only add themed declarations to override
     for (const property of themedDeclarations) {
-      const declaration = decl(property);
+      const declaration = postcss.decl(property);
       replaceThemeVariables(
         componentConfig,
         theme,
@@ -221,8 +218,8 @@ const createNewRule = (
 /** Create theme override rule for every theme */
 function createNewRules(
   componentConfig: PostcssStrictThemeConfig,
-  rule: Rule,
-  themedDeclarations: Declaration[],
+  rule: postcss.Rule,
+  themedDeclarations: postcss.Declaration[],
   defaultTheme: string
 ) {
   // Need to remember original selector because we overwrite rule.selector
@@ -230,7 +227,7 @@ function createNewRules(
   // multiple themes break
   const originalSelector = rule.selector;
   const themes = Object.keys(componentConfig);
-  const rules: Rule[] = [];
+  const rules: postcss.Rule[] = [];
 
   // Create new rules for theme overrides
   for (const themeKey of themes) {
@@ -273,7 +270,7 @@ const normalizeTheme = (
 
 /** Accomplish theming by creating new classes to override theme values  */
 const legacyTheme = (
-  root: Root,
+  root: postcss.Root,
   componentConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
@@ -282,10 +279,10 @@ const legacyTheme = (
     forceSingleTheme = undefined,
     forceEmptyThemeSelectors
   } = options;
-  let newRules: Rule[] = [];
+  let newRules: postcss.Rule[] = [];
 
   root.walkRules(rule => {
-    const themedDeclarations: Declaration[] = [];
+    const themedDeclarations: postcss.Declaration[] = [];
 
     // Walk each declaration and find themed values
     rule.walkDecls(decl => {
@@ -304,7 +301,7 @@ const legacyTheme = (
       }
     });
 
-    let createNewThemeRules: Rule[];
+    let createNewThemeRules: postcss.Rule[];
     if (forceSingleTheme) {
       createNewThemeRules = [];
     } else {
@@ -334,7 +331,7 @@ const legacyTheme = (
     }
 
     extra.forEach(selector =>
-      newRules.push(new rule({ selector: `.${selector}` }))
+      newRules.push(postcss.rule({ selector: `.${selector}` }))
     );
   }
 
@@ -351,9 +348,9 @@ const createModernTheme = (
   theme: SimpleTheme,
   transform: (value: string) => string
 ) => {
-  const newRule = new rule({ selector });
+  const rule = postcss.rule({ selector });
   const decls = Object.entries(theme).map(([prop, value]) =>
-    decl({
+    postcss.decl({
       prop: `--${transform(prop)}`,
       value: `${value}`
     })
@@ -363,9 +360,9 @@ const createModernTheme = (
     return;
   }
 
-  newRule.append(decls);
+  rule.append(decls);
 
-  return newRule;
+  return rule;
 };
 
 const defaultLocalizeFunction = (
@@ -422,7 +419,7 @@ const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
 
 /** Accomplish theming by creating CSS variable overrides  */
 const modernTheme = (
-  root: Root,
+  root: postcss.Root,
   componentConfig: PostcssStrictThemeConfig,
   globalConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
@@ -506,7 +503,7 @@ const modernTheme = (
 
   // 2a. If generating a single theme, simply generate the default
   if (singleTheme) {
-    const rules: (Rule | undefined)[] = [];
+    const rules: (postcss.Rule | undefined)[] = [];
 
     if (hasMergedDarkMode) {
       rules.push(
@@ -531,13 +528,13 @@ const modernTheme = (
       );
     }
 
-    root.append(...rules.filter((x): x is Rule => Boolean(x)));
+    root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
     return;
   }
 
   // 2b. Under normal operation, generate CSS variable blocks for each theme
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
-    const rules: (Rule | undefined)[] = [];
+    const rules: (postcss.Rule | undefined)[] = [];
     const isDefault = theme === defaultTheme;
     const rootClass = isDefault ? ':root' : `.${theme}`;
 
@@ -572,14 +569,14 @@ const modernTheme = (
       );
     }
 
-    root.append(...rules.filter((x): x is Rule => Boolean(x)));
+    root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
   });
 };
 
 /** Generate a theme */
 const themeFile = (options: PostcssThemeOptions = {}) => (
-  root: Root,
-  result: Result
+  root: postcss.Root,
+  result: postcss.Result
 ) => {
   const { config, resolveTheme } = options;
 
