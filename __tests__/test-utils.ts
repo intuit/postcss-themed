@@ -1,7 +1,8 @@
 import postcss from 'postcss';
 import nested from 'postcss-nested';
 
-import plugin, { PostcssThemeOptions } from '../src/index';
+import plugin  from '../src/index';
+import { PostcssThemeOptions } from '../src/types';
 
 export function normalizeResult(input: string) {
   return input
