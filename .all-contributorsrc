@@ -90,6 +90,16 @@
         "infra",
         "test"
       ]
+    },
+    {
+      "login": "joshtym",
+      "name": "Joshua Tymburski",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/6886456?v=4",
+      "profile": "https://github.com/joshtym",
+      "contributions": [
+        "test",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
