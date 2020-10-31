@@ -1,3 +1,15 @@
+# v2.2.1 (Fri Oct 30 2020)
+
+#### 🐛  Bug Fix
+
+- refactor: restructure plugin layout for better separation [#35](https://github.com/intuit/postcss-themed/pull/35) (5761061+tylerkrupicka@users.noreply.github.com [@joshtym](https://github.com/joshtym))
+
+#### Authors: 1
+
+- Joshua Tymburski ([@joshtym](https://github.com/joshtym))
+
+---
+
 # v2.2.0 (Tue Oct 20 2020)
 
 #### 🚀  Enhancement
