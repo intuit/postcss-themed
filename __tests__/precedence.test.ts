@@ -25,12 +25,9 @@ it('Overrides all themes from default', () => {
     `,
     `
       .test {
-        color: var(--color);
+        color: var(--color, red);
       }
 
-      :root {
-        --color: red;
-      }
       
       .dark {
         --color: blue;
@@ -74,12 +71,9 @@ it('Overrides dark themes from default', () => {
     `,
     `
       .test {
-        color: var(--color);
+        color: var(--color, red);
       }
 
-      :root {
-        --color: red;
-      }
       
       .dark {
         --color: blue;
@@ -125,13 +119,8 @@ it('Merges missing variables from single theme', () => {
     `,
     `
       .test {
-        color: var(--color);
-        background-color: var(--bgColor);
-      }
-
-      :root {
-        --color: teal;
-        --bgColor: orange;
+        color: var(--color, teal);
+        background-color: var(--bgColor, orange);
       }
       
       .dark {
@@ -166,14 +155,10 @@ it('Merges single theme but leaves variables by default', () => {
     `,
     `
       .test {
-        color: var(--color);
-        background-color: var(--bgColor);
+        color: var(--color, teal);
+        background-color: var(--bgColor, orange);
       }
 
-      :root {
-        --color: teal;
-        --bgColor: orange;
-      }
     `,
     {
       config,
