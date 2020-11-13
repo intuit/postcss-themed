@@ -24,12 +24,8 @@ it('Creates a simple css variable based theme', () => {
     `,
     `
       .test {
-        color: var(--color);
-        background-image: linear-gradient(to right, var(--color), var(--color))
-      }
-
-      :root {
-        --color: purple
+        color: var(--color, purple);
+        background-image: linear-gradient(to right, var(--color, purple), var(--color, purple))
       }
 
       .mint {
@@ -74,12 +70,8 @@ it('Creates a simple css variable based theme with light and dark', () => {
     `,
     `
       .test {
-        color: var(--color);
-        background-image: linear-gradient(to right, var(--color), var(--color))
-      }
-
-      :root {
-        --color: purple
+        color: var(--color, purple);
+        background-image: linear-gradient(to right, var(--color, purple), var(--color, purple))
       }
 
       .dark {
@@ -135,11 +127,7 @@ it('Produces a single theme', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: beige;
+        color: var(--color, beige);
       }
 
       .dark {
@@ -176,11 +164,7 @@ it('Produces a single theme with dark mode if default has it', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: teal;
+        color: var(--color, teal);
       }
 
       .dark {
@@ -212,11 +196,7 @@ it('Produces a single theme with variables by default', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: teal;
+        color: var(--color, teal);
       }
     `,
     {
@@ -279,15 +259,11 @@ it('works with nested', () => {
     `,
     `
       .foo.test {
-        color: var(--color);
+        color: var(--color, purple);
       }
 
       .foo .another {
-        color: var(--color);
-      }
-
-      :root {
-        --color: purple;
+        color: var(--color, purple);
       }
 
       .light {
@@ -319,12 +295,8 @@ it('scoped variable names', () => {
     `,
     `
       .test {
-        color: var(--app-foo-color);
-        background-image: linear-gradient(to right, var(--app-foo-color), var(--app-foo-color))
-      }
-
-      :root {
-        --app-foo-color: purple
+        color: var(--app-foo-color, purple);
+        background-image: linear-gradient(to right, var(--app-foo-color, purple), var(--app-foo-color, purple))
       }
 
       .light {
@@ -358,12 +330,8 @@ it('scoped variable names with custom function', () => {
     `,
     `
       .test {
-        color: var(--test-color-da3);
-        background-image: linear-gradient(to right, var(--test-color-da3), var(--test-color-da3))
-      }
-
-      :root {
-        --test-color-da3: purple
+        color: var(--test-color-da3, purple);
+        background-image: linear-gradient(to right, var(--test-color-da3, purple), var(--test-color-da3, purple))
       }
 
       .light {
@@ -403,12 +371,8 @@ it('scoped variable names with default function', () => {
     `,
     `
       .test {
-        color: var(--default-color-d41d8c);
-        background-image: linear-gradient(to right, var(--default-color-d41d8c), var(--default-color-d41d8c))
-      }
-
-      :root {
-        --default-color-d41d8c: purple
+        color: var(--default-color-d41d8c, purple);
+        background-image: linear-gradient(to right, var(--default-color-d41d8c, purple), var(--default-color-d41d8c, purple))
       }
 
       .light {
@@ -447,5 +411,48 @@ it('Wrong key mentioned in theme configuration', () => {
       forceSingleTheme: 'mint',
       optimizeSingleTheme: true
     }
+  );
+});
+
+it('With component Config', () => {
+  const config = {
+    default: {
+      light: {
+        background: 'purple',
+        extras: 'black'
+      },
+      dark: {
+        background: 'black'
+      }
+    },
+    mint: {
+      background: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme background;
+        background-image: linear-gradient(to right, @theme background, @theme background)
+      }
+    `,
+    `
+      .test {
+        color: var(--background, yellow);
+        background-image: linear-gradient(to right, var(--background, yellow), var(--background, yellow))
+      }
+
+      .dark {
+        --background: pink
+      }
+      .mint.light {
+        --background: teal
+      }
+    `,
+    {
+      config
+    },
+    './__tests__/test-modern-themes-ts/test.css'
   );
 });

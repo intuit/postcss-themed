@@ -1,10 +1,22 @@
-import postcss from "postcss";
+import postcss from 'postcss';
 import crypto from 'crypto';
 import fs from 'fs';
 
-import localizeIdentifier from "../localize-identifier";
-import { ColorScheme, LightDarkTheme, PostcssStrictThemeConfig, PostcssThemeOptions, ScopedNameFunction, SimpleTheme } from "../types";
-import { hasDarkMode, parseThemeKey, replaceTheme, replaceThemeRoot } from "../common";
+import localizeIdentifier from '../localize-identifier';
+import {
+  ColorScheme,
+  LightDarkTheme,
+  PostcssStrictThemeConfig,
+  PostcssThemeOptions,
+  ScopedNameFunction,
+  SimpleTheme
+} from '../types';
+import {
+  hasDarkMode,
+  parseThemeKey,
+  replaceTheme,
+  replaceThemeRoot
+} from '../common';
 
 /** Create a CSS variable override block for a given selector */
 const createModernTheme = (
@@ -53,7 +65,7 @@ const defaultLocalizeFunction = (
     .digest('hex')
     .slice(0, 6);
   return `${filePath || 'default'}-${name}-${hash}`;
-}
+};
 
 const getLocalizeFunction = (
   modules: string | ScopedNameFunction | undefined,
@@ -65,7 +77,8 @@ const getLocalizeFunction = (
       fileContents = fs.readFileSync(resourcePath, 'utf8');
     }
 
-    const localize = typeof modules === 'function' ? modules : defaultLocalizeFunction;
+    const localize =
+      typeof modules === 'function' ? modules : defaultLocalizeFunction;
     return (name: string) => {
       return localize(name, resourcePath || '', fileContents);
     };
@@ -79,7 +92,6 @@ const getLocalizeFunction = (
 export const modernTheme = (
   root: postcss.Root,
   componentConfig: PostcssStrictThemeConfig,
-  globalConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
   const usage = new Set<string>();
@@ -139,24 +151,23 @@ export const modernTheme = (
             break;
           }
         } else {
-          decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+          decl.value = replaceTheme(
+            decl.value,
+            `var(--${localize(key)}, ${mergedSingleThemeConfig['light'][key]})` // assign default value
+          );
         }
 
         usage.add(key);
       }
     });
   });
-
   // 2. Create variable declaration blocks
   const filterUsed = (
     colorScheme: ColorScheme,
-    theme: string,
     themeConfig: LightDarkTheme
   ): SimpleTheme =>
     Object.entries(themeConfig[colorScheme])
-      .filter(
-        ([name]) => usage.has(name) || !globalConfig[theme][colorScheme][name]
-      )
+      .filter(([name]) => usage.has(name))
       .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
 
   // 2a. If generating a single theme, simply generate the default
@@ -166,21 +177,8 @@ export const modernTheme = (
     if (hasMergedDarkMode) {
       rules.push(
         createModernTheme(
-          ':root',
-          filterUsed('light', singleTheme, mergedSingleThemeConfig),
-          localize
-        ),
-        createModernTheme(
           '.dark',
-          filterUsed('dark', singleTheme, mergedSingleThemeConfig),
-          localize
-        )
-      );
-    } else if (!optimizeSingleTheme) {
-      rules.push(
-        createModernTheme(
-          ':root',
-          filterUsed('light', singleTheme, mergedSingleThemeConfig),
+          filterUsed('dark', mergedSingleThemeConfig),
           localize
         )
       );
@@ -193,41 +191,36 @@ export const modernTheme = (
   // 2b. Under normal operation, generate CSS variable blocks for each theme
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
     const rules: (postcss.Rule | undefined)[] = [];
-    const isDefault = theme === defaultTheme;
-    const rootClass = isDefault ? ':root' : `.${theme}`;
 
-    if (hasDarkMode(themeConfig)) {
-      rules.push(
-        createModernTheme(
-          isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light', theme, themeConfig),
-          localize
-        ),
-        createModernTheme(
-          isDefault ? '.dark' : `${rootClass}.dark`,
-          filterUsed('dark', theme, themeConfig),
-          localize
-        )
-      );
-    } else if (hasRootDarkMode) {
-      rules.push(
-        createModernTheme(
-          isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light', theme, themeConfig),
-          localize
-        )
-      );
+    if (theme !== defaultTheme) {
+      if (hasDarkMode(themeConfig)) {
+        rules.push(
+          createModernTheme(
+            `.${theme}.light`,
+            filterUsed('light', themeConfig),
+            localize
+          ),
+          createModernTheme(
+            `.${theme}.dark`,
+            filterUsed('dark', themeConfig),
+            localize
+          )
+        );
+      } else {
+        rules.push(
+          createModernTheme(
+            hasRootDarkMode ? `.${theme}.light` : `.${theme}`,
+            filterUsed('light', themeConfig),
+            localize
+          )
+        );
+      }
     } else {
       rules.push(
-        createModernTheme(
-          rootClass,
-          filterUsed('light', theme, themeConfig),
-          localize
-        )
+        createModernTheme('.dark', filterUsed('dark', themeConfig), localize)
       );
     }
 
     root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
   });
 };
-
