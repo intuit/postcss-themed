@@ -38,6 +38,45 @@ it('Creates a simple css variable based theme', () => {
   );
 });
 
+it('inlineRootThemeVariables false', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      extras: 'black'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+        background-image: linear-gradient(to right, var(--color), var(--color))
+      }
+
+      :root {
+        --color: purple
+      }
+
+      .mint {
+        --color: teal
+      }
+    `,
+    {
+      config,
+      inlineRootThemeVariables: false
+    }
+  );
+});
+
 it('Creates a simple css variable based theme with light and dark', () => {
   const config = {
     default: {
@@ -206,6 +245,38 @@ it('Produces a single theme with variables by default', () => {
   );
 });
 
+it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint',
+      inlineRootThemeVariables: false
+    }
+  );
+});
 it('Optimizes single theme by removing variables', () => {
   const config = {
     default: {

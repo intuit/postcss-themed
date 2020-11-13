@@ -94,10 +94,14 @@ export const modernTheme = (
   componentConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
-  const usage = new Set<string>();
+  const usage = new Map<string, number>();
   const defaultTheme = options.defaultTheme || 'default';
   const singleTheme = options.forceSingleTheme || undefined;
   const optimizeSingleTheme = options.optimizeSingleTheme;
+  const inlineRootThemeVariables =
+    typeof options.inlineRootThemeVariables === 'undefined'
+      ? true
+      : options.inlineRootThemeVariables;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
@@ -151,13 +155,20 @@ export const modernTheme = (
             break;
           }
         } else {
-          decl.value = replaceTheme(
-            decl.value,
-            `var(--${localize(key)}, ${mergedSingleThemeConfig['light'][key]})` // assign default value
-          );
+          decl.value = inlineRootThemeVariables
+            ? replaceTheme(
+                decl.value,
+                `var(--${localize(key)}, ${
+                  mergedSingleThemeConfig['light'][key]
+                })`
+              )
+            : replaceTheme(
+                decl.value,
+                `var(--${localize(key)})` // assign default value
+              );
         }
 
-        usage.add(key);
+        usage.set(key, usage.get(key) || 1);
       }
     });
   });
@@ -170,9 +181,20 @@ export const modernTheme = (
       .filter(([name]) => usage.has(name))
       .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
 
+  const addRootTheme = (themConfig: LightDarkTheme) => {
+    if (!inlineRootThemeVariables) {
+      return createModernTheme(
+        ':root',
+        filterUsed('light', themConfig),
+        localize
+      );
+    }
+  };
+
   // 2a. If generating a single theme, simply generate the default
   if (singleTheme) {
     const rules: (postcss.Rule | undefined)[] = [];
+    const rootRules = addRootTheme(mergedSingleThemeConfig);
 
     if (hasMergedDarkMode) {
       rules.push(
@@ -182,6 +204,10 @@ export const modernTheme = (
           localize
         )
       );
+      rules.push(rootRules);
+    }
+    if (!optimizeSingleTheme) {
+      rules.push(rootRules);
     }
 
     root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
@@ -216,6 +242,10 @@ export const modernTheme = (
         );
       }
     } else {
+      if (!inlineRootThemeVariables) {
+        // config is on OR is if there are multiple uses
+        rules.push(addRootTheme(themeConfig));
+      }
       rules.push(
         createModernTheme('.dark', filterUsed('dark', themeConfig), localize)
       );

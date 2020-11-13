@@ -32,6 +32,8 @@ export interface PostcssThemeOptions {
   forceSingleTheme?: string;
   /** Remove CSS Variables when possible */
   optimizeSingleTheme?: boolean;
+  /** Whether to include custom variable default values. Defaults to true. */
+  inlineRootThemeVariables?: boolean;
   /** Transform CSS variable names similar to CSS-Modules */
   modules?: string | ScopedNameFunction;
 }
