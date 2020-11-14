@@ -131,7 +131,22 @@ export const modernTheme = (
   const hasMergedDarkMode =
     mergedSingleThemeConfig && hasDarkMode(mergedSingleThemeConfig);
 
-  // 1. Walk each declaration and replace theme vars with CSS vars
+  // 1a. walk again to optimize inline default values
+  root.walkRules(rule => {
+    rule.selector = replaceThemeRoot(rule.selector);
+
+    rule.walkDecls(decl => {
+      decl.value.split(/(?=@theme)/g).forEach(chunk => {
+        const key = parseThemeKey(chunk);
+        if (key) {
+          const count = usage.has(key) ? usage.get(key)! + 1 : 1;
+          usage.set(key, count);
+        }
+      });
+    });
+  });
+
+  // 1b. Walk each declaration and replace theme vars with CSS vars
   root.walkRules(rule => {
     rule.selector = replaceThemeRoot(rule.selector);
 
@@ -155,40 +170,46 @@ export const modernTheme = (
             break;
           }
         } else {
-          decl.value = inlineRootThemeVariables
-            ? replaceTheme(
-                decl.value,
-                `var(--${localize(key)}, ${
-                  mergedSingleThemeConfig['light'][key]
-                })`
-              )
-            : replaceTheme(
-                decl.value,
-                `var(--${localize(key)})` // assign default value
-              );
+          if (
+            inlineRootThemeVariables &&
+            usage.has(key) &&
+            usage.get(key) === 1
+          ) {
+            decl.value = replaceTheme(
+              decl.value,
+              `var(--${localize(key)}, ${
+                mergedSingleThemeConfig['light'][key]
+              })`
+            );
+          } else {
+            decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+          }
         }
-
-        usage.set(key, usage.get(key) || 1);
       }
     });
   });
+
   // 2. Create variable declaration blocks
   const filterUsed = (
     colorScheme: ColorScheme,
-    themeConfig: LightDarkTheme
+    themeConfig: LightDarkTheme,
+    filterFunction = ([name]: string[]) => usage.has(name)
   ): SimpleTheme =>
     Object.entries(themeConfig[colorScheme])
-      .filter(([name]) => usage.has(name))
+      .filter(filterFunction)
       .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
 
   const addRootTheme = (themConfig: LightDarkTheme) => {
-    if (!inlineRootThemeVariables) {
-      return createModernTheme(
-        ':root',
-        filterUsed('light', themConfig),
-        localize
-      );
-    }
+    // if inlineRootThemeVariables then only add vars to root that are used more than once
+    const func = inlineRootThemeVariables
+      ? ([name]: string[]) => usage.has(name) && usage.get(name)! > 1
+      : undefined;
+
+    return createModernTheme(
+      ':root',
+      filterUsed('light', themConfig, func),
+      localize
+    );
   };
 
   // 2a. If generating a single theme, simply generate the default
@@ -242,10 +263,7 @@ export const modernTheme = (
         );
       }
     } else {
-      if (!inlineRootThemeVariables) {
-        // config is on OR is if there are multiple uses
-        rules.push(addRootTheme(themeConfig));
-      }
+      rules.push(addRootTheme(themeConfig));
       rules.push(
         createModernTheme('.dark', filterUsed('dark', themeConfig), localize)
       );
