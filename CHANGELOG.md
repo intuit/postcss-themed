@@ -1,3 +1,15 @@
+# v2.2.2 (Mon Nov 16 2020)
+
+#### 🐛  Bug Fix
+
+- Adding default values inside the custom property statements [#38](https://github.com/intuit/postcss-themed/pull/38) ([@kendallgassner](https://github.com/kendallgassner))
+
+#### Authors: 1
+
+- Kendall Gassner ([@kendallgassner](https://github.com/kendallgassner))
+
+---
+
 # v2.2.1 (Fri Oct 30 2020)
 
 #### 🐛  Bug Fix
