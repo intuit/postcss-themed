@@ -1,10 +1,22 @@
-import postcss from "postcss";
+import postcss from 'postcss';
 import crypto from 'crypto';
 import fs from 'fs';
 
-import localizeIdentifier from "../localize-identifier";
-import { ColorScheme, LightDarkTheme, PostcssStrictThemeConfig, PostcssThemeOptions, ScopedNameFunction, SimpleTheme } from "../types";
-import { hasDarkMode, parseThemeKey, replaceTheme, replaceThemeRoot } from "../common";
+import localizeIdentifier from '../localize-identifier';
+import {
+  ColorScheme,
+  LightDarkTheme,
+  PostcssStrictThemeConfig,
+  PostcssThemeOptions,
+  ScopedNameFunction,
+  SimpleTheme
+} from '../types';
+import {
+  hasDarkMode,
+  parseThemeKey,
+  replaceTheme,
+  replaceThemeRoot
+} from '../common';
 
 /** Create a CSS variable override block for a given selector */
 const createModernTheme = (
@@ -53,7 +65,7 @@ const defaultLocalizeFunction = (
     .digest('hex')
     .slice(0, 6);
   return `${filePath || 'default'}-${name}-${hash}`;
-}
+};
 
 const getLocalizeFunction = (
   modules: string | ScopedNameFunction | undefined,
@@ -65,7 +77,8 @@ const getLocalizeFunction = (
       fileContents = fs.readFileSync(resourcePath, 'utf8');
     }
 
-    const localize = typeof modules === 'function' ? modules : defaultLocalizeFunction;
+    const localize =
+      typeof modules === 'function' ? modules : defaultLocalizeFunction;
     return (name: string) => {
       return localize(name, resourcePath || '', fileContents);
     };
@@ -79,13 +92,13 @@ const getLocalizeFunction = (
 export const modernTheme = (
   root: postcss.Root,
   componentConfig: PostcssStrictThemeConfig,
-  globalConfig: PostcssStrictThemeConfig,
   options: PostcssThemeOptions
 ) => {
-  const usage = new Set<string>();
+  const usage = new Map<string, number>();
   const defaultTheme = options.defaultTheme || 'default';
   const singleTheme = options.forceSingleTheme || undefined;
   const optimizeSingleTheme = options.optimizeSingleTheme;
+  const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
@@ -115,7 +128,22 @@ export const modernTheme = (
   const hasMergedDarkMode =
     mergedSingleThemeConfig && hasDarkMode(mergedSingleThemeConfig);
 
-  // 1. Walk each declaration and replace theme vars with CSS vars
+  // 1a. walk again to optimize inline default values
+  root.walkRules(rule => {
+    rule.selector = replaceThemeRoot(rule.selector);
+
+    rule.walkDecls(decl => {
+      decl.value.split(/(?=@theme)/g).forEach(chunk => {
+        const key = parseThemeKey(chunk);
+        if (key) {
+          const count = usage.has(key) ? usage.get(key)! + 1 : 1;
+          usage.set(key, count);
+        }
+      });
+    });
+  });
+
+  // 1b. Walk each declaration and replace theme vars with CSS vars
   root.walkRules(rule => {
     rule.selector = replaceThemeRoot(rule.selector);
 
@@ -139,10 +167,21 @@ export const modernTheme = (
             break;
           }
         } else {
-          decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+          if (
+            inlineRootThemeVariables &&
+            usage.has(key) &&
+            usage.get(key) === 1
+          ) {
+            decl.value = replaceTheme(
+              decl.value,
+              `var(--${localize(key)}, ${
+                mergedSingleThemeConfig['light'][key]
+              })`
+            );
+          } else {
+            decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+          }
         }
-
-        usage.add(key);
       }
     });
   });
@@ -150,40 +189,43 @@ export const modernTheme = (
   // 2. Create variable declaration blocks
   const filterUsed = (
     colorScheme: ColorScheme,
-    theme: string,
-    themeConfig: LightDarkTheme
+    themeConfig: LightDarkTheme,
+    filterFunction = ([name]: string[]) => usage.has(name)
   ): SimpleTheme =>
     Object.entries(themeConfig[colorScheme])
-      .filter(
-        ([name]) => usage.has(name) || !globalConfig[theme][colorScheme][name]
-      )
+      .filter(filterFunction)
       .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
+
+  const addRootTheme = (themConfig: LightDarkTheme) => {
+    // if inlineRootThemeVariables then only add vars to root that are used more than once
+    const func = inlineRootThemeVariables
+      ? ([name]: string[]) => usage.has(name) && usage.get(name)! > 1
+      : undefined;
+
+    return createModernTheme(
+      ':root',
+      filterUsed('light', themConfig, func),
+      localize
+    );
+  };
 
   // 2a. If generating a single theme, simply generate the default
   if (singleTheme) {
     const rules: (postcss.Rule | undefined)[] = [];
+    const rootRules = addRootTheme(mergedSingleThemeConfig);
 
     if (hasMergedDarkMode) {
       rules.push(
         createModernTheme(
-          ':root',
-          filterUsed('light', singleTheme, mergedSingleThemeConfig),
-          localize
-        ),
-        createModernTheme(
           '.dark',
-          filterUsed('dark', singleTheme, mergedSingleThemeConfig),
+          filterUsed('dark', mergedSingleThemeConfig),
           localize
         )
       );
-    } else if (!optimizeSingleTheme) {
-      rules.push(
-        createModernTheme(
-          ':root',
-          filterUsed('light', singleTheme, mergedSingleThemeConfig),
-          localize
-        )
-      );
+      rules.push(rootRules);
+    }
+    if (!optimizeSingleTheme) {
+      rules.push(rootRules);
     }
 
     root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
@@ -193,41 +235,37 @@ export const modernTheme = (
   // 2b. Under normal operation, generate CSS variable blocks for each theme
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
     const rules: (postcss.Rule | undefined)[] = [];
-    const isDefault = theme === defaultTheme;
-    const rootClass = isDefault ? ':root' : `.${theme}`;
 
-    if (hasDarkMode(themeConfig)) {
-      rules.push(
-        createModernTheme(
-          isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light', theme, themeConfig),
-          localize
-        ),
-        createModernTheme(
-          isDefault ? '.dark' : `${rootClass}.dark`,
-          filterUsed('dark', theme, themeConfig),
-          localize
-        )
-      );
-    } else if (hasRootDarkMode) {
-      rules.push(
-        createModernTheme(
-          isDefault ? rootClass : `${rootClass}.light`,
-          filterUsed('light', theme, themeConfig),
-          localize
-        )
-      );
+    if (theme !== defaultTheme) {
+      if (hasDarkMode(themeConfig)) {
+        rules.push(
+          createModernTheme(
+            `.${theme}.light`,
+            filterUsed('light', themeConfig),
+            localize
+          ),
+          createModernTheme(
+            `.${theme}.dark`,
+            filterUsed('dark', themeConfig),
+            localize
+          )
+        );
+      } else {
+        rules.push(
+          createModernTheme(
+            hasRootDarkMode ? `.${theme}.light` : `.${theme}`,
+            filterUsed('light', themeConfig),
+            localize
+          )
+        );
+      }
     } else {
+      rules.push(addRootTheme(themeConfig));
       rules.push(
-        createModernTheme(
-          rootClass,
-          filterUsed('light', theme, themeConfig),
-          localize
-        )
+        createModernTheme('.dark', filterUsed('dark', themeConfig), localize)
       );
     }
 
     root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
   });
 };
-

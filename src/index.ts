@@ -9,7 +9,12 @@ import * as tsNode from 'ts-node';
 import { getThemeFilename, normalizeTheme } from './common';
 import { modernTheme } from './modern';
 import { legacyTheme } from './legacy';
-import { ComponentTheme, PostcssThemeConfig, PostcssThemeOptions, ThemeResolver } from './types';
+import {
+  ComponentTheme,
+  PostcssThemeConfig,
+  PostcssThemeOptions,
+  ThemeResolver
+} from './types';
 
 const log = debug('postcss-themed');
 
@@ -47,7 +52,7 @@ const configForComponent = (
     log(error);
     return {};
   }
-}
+};
 
 /** Generate a theme */
 const themeFile = (options: PostcssThemeOptions = {}) => (
@@ -77,7 +82,7 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   const mergedConfig = merge(globalConfig, componentConfig);
 
   if (caniuse.isSupported('css-variables', browserslist())) {
-    modernTheme(root, mergedConfig, globalConfig, options);
+    modernTheme(root, mergedConfig, options);
   } else {
     legacyTheme(root, mergedConfig, options);
   }
@@ -86,12 +91,12 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   root.source.processed = true;
 
   if (!resolveTheme && root.source.input.file) {
-    const themeFilename = getThemeFilename(root.source.input.file)
+    const themeFilename = getThemeFilename(root.source.input.file);
 
     if (fs.existsSync(themeFilename)) {
       result.messages.push({
         plugin: 'postcss-themed',
-        type: "dependency",
+        type: 'dependency',
         file: themeFilename
       });
     }

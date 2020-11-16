@@ -37,6 +37,7 @@
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.4.3",
     "@babel/preset-typescript": "^7.7.7",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
     "@logux/eslint-config": "^34.0.0",
     "@types/browserslist": "^4.4.0",
     "@types/caniuse-api": "^3.0.0",
@@ -119,6 +120,7 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "test-component-themes",
+      "test-modern-themes",
       "test-utils"
     ],
     "collectCoverageFrom": [

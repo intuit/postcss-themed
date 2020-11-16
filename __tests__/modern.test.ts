@@ -42,6 +42,45 @@ it('Creates a simple css variable based theme', () => {
   );
 });
 
+it('inlineRootThemeVariables false', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      extras: 'black'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+        background-image: linear-gradient(to right, var(--color), var(--color))
+      }
+
+      :root {
+        --color: purple
+      }
+
+      .mint {
+        --color: teal
+      }
+    `,
+    {
+      config,
+      inlineRootThemeVariables: false
+    }
+  );
+});
+
 it('Creates a simple css variable based theme with light and dark', () => {
   const config = {
     default: {
@@ -52,6 +91,7 @@ it('Creates a simple css variable based theme with light and dark', () => {
         color: 'black'
       }
     },
+
     mint: {
       color: 'teal'
     },
@@ -77,7 +117,6 @@ it('Creates a simple css variable based theme with light and dark', () => {
         color: var(--color);
         background-image: linear-gradient(to right, var(--color), var(--color))
       }
-
       :root {
         --color: purple
       }
@@ -135,11 +174,7 @@ it('Produces a single theme', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: beige;
+        color: var(--color, beige);
       }
 
       .dark {
@@ -176,11 +211,7 @@ it('Produces a single theme with dark mode if default has it', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: teal;
+        color: var(--color, teal);
       }
 
       .dark {
@@ -212,11 +243,7 @@ it('Produces a single theme with variables by default', () => {
     `,
     `
       .test {
-        color: var(--color);
-      }
-
-      :root {
-        --color: teal;
+        color: var(--color, teal);
       }
     `,
     {
@@ -226,6 +253,38 @@ it('Produces a single theme with variables by default', () => {
   );
 });
 
+it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+      }
+
+      :root {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint',
+      inlineRootThemeVariables: false
+    }
+  );
+});
 it('Optimizes single theme by removing variables', () => {
   const config = {
     default: {
@@ -446,6 +505,91 @@ it('Wrong key mentioned in theme configuration', () => {
       config,
       forceSingleTheme: 'mint',
       optimizeSingleTheme: true
+    }
+  );
+});
+
+it('With component Config', () => {
+  const config = {
+    default: {
+      light: {
+        background: 'purple',
+        extras: 'black'
+      },
+      dark: {
+        background: 'black'
+      }
+    },
+    mint: {
+      background: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme background;
+        background-image: linear-gradient(to right, @theme background, @theme background)
+      }
+    `,
+    `
+      .test {
+        color: var(--background);
+        background-image: linear-gradient(to right, var(--background), var(--background))
+      }
+
+      :root {
+        --background: yellow
+      }
+
+      .dark {
+        --background: pink
+      }
+      .mint.light {
+        --background: teal
+      }
+    `,
+    {
+      config
+    },
+    './__tests__/test-modern-themes-ts/test.css'
+  );
+});
+
+it('Some variables show inline and some show in root', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      extras: 'black'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme extras, @theme extras)
+      }
+    `,
+    `
+      .test {
+        color: var(--color, purple);
+        background-image: linear-gradient(to right, var(--extras), var(--extras))
+      }
+
+      :root {
+        --extras: black
+      }
+
+      .mint {
+        --color: teal
+      }
+    `,
+    {
+      config
     }
   );
 });
