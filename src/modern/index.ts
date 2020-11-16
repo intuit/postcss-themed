@@ -98,10 +98,7 @@ export const modernTheme = (
   const defaultTheme = options.defaultTheme || 'default';
   const singleTheme = options.forceSingleTheme || undefined;
   const optimizeSingleTheme = options.optimizeSingleTheme;
-  const inlineRootThemeVariables =
-    typeof options.inlineRootThemeVariables === 'undefined'
-      ? true
-      : options.inlineRootThemeVariables;
+  const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
