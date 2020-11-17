@@ -3,13 +3,13 @@ import { PostcssThemeConfig, PostcssStrictThemeConfig, Theme } from "../types";
 
 /** Get the theme variable name from a string */
 export const parseThemeKey = (value: string) => {
-  const key = value.match(/@theme ([a-zA-Z-_0-9]+)/);
+  const key = value.match(/@theme \$?([a-zA-Z-_0-9]+)/);
   return key ? key[1] : '';
 }
 
 /** Replace a theme variable reference with a value */
 export const replaceTheme = (value: string, replace: string) => {
-  return value.replace(/@theme ([a-zA-Z-_0-9]+)/, replace);
+  return value.replace(/@theme \$?([a-zA-Z-_0-9]+)/, replace);
 }
 
 /** Get the location of the theme file */

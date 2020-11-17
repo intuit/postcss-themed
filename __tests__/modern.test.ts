@@ -253,6 +253,35 @@ it('Produces a single theme with variables by default', () => {
   );
 });
 
+it("doesn't hang on $Variable", () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme $color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, teal);
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
+
 it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
   const config = {
     default: {
