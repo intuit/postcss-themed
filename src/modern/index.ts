@@ -38,7 +38,6 @@ const createModernTheme = (
 
   rule.append(decls);
 
-  console.log('1')
   return rule;
 };
 
@@ -101,7 +100,6 @@ export const modernTheme = (
   const optimizeSingleTheme = options.optimizeSingleTheme;
   const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
-  console.log('1')
   const localize = getLocalizeFunction(options.modules, resourcePath);
 
   const defaultThemeConfig = Object.entries(componentConfig).find(
