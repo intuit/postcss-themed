@@ -1,3 +1,15 @@
+# v2.2.3 (Tue Nov 17 2020)
+
+#### 🐛  Bug Fix
+
+- handle $ variable [#39](https://github.com/intuit/postcss-themed/pull/39) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.2.2 (Mon Nov 16 2020)
 
 #### 🐛  Bug Fix
