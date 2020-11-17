@@ -1,6 +1,6 @@
 {
   "name": "postcss-themed",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "main": "dist/index.js",
   "description": "PostCSS plugin for adding multiple themes to CSS files",
   "keywords": [
