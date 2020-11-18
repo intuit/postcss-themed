@@ -1,3 +1,15 @@
+# v2.2.4 (Wed Nov 18 2020)
+
+#### 🐛  Bug Fix
+
+- handle missing space in theme usage [#40](https://github.com/intuit/postcss-themed/pull/40) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.2.3 (Tue Nov 17 2020)
 
 #### 🐛  Bug Fix
