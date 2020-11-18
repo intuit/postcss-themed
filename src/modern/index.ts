@@ -180,8 +180,10 @@ export const modernTheme = (
               mergedSingleThemeConfig.light[key]
             })`
           );
-        } else {
+        } else if (key) {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
+        } else {
+          throw decl.error(`Invalid @theme usage: ${decl.value}`, { word: decl.value })
         }
       }
     });

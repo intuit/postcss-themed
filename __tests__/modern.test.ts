@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import postcss from 'postcss';
 
 import { run } from './test-utils';
 
@@ -281,7 +282,7 @@ it("doesn't hang on $Variable", () => {
   );
 });
 
-it("doesn't hang on missing space", () => {
+it('should error on missing space', () => {
   const config = {
     default: {
       color: 'purple'
@@ -306,9 +307,12 @@ it("doesn't hang on missing space", () => {
       config,
       forceSingleTheme: 'mint'
     }
-  );
+  ).catch(e => {
+    expect(e.message).toEqual(
+      'postcss-themed: <css input>:3:16: Invalid @theme usage: @themecolor'
+    );
+  });
 });
-
 
 it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
   const config = {
