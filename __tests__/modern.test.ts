@@ -281,6 +281,34 @@ it("doesn't hang on $Variable", () => {
   );
 });
 
+it("doesn't hang on missing space", () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    mint: {
+      color: 'teal'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @themecolor;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, teal);
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
 
 it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
   const config = {
