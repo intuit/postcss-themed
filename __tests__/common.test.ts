@@ -31,6 +31,38 @@ it('should be able to extend a simple theme', () => {
   });
 });
 
+it('should be able to extend a simple theme', () => {
+  expect(
+    resolveThemeExtension(
+      normalizeTheme({
+        default: {
+          color: 'red'
+        },
+        myTheme: {
+          light: { color: 'blue' },
+          dark: { color: 'green' }
+        },
+        myChildTheme: {
+          extends: 'myTheme'
+        }
+      })
+    )
+  ).toStrictEqual({
+    default: {
+      light: { color: 'red' },
+      dark: {}
+    },
+    myTheme: {
+      light: { color: 'blue' },
+      dark: { color: 'green' }
+    },
+    myChildTheme: {
+      light: { color: 'blue' },
+      dark: { color: 'green' }
+    }
+  });
+});
+
 it('should be able to extend a dark/light theme from root', () => {
   expect(
     resolveThemeExtension({
@@ -158,7 +190,7 @@ it('should error on unknown themes', () => {
   ).toThrow("Theme to extend from not found! 'myThemes'");
 });
 
-it('should when extending itself', () => {
+it('should error when extending itself', () => {
   expect(() =>
     resolveThemeExtension(
       normalizeTheme({
@@ -173,7 +205,7 @@ it('should when extending itself', () => {
   ).toThrow("A theme cannot extend itself! 'myTheme' extends 'myTheme'");
 });
 
-it('should when cycles detected', () => {
+it('should error when cycles detected', () => {
   expect(() =>
     resolveThemeExtension({
       default: {
@@ -196,7 +228,7 @@ it('should when cycles detected', () => {
   );
 });
 
-it('should when cycles detected - subthemes', () => {
+it('should error when cycles detected - subthemes', () => {
   expect(() =>
     resolveThemeExtension(
       normalizeTheme({
@@ -216,8 +248,7 @@ it('should when cycles detected - subthemes', () => {
   );
 });
 
-
-it('should when cycles detected - complicated', () => {
+it('should error when cycles detected - complicated', () => {
   expect(() =>
     resolveThemeExtension(
       normalizeTheme({

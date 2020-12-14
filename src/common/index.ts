@@ -42,6 +42,20 @@ export const normalizeTheme = (
         return { [theme]: themeConfig };
       }
 
+      if (themeConfig.extends) {
+        const configWithoutExtends = { ...themeConfig };
+
+        delete configWithoutExtends.extends;
+
+        return {
+          [theme]: {
+            extends: themeConfig.extends,
+            light: configWithoutExtends,
+            dark: {}
+          }
+        };
+      }
+
       return { [theme]: { light: themeConfig, dark: {} } };
     })
   );
@@ -91,6 +105,17 @@ export const resolveThemeExtension = (
   const resolveSubTheme = (theme: string) => {
     const subConfig = { ...config };
     delete subConfig[theme];
+
+    Object.keys(subConfig).forEach(t => {
+      if (
+        subConfig[t].extends === theme ||
+        subConfig[t].light.extends === theme ||
+        subConfig[t].dark.extends === theme
+      ) {
+        delete subConfig[t];
+      }
+    });
+
     resolveThemeExtension(subConfig);
   };
 
@@ -126,7 +151,7 @@ export const resolveThemeExtension = (
       checkExtendSelf(theme, themeConfig.extends);
       checkCycles(theme);
 
-      if (!config[themeConfig.extends]) {
+      if (config[themeConfig.extends]) {
         resolveSubTheme(theme);
       }
 
