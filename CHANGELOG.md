@@ -1,3 +1,15 @@
+# v2.4.0 (Mon Dec 14 2020)
+
+#### 🚀  Enhancement
+
+- merge rules when all declarations are the same [#43](https://github.com/intuit/postcss-themed/pull/43) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.3.0 (Mon Dec 14 2020)
 
 #### 🚀  Enhancement
