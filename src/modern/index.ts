@@ -46,6 +46,10 @@ const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
   const merged = defaultTheme;
 
   for (const [colorScheme, values] of Object.entries(theme)) {
+    if (!values) {
+      continue
+    }
+
     for (const [key, value] of Object.entries(values)) {
       merged[colorScheme as ColorScheme][key] = value;
     }

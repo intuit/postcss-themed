@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import postcss from 'postcss';
 
 import { run } from './test-utils';
 
@@ -647,6 +646,90 @@ it('Some variables show inline and some show in root', () => {
 
       .mint {
         --color: teal
+      }
+    `,
+    {
+      config
+    }
+  );
+});
+
+it('can extend another theme', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    turbotax: {
+      color: 'teal'
+    },
+    mytt: {
+      extends: 'turbotax'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, purple);
+      }
+
+      .turbotax {
+        --color: teal;
+      }
+
+      .mytt {
+        --color: teal;
+      }
+    `,
+    {
+      config
+    }
+  );
+});
+
+
+it('can extend another theme that extends a theme', () => {
+  const config = {
+    default: {
+      color: 'purple'
+    },
+    turbotax: {
+      color: 'teal'
+    },
+    mytt: {
+      extends: 'turbotax'
+    },
+    ttlive: {
+      extends: 'mytt'
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, purple);
+      }
+
+      .turbotax {
+        --color: teal;
+      }
+
+      .mytt {
+        --color: teal;
+      }
+
+      .ttlive {
+        --color: teal;
       }
     `,
     {
