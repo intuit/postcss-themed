@@ -6,7 +6,11 @@ import * as caniuse from 'caniuse-api';
 import browserslist from 'browserslist';
 import * as tsNode from 'ts-node';
 
-import { getThemeFilename, normalizeTheme, resolveThemeExtension } from './common';
+import {
+  getThemeFilename,
+  normalizeTheme,
+  resolveThemeExtension
+} from './common';
 import { modernTheme } from './modern';
 import { legacyTheme } from './legacy';
 import {
@@ -81,7 +85,7 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   );
   const mergedConfig = merge(globalConfig, componentConfig);
 
-  resolveThemeExtension(mergedConfig)
+  resolveThemeExtension(mergedConfig);
 
   if (caniuse.isSupported('css-variables', browserslist())) {
     modernTheme(root, mergedConfig, options);
