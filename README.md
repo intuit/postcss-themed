@@ -21,6 +21,8 @@ Will create class overrides for legacy browsers and use CSS variables for modern
 
 :rocket: Supports scoping CSS Variable names to mitigate conflicts
 
+:rocket: Themes can extend other themes
+
 [postcss]: https://github.com/postcss/postcss
 
 ## Contributing
@@ -89,7 +91,7 @@ See [PostCSS] docs for examples for your environment.
 
 ### Using Theme Variables
 
-**Input**
+**Input:**
 
 ```css
 .foo {
@@ -98,7 +100,7 @@ See [PostCSS] docs for examples for your environment.
 }
 ```
 
-**Output**
+**Output:**
 
 ```css
 .foo {
@@ -115,7 +117,7 @@ See [PostCSS] docs for examples for your environment.
 
 Define a component level theme in either commonjs or typescript. A file names `themes.(js|ts)` must be co-located with the themeable CSS file.
 
-**themes.js**
+**themes.js:**
 
 ```js
 module.exports = (theme) => ({
@@ -128,7 +130,7 @@ module.exports = (theme) => ({
 });
 ```
 
-**themes.ts**
+**themes.ts:**
 
 ```js
 import { Theme } from '@your/themes';
@@ -165,11 +167,63 @@ postcss([
 
 Now you can use `@theme border` in your CSS file.
 
-### Theming Root class
+### Theme Extension
+
+Any theme can extend another theme.
+This is useful when you are defining a child theme that customizes some stuff but in general adopts most of the styling of another theme.
+
+**Config:**
+
+```js
+const config = {
+  default: {
+    color: 'white',
+    background: 'black'
+  },
+  myTheme: {
+    color: 'purple',
+    background: 'green'
+  },
+  myChildTheme: {
+    extends: 'myTheme',
+    background: 'red'
+  }
+};
+```
+
+**Input:**
+
+```css
+.test {
+  color: @theme color;
+  background: @theme background;
+}
+```
+
+**Output:**
+
+```css
+.test {
+  color: var(--color, white);
+  background: var(--background, black);
+}
+
+.myTheme {
+  --color: purple;
+  --background: green;
+}
+
+.myChildTheme {
+  --color: purple;
+  --background: red;
+}
+```
+
+### Theming Root class (LEGACY ONLY)
 
 Only needed when targeting legacy environments that do not support CSS Variables.
 
-**Input**
+**Input:**
 
 ```css
 :theme-root(.foo) {
@@ -179,7 +233,7 @@ Only needed when targeting legacy environments that do not support CSS Variables
 
 or by nesting
 
-**Input**
+**Input:**
 
 ```css
 :theme-root {
@@ -189,7 +243,7 @@ or by nesting
 }
 ```
 
-**Output**
+**Output:**
 
 ```css
 .foo {
@@ -202,7 +256,7 @@ or by nesting
 
 ## Options
 
-### modules
+### `modules`
 
 This plugin also support scoping your CSS Variable names in a very similar way to CSS Modules. This option should be used when targeting browsers with css variables to avoid name collisions.
 
@@ -266,11 +320,11 @@ postcss([
 ]);
 ```
 
-### defaultTheme
+### `defaultTheme`
 
 An optional parameter to change the name of the _default_ theme (where no extra classes are added to the selector). It defaults to `default`, and also corresponds to the only required key in your `theme.ts` files.
 
-### forceEmptyThemeSelectors - only legacy
+### `forceEmptyThemeSelectors` - only legacy
 
 By default this plugin will not produce class names for theme that have no component level configuration if there are no styles. (ex: you have 3 themes but your component only uses 1, then only 1 extra set of classnames is produced).
 
@@ -284,7 +338,7 @@ postcss([
 ]);
 ```
 
-### forceSingleTheme
+### `forceSingleTheme`
 
 This is a niche option which only inserts a single theme.
 At first glance, this may seem strange because this plugin primarily allows you to support _many_ themes in a _single_ CSS file.
@@ -293,7 +347,7 @@ In practice, we use this to generate extra CSS files for teams that only need a 
 
 It is still recommended to set defaultTheme with this option, as any missing variables will be merged with the default.
 
-### Usage
+**Config:**
 
 ```js
 const config = {
@@ -324,7 +378,7 @@ postcss([
 ]);
 ```
 
-**Input**
+**Input:**
 
 ```css
 .test {
@@ -332,7 +386,7 @@ postcss([
 }
 ```
 
-**Output**
+**Output:**
 
 ```css
 .test {
@@ -350,14 +404,14 @@ postcss([
 
 As you can see in the above example, only one theme will be generated using this option.
 
-### optimizeSingleTheme
+### `optimizeSingleTheme`
 
 This option should only be used in conjunction with `forceSingleTheme`.
 By default `forceSingleTheme` will always add CSS variables, since many users still want to be able to modify and override them.
 However, if you are not going to be modifying them, we can optimize the single theme further by removing variables when possible.
 If only a light theme is specified, this config option will just do in-place replacement of the theme variables.
 
-### Usage
+**Config:**
 
 ```js
 const config = {
@@ -379,7 +433,7 @@ postcss([
 ]);
 ```
 
-**Input**
+**Input:**
 
 ```css
 .test {
@@ -387,7 +441,7 @@ postcss([
 }
 ```
 
-**Output**
+**Output:**
 
 ```css
 .test {
@@ -431,6 +485,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
