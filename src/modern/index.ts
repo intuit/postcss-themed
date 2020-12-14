@@ -92,6 +92,17 @@ const getLocalizeFunction = (
     localizeIdentifier({ resourcePath }, modules || '[local]', name);
 };
 
+const declarationsAsString = ({ nodes }: postcss.Rule) => {
+  if (!nodes) {
+    return '';
+  }
+
+  return nodes
+    .filter((node): node is postcss.Declaration => node.type === 'decl')
+    .map((declaration) => `${declaration.prop}: ${declaration.value};`)
+    .join('');
+};
+
 /** Accomplish theming by creating CSS variable overrides  */
 export const modernTheme = (
   root: postcss.Root,
@@ -241,10 +252,10 @@ export const modernTheme = (
     return;
   }
 
+  const rules: (postcss.Rule | undefined)[] = [];
+
   // 2b. Under normal operation, generate CSS variable blocks for each theme
   Object.entries(componentConfig).forEach(([theme, themeConfig]) => {
-    const rules: (postcss.Rule | undefined)[] = [];
-
     if (theme === defaultTheme) {
       rules.push(addRootTheme(themeConfig));
       rules.push(
@@ -272,7 +283,23 @@ export const modernTheme = (
         )
       );
     }
-
-    root.append(...rules.filter((x): x is postcss.Rule => Boolean(x)));
   });
+
+  const definedRules: postcss.Rule[] = [];
+
+  rules.forEach(rule => {
+    if (!rule) {
+      return;
+    }
+
+    const defined = definedRules.find(definedRule => declarationsAsString(definedRule) === declarationsAsString(rule));
+
+    if (defined) {
+      defined.selector += `,${rule.selector}`;
+    } else {
+      definedRules.push(rule)
+    }
+  })
+
+  root.append(...definedRules);
 };
