@@ -1,3 +1,15 @@
+# v2.3.0 (Mon Dec 14 2020)
+
+#### 🚀  Enhancement
+
+- Allow one theme to extend from another [#42](https://github.com/intuit/postcss-themed/pull/42) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.2.4 (Wed Nov 18 2020)
 
 #### 🐛  Bug Fix
