@@ -678,10 +678,7 @@ it('can extend another theme', () => {
         color: var(--color, purple);
       }
 
-      .turbotax {
-        --color: teal;
-      }
-
+      .turbotax,
       .mytt {
         --color: teal;
       }
@@ -720,14 +717,8 @@ it('can extend another theme that extends a theme', () => {
         color: var(--color, purple);
       }
 
-      .turbotax {
-        --color: teal;
-      }
-
-      .mytt {
-        --color: teal;
-      }
-
+      .turbotax,
+      .mytt,
       .ttlive {
         --color: teal;
       }
