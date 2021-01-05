@@ -1,3 +1,15 @@
+# v2.4.1 (Tue Jan 05 2021)
+
+#### 🐛  Bug Fix
+
+- Hot Reloading: Include Extension in Theme File Path [#44](https://github.com/intuit/postcss-themed/pull/44) ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+#### Authors: 1
+
+- Tyler Krupicka ([@tylerkrupicka](https://github.com/tylerkrupicka))
+
+---
+
 # v2.4.0 (Mon Dec 14 2020)
 
 #### 🚀  Enhancement
