@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 import merge from 'deepmerge';
 
 import {
@@ -24,7 +25,12 @@ export const replaceTheme = (value: string, replace: string) => {
 
 /** Get the location of the theme file */
 export function getThemeFilename(cssFile: string) {
-  return path.join(path.dirname(cssFile), 'theme');
+  let themePath = path.join(path.dirname(cssFile), 'theme.ts');
+  if (!fs.existsSync(themePath)) {
+    themePath = path.join(path.dirname(cssFile), 'theme.js');
+  }
+
+  return themePath;
 }
 
 /** Remove :theme-root usage from a selector */
