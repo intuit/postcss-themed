@@ -10,7 +10,7 @@ import {
   ColorScheme
 } from '../types';
 
-const THEME_USAGE_REGEX = /@theme \$?([a-zA-Z-_0-9]+)/;
+const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9]+)/;
 
 /** Get the theme variable name from a string */
 export const parseThemeKey = (value: string) => {
