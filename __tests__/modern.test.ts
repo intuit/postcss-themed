@@ -281,6 +281,37 @@ it("doesn't hang on $Variable", () => {
   );
 });
 
+it("doesn't error on multi-line declaration", () => {
+  const config = {
+    default: {
+      color: 'purple',
+      otherColor: 'red'
+    },
+    mint: {
+      color: 'teal',
+      otherColor: 'green'
+    }
+  };
+
+  return run(
+    `
+      .test {
+        background: @theme
+         $color, @theme otherColor;
+      }
+    `,
+    `
+      .test {
+        background: var(--color, teal), var(--otherColor, green);
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint'
+    }
+  );
+});
+
 it('should error on missing space', () => {
   const config = {
     default: {
@@ -345,6 +376,7 @@ it('Produces a single theme with variables by default with inlineRootThemeVariab
     }
   );
 });
+
 it('Optimizes single theme by removing variables', () => {
   const config = {
     default: {
