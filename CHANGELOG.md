@@ -1,3 +1,15 @@
+# v2.4.2 (Tue Feb 09 2021)
+
+#### 🐛  Bug Fix
+
+- handle multi-line theme usage [#46](https://github.com/intuit/postcss-themed/pull/46) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.4.1 (Tue Jan 05 2021)
 
 #### 🐛  Bug Fix
