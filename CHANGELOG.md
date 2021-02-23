@@ -1,3 +1,15 @@
+# v2.4.3 (Tue Feb 23 2021)
+
+#### 🐛  Bug Fix
+
+- don't swallow error if it's a syntax error [#47](https://github.com/intuit/postcss-themed/pull/47) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.4.2 (Tue Feb 09 2021)
 
 #### 🐛  Bug Fix
