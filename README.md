@@ -113,6 +113,45 @@ See [PostCSS] docs for examples for your environment.
 }
 ```
 
+### Theming with Objects
+
+You can even keep theme values in deeply nested objects.
+
+**Input:**
+
+```js
+const config = {
+  default: {
+    colors: {
+      primary: 'white',
+    },
+  },
+  other: {
+    colors: {
+      primary: 'black',
+    },
+  },
+};
+```
+
+```css
+.foo {
+  color: @theme colors.primary;
+}
+```
+
+**Output:**
+
+```css
+.foo {
+  color: white;
+}
+
+.other .foo {
+  color: black;
+}
+```
+
 ### Component themes
 
 Define a component level theme in either commonjs or typescript. A file names `themes.(js|ts)` must be co-located with the themeable CSS file.
