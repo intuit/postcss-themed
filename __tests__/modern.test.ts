@@ -8,49 +8,11 @@ it('Creates a simple css variable based theme', () => {
   const config = {
     default: {
       color: 'purple',
-      extras: 'black'
+      extras: 'black',
     },
     mint: {
-      color: 'teal'
-    }
-  };
-
-  return run(
-    `
-      .test {
-        color: @theme color;
-        background-image: linear-gradient(to right, @theme color, @theme color)
-      }
-    `,
-    `
-      .test {
-        color: var(--color);
-        background-image: linear-gradient(to right, var(--color), var(--color))
-      }
-
-      :root {
-        --color: purple
-      }
-
-      .mint {
-        --color: teal
-      }
-    `,
-    {
-      config
-    }
-  );
-});
-
-it('inlineRootThemeVariables false', () => {
-  const config = {
-    default: {
-      color: 'purple',
-      extras: 'black'
+      color: 'teal',
     },
-    mint: {
-      color: 'teal'
-    }
   };
 
   return run(
@@ -76,7 +38,45 @@ it('inlineRootThemeVariables false', () => {
     `,
     {
       config,
-      inlineRootThemeVariables: false
+    }
+  );
+});
+
+it('inlineRootThemeVariables false', () => {
+  const config = {
+    default: {
+      color: 'purple',
+      extras: 'black',
+    },
+    mint: {
+      color: 'teal',
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+        background-image: linear-gradient(to right, var(--color), var(--color))
+      }
+
+      :root {
+        --color: purple
+      }
+
+      .mint {
+        --color: teal
+      }
+    `,
+    {
+      config,
+      inlineRootThemeVariables: false,
     }
   );
 });
@@ -85,24 +85,24 @@ it('Creates a simple css variable based theme with light and dark', () => {
   const config = {
     default: {
       light: {
-        color: 'purple'
+        color: 'purple',
       },
       dark: {
-        color: 'black'
-      }
+        color: 'black',
+      },
     },
 
     mint: {
-      color: 'teal'
+      color: 'teal',
     },
     chair: {
       light: {
-        color: 'beige'
+        color: 'beige',
       },
       dark: {
-        color: 'darkpurple'
-      }
-    }
+        color: 'darkpurple',
+      },
+    },
   };
 
   return run(
@@ -138,7 +138,7 @@ it('Creates a simple css variable based theme with light and dark', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -147,23 +147,23 @@ it('Produces a single theme', () => {
   const config = {
     default: {
       light: {
-        color: 'purple'
+        color: 'purple',
       },
       dark: {
-        color: 'black'
-      }
+        color: 'black',
+      },
     },
     mint: {
-      color: 'teal'
+      color: 'teal',
     },
     chair: {
       light: {
-        color: 'beige'
+        color: 'beige',
       },
       dark: {
-        color: 'darkpurple'
-      }
-    }
+        color: 'darkpurple',
+      },
+    },
   };
 
   return run(
@@ -183,7 +183,7 @@ it('Produces a single theme', () => {
     `,
     {
       config,
-      forceSingleTheme: 'chair'
+      forceSingleTheme: 'chair',
     }
   );
 });
@@ -192,15 +192,15 @@ it('Produces a single theme with dark mode if default has it', () => {
   const config = {
     default: {
       light: {
-        color: 'purple'
+        color: 'purple',
       },
       dark: {
-        color: 'black'
-      }
+        color: 'black',
+      },
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -220,7 +220,7 @@ it('Produces a single theme with dark mode if default has it', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -228,11 +228,11 @@ it('Produces a single theme with dark mode if default has it', () => {
 it('Produces a single theme with variables by default', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -248,7 +248,7 @@ it('Produces a single theme with variables by default', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -257,14 +257,14 @@ it('Gets deep paths', () => {
   const config = {
     default: {
       colors: {
-        purple: 'purple'
-      }
+        purple: 'purple',
+      },
     },
     mint: {
       colors: {
-        purple: 'purple2'
-      }
-    }
+        purple: 'purple2',
+      },
+    },
   };
 
   return run(
@@ -292,14 +292,14 @@ it('Errors on unknown deep paths', () => {
   const config = {
     default: {
       colors: {
-        purple: 'purple'
-      }
+        purple: 'purple',
+      },
     },
     mint: {
       colors: {
-        purple: 'purple2'
-      }
-    }
+        purple: 'purple2',
+      },
+    },
   };
 
   return run(
@@ -320,7 +320,7 @@ it('Errors on unknown deep paths', () => {
     {
       config,
     }
-  ).catch(e => {
+  ).catch((e) => {
     expect(e.message).toEqual(
       'postcss-themed: <css input>:3:16: Could not find key colors.black in theme configuration.'
     );
@@ -330,11 +330,11 @@ it('Errors on unknown deep paths', () => {
 it("doesn't hang on $Variable", () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -350,7 +350,7 @@ it("doesn't hang on $Variable", () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -359,12 +359,12 @@ it("doesn't error on multi-line declaration", () => {
   const config = {
     default: {
       color: 'purple',
-      otherColor: 'red'
+      otherColor: 'red',
     },
     mint: {
       color: 'teal',
-      otherColor: 'green'
-    }
+      otherColor: 'green',
+    },
   };
 
   return run(
@@ -381,7 +381,7 @@ it("doesn't error on multi-line declaration", () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -389,11 +389,11 @@ it("doesn't error on multi-line declaration", () => {
 it('should error on missing space', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -409,9 +409,9 @@ it('should error on missing space', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
-  ).catch(e => {
+  ).catch((e) => {
     expect(e.message).toEqual(
       'postcss-themed: <css input>:3:16: Invalid @theme usage: @themecolor'
     );
@@ -421,11 +421,11 @@ it('should error on missing space', () => {
 it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -446,7 +446,7 @@ it('Produces a single theme with variables by default with inlineRootThemeVariab
     {
       config,
       forceSingleTheme: 'mint',
-      inlineRootThemeVariables: false
+      inlineRootThemeVariables: false,
     }
   );
 });
@@ -454,11 +454,11 @@ it('Produces a single theme with variables by default with inlineRootThemeVariab
 it('Optimizes single theme by removing variables', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -475,7 +475,7 @@ it('Optimizes single theme by removing variables', () => {
     {
       config,
       forceSingleTheme: 'mint',
-      optimizeSingleTheme: true
+      optimizeSingleTheme: true,
     }
   );
 });
@@ -483,11 +483,11 @@ it('Optimizes single theme by removing variables', () => {
 it('works with nested', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -520,7 +520,7 @@ it('works with nested', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -528,11 +528,11 @@ it('works with nested', () => {
 it('scoped variable names', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -558,7 +558,7 @@ it('scoped variable names', () => {
     `,
     {
       config,
-      modules: '[folder]-[name]-[local]'
+      modules: '[folder]-[name]-[local]',
     },
     '/app/foo.css'
   );
@@ -567,11 +567,11 @@ it('scoped variable names', () => {
 it('scoped variable names with custom function', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -604,7 +604,7 @@ it('scoped variable names with custom function', () => {
           .digest('hex')
           .slice(0, 3);
         return `${filename || 'test'}-${name}-${hash}`;
-      }
+      },
     }
   );
 });
@@ -612,11 +612,11 @@ it('scoped variable names with custom function', () => {
 it('scoped variable names with default function', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -642,7 +642,7 @@ it('scoped variable names with default function', () => {
     `,
     {
       config,
-      modules: 'default'
+      modules: 'default',
     }
   );
 });
@@ -650,11 +650,11 @@ it('scoped variable names with default function', () => {
 it('Wrong key mentioned in theme configuration', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -670,7 +670,7 @@ it('Wrong key mentioned in theme configuration', () => {
     {
       config,
       forceSingleTheme: 'mint',
-      optimizeSingleTheme: true
+      optimizeSingleTheme: true,
     }
   );
 });
@@ -680,15 +680,15 @@ it('With component Config', () => {
     default: {
       light: {
         background: 'purple',
-        extras: 'black'
+        extras: 'black',
       },
       dark: {
-        background: 'black'
-      }
+        background: 'black',
+      },
     },
     mint: {
-      background: 'teal'
-    }
+      background: 'teal',
+    },
   };
 
   return run(
@@ -716,7 +716,7 @@ it('With component Config', () => {
       }
     `,
     {
-      config
+      config,
     },
     './__tests__/test-modern-themes-ts/test.css'
   );
@@ -726,11 +726,11 @@ it('Some variables show inline and some show in root', () => {
   const config = {
     default: {
       color: 'purple',
-      extras: 'black'
+      extras: 'black',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -755,7 +755,7 @@ it('Some variables show inline and some show in root', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -763,14 +763,14 @@ it('Some variables show inline and some show in root', () => {
 it('can extend another theme', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     turbotax: {
-      color: 'teal'
+      color: 'teal',
     },
     mytt: {
-      extends: 'turbotax'
-    }
+      extends: 'turbotax',
+    },
   };
 
   return run(
@@ -790,25 +790,24 @@ it('can extend another theme', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
 
-
 it('can extend another theme that extends a theme', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     turbotax: {
-      color: 'teal'
+      color: 'teal',
     },
     mytt: {
-      extends: 'turbotax'
+      extends: 'turbotax',
     },
     ttlive: {
-      extends: 'mytt'
+      extends: 'mytt',
     },
   };
 
@@ -830,7 +829,7 @@ it('can extend another theme that extends a theme', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });

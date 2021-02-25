@@ -12,13 +12,13 @@ import {
   PostcssStrictThemeConfig,
   PostcssThemeOptions,
   ScopedNameFunction,
-  SimpleTheme
+  SimpleTheme,
 } from '../types';
 import {
   hasDarkMode,
   parseThemeKey,
   replaceTheme,
-  replaceThemeRoot
+  replaceThemeRoot,
 } from '../common';
 
 /** Create a CSS variable override block for a given selector */
@@ -31,7 +31,7 @@ const createModernTheme = (
   const decls = Object.entries(flat(theme)).map(([prop, value]) =>
     postcss.decl({
       prop: `--${transform(prop)}`,
-      value: `${value}`
+      value: `${value}`,
     })
   );
 
@@ -50,7 +50,7 @@ const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
 
   for (const [colorScheme, values] of Object.entries(theme)) {
     if (!values) {
-      continue
+      continue;
     }
 
     for (const [key, value] of Object.entries(values)) {
@@ -66,11 +66,7 @@ const defaultLocalizeFunction = (
   filePath: string,
   css: string
 ) => {
-  const hash = crypto
-    .createHash('md5')
-    .update(css)
-    .digest('hex')
-    .slice(0, 6);
+  const hash = crypto.createHash('md5').update(css).digest('hex').slice(0, 6);
   return `${filePath || 'default'}-${name}-${hash}`;
 };
 
@@ -118,9 +114,10 @@ export const modernTheme = (
   const optimizeSingleTheme = options.optimizeSingleTheme;
   const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
-  const localize = (name: string) => {
-    return getLocalizeFunction(options.modules, resourcePath)(name.replace(/\./g, '-'))
-  };
+  const localize = (name: string) => getLocalizeFunction(
+    options.modules,
+    resourcePath
+  )(name.replace(/\./g, '-'));
 
   const defaultThemeConfig = Object.entries(componentConfig).find(
     ([theme]) => theme === defaultTheme
@@ -149,11 +146,11 @@ export const modernTheme = (
     mergedSingleThemeConfig && hasDarkMode(mergedSingleThemeConfig);
 
   // 1a. walk again to optimize inline default values
-  root.walkRules(rule => {
+  root.walkRules((rule) => {
     rule.selector = replaceThemeRoot(rule.selector);
 
-    rule.walkDecls(decl => {
-      decl.value.split(/(?=@theme)/g).forEach(chunk => {
+    rule.walkDecls((decl) => {
+      decl.value.split(/(?=@theme)/g).forEach((chunk) => {
         const key = parseThemeKey(chunk);
 
         if (key) {
@@ -166,14 +163,14 @@ export const modernTheme = (
   });
 
   // 1b. Walk each declaration and replace theme vars with CSS vars
-  root.walkRules(rule => {
+  root.walkRules((rule) => {
     rule.selector = replaceThemeRoot(rule.selector);
 
-    rule.walkDecls(decl => {
+    rule.walkDecls((decl) => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
         const themeValue = get(mergedSingleThemeConfig.light, key);
-        
+
         if (singleTheme && !hasMergedDarkMode && optimizeSingleTheme) {
           // If we are only building a single theme with light mode, we can optionally insert the value
           if (themeValue) {
@@ -187,9 +184,11 @@ export const modernTheme = (
             decl.remove();
             break;
           }
-
         } else if (key && !themeValue) {
-          throw decl.error(`Could not find key ${key} in theme configuration.`, { word: decl.value })
+          throw decl.error(
+            `Could not find key ${key} in theme configuration.`,
+            { word: decl.value }
+          );
         } else if (
           inlineRootThemeVariables &&
           usage.has(key) &&
@@ -202,7 +201,9 @@ export const modernTheme = (
         } else if (key) {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
         } else {
-          throw decl.error(`Invalid @theme usage: ${decl.value}`, { word: decl.value })
+          throw decl.error(`Invalid @theme usage: ${decl.value}`, {
+            word: decl.value,
+          });
         }
       }
     });
@@ -215,22 +216,22 @@ export const modernTheme = (
     filterFunction = (name: string) => usage.has(name)
   ): SimpleTheme => {
     const theme = themeConfig[colorScheme];
-    const usedVariables: SimpleTheme = {}
+    const usedVariables: SimpleTheme = {};
 
-    Array.from(usage.keys()).forEach(key => {
+    Array.from(usage.keys()).forEach((key) => {
       if (get(theme, key) && filterFunction(key)) {
-        set(usedVariables, key, get(theme, key))
+        set(usedVariables, key, get(theme, key));
       }
-    })
+    });
 
     return usedVariables;
-  }
+  };
 
   const addRootTheme = (themConfig: LightDarkTheme) => {
     // If inlineRootThemeVariables then only add vars to root that are used more than once
     const func = inlineRootThemeVariables
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      ? (name: string) => usage.has(name) && usage.get(name)! > 1
+      ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        (name: string) => usage.has(name) && usage.get(name)! > 1
       : undefined;
 
     return createModernTheme(
@@ -299,19 +300,22 @@ export const modernTheme = (
 
   const definedRules: postcss.Rule[] = [];
 
-  rules.forEach(rule => {
+  rules.forEach((rule) => {
     if (!rule) {
       return;
     }
 
-    const defined = definedRules.find(definedRule => declarationsAsString(definedRule) === declarationsAsString(rule));
+    const defined = definedRules.find(
+      (definedRule) =>
+        declarationsAsString(definedRule) === declarationsAsString(rule)
+    );
 
     if (defined) {
       defined.selector += `,${rule.selector}`;
     } else {
-      definedRules.push(rule)
+      definedRules.push(rule);
     }
-  })
+  });
 
   root.append(...definedRules);
 };

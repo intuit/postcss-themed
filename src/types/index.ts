@@ -3,7 +3,7 @@ export interface ThemeObject {
 }
 export type SimpleTheme = Omit<ThemeObject, 'extends'> & {
   extends?: string;
-}
+};
 export type ColorScheme = 'light' | 'dark';
 export type LightDarkTheme = Record<ColorScheme, SimpleTheme> & {
   extends?: string;

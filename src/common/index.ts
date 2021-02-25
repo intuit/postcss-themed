@@ -7,7 +7,7 @@ import {
   PostcssStrictThemeConfig,
   Theme,
   LightDarkTheme,
-  ColorScheme
+  ColorScheme,
 } from '../types';
 
 const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
@@ -57,8 +57,8 @@ export const normalizeTheme = (
           [theme]: {
             extends: themeConfig.extends,
             light: configWithoutExtends,
-            dark: {}
-          }
+            dark: {},
+          },
         };
       }
 
@@ -96,7 +96,7 @@ export const resolveThemeExtension = (
         chain.push(currentTheme);
         throw new Error(
           `Circular theme extension found! ${chain
-            .map(i => `'${i}'`)
+            .map((i) => `'${i}'`)
             .join(' => ')}`
         );
       }
@@ -112,7 +112,7 @@ export const resolveThemeExtension = (
     const subConfig = { ...config };
     delete subConfig[theme];
 
-    Object.keys(subConfig).forEach(t => {
+    Object.keys(subConfig).forEach((t) => {
       if (
         subConfig[t].extends === theme ||
         subConfig[t].light.extends === theme ||

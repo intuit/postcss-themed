@@ -6,15 +6,15 @@ it('Overrides all themes from default', () => {
   const config = {
     default: {
       light: {
-        color: 'red'
+        color: 'red',
       },
       dark: {
-        color: 'blue'
-      }
+        color: 'blue',
+      },
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -38,7 +38,7 @@ it('Overrides all themes from default', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -47,20 +47,20 @@ it('Overrides dark themes from default', () => {
   const config = {
     default: {
       light: {
-        color: 'red'
+        color: 'red',
       },
       dark: {
-        color: 'blue'
-      }
+        color: 'blue',
+      },
     },
     mint: {
       light: {
-        color: 'purple'
+        color: 'purple',
       },
       dark: {
-        color: 'teal'
-      }
-    }
+        color: 'teal',
+      },
+    },
   };
 
   return run(
@@ -88,7 +88,7 @@ it('Overrides dark themes from default', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -98,16 +98,16 @@ it('Merges missing variables from single theme', () => {
     default: {
       light: {
         color: 'red',
-        bgColor: 'orange'
+        bgColor: 'orange',
       },
       dark: {
         color: 'blue',
-        bgColor: 'magenta'
-      }
+        bgColor: 'magenta',
+      },
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -130,7 +130,7 @@ it('Merges missing variables from single theme', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -139,11 +139,11 @@ it('Merges single theme but leaves variables by default', () => {
   const config = {
     default: {
       color: 'red',
-      bgColor: 'orange'
+      bgColor: 'orange',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -162,7 +162,7 @@ it('Merges single theme but leaves variables by default', () => {
     `,
     {
       config,
-      forceSingleTheme: 'mint'
+      forceSingleTheme: 'mint',
     }
   );
 });
@@ -171,11 +171,11 @@ it('Merges single theme but omits variables when optimized', () => {
   const config = {
     default: {
       color: 'red',
-      bgColor: 'orange'
+      bgColor: 'orange',
     },
     mint: {
-      color: 'teal'
-    }
+      color: 'teal',
+    },
   };
 
   return run(
@@ -194,7 +194,7 @@ it('Merges single theme but omits variables when optimized', () => {
     {
       config,
       forceSingleTheme: 'mint',
-      optimizeSingleTheme: true
+      optimizeSingleTheme: true,
     }
   );
 });

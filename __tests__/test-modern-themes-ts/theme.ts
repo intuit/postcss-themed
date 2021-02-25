@@ -2,10 +2,10 @@ export default () => ({
   default: {
     light: {
       background: 'yellow',
-      color: 'green'
+      color: 'green',
     },
     dark: {
-      background: 'pink'
-    }
-  }
+      background: 'pink',
+    },
+  },
 });

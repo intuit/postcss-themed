@@ -6,11 +6,11 @@ import { run } from './test-utils';
 it('Creates theme override', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     dark: {
-      color: 'black'
-    }
+      color: 'black',
+    },
   };
 
   return run(
@@ -31,7 +31,7 @@ it('Creates theme override', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -39,17 +39,17 @@ it('Creates theme override', () => {
 it('Creates multiple theme overrides', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
+      color: 'white',
     },
     dark: {
-      color: 'black'
+      color: 'black',
     },
     happy: {
-      color: 'green'
-    }
+      color: 'green',
+    },
   };
 
   return run(
@@ -73,7 +73,7 @@ it('Creates multiple theme overrides', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -81,11 +81,11 @@ it('Creates multiple theme overrides', () => {
 it('Only overrides what it needs to', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -107,7 +107,7 @@ it('Only overrides what it needs to', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -115,11 +115,11 @@ it('Only overrides what it needs to', () => {
 it('replaces partial values', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -137,7 +137,7 @@ it('replaces partial values', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -146,8 +146,8 @@ it('finds javascript themes', () => {
   const config = {
     default: {},
     light: {
-      background: 'red'
-    }
+      background: 'red',
+    },
   };
 
   return run(
@@ -164,7 +164,7 @@ it('finds javascript themes', () => {
       }
     `,
     {
-      config
+      config,
     },
     './__tests__/test-component-themes-js/test.css'
   );
@@ -174,8 +174,8 @@ it('finds typescript themes', () => {
   const config = {
     default: {},
     light: {
-      background: 'red'
-    }
+      background: 'red',
+    },
   };
 
   return run(
@@ -192,7 +192,7 @@ it('finds typescript themes', () => {
       }
     `,
     {
-      config
+      config,
     },
     './__tests__/test-component-themes-ts/test.css'
   );
@@ -202,8 +202,8 @@ it('custom theme resolver', () => {
   const config = {
     default: {},
     light: {
-      background: 'red'
-    }
+      background: 'red',
+    },
   };
 
   return run(
@@ -223,7 +223,7 @@ it('custom theme resolver', () => {
       config,
       resolveTheme: () =>
         // eslint-disable-next-line global-require, node/no-missing-require
-        require('./test-component-themes-ts/theme')
+        require('./test-component-themes-ts/theme'),
     },
     './test.css'
   );
@@ -233,8 +233,8 @@ it('works when no theme found', () => {
   const config = {
     default: {},
     light: {
-      background: 'red'
-    }
+      background: 'red',
+    },
   };
 
   return run(
@@ -251,7 +251,7 @@ it('works when no theme found', () => {
       }
     `,
     {
-      config
+      config,
     },
     './__tests__/test.css'
   );
@@ -260,11 +260,11 @@ it('works when no theme found', () => {
 it('omits undefined values', () => {
   const config = {
     default: {
-      background: 'blue'
+      background: 'blue',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -283,7 +283,7 @@ it('omits undefined values', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -291,11 +291,11 @@ it('omits undefined values', () => {
 it('process :theme-root', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -313,7 +313,7 @@ it('process :theme-root', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -321,11 +321,11 @@ it('process :theme-root', () => {
 it('process :theme-root - nested', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -355,7 +355,7 @@ it('process :theme-root - nested', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -364,12 +364,12 @@ it('multiple values in one declaration', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
-    }
+      width: '10px',
+    },
   };
 
   return run(
@@ -387,7 +387,7 @@ it('multiple values in one declaration', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -395,7 +395,7 @@ it('multiple values in one declaration', () => {
 it('Requires a config', () => {
   return postcss([plugin()])
     .process('', { from: undefined })
-    .catch(e => {
+    .catch((e) => {
       expect(e).toEqual(new Error('No config provided to postcss-themed'));
     });
 });
@@ -408,16 +408,16 @@ it('Finds missing keys', () => {
   `;
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     dark: {
-      'background-color': 'black'
-    }
+      'background-color': 'black',
+    },
   };
 
   return postcss([plugin({ config })])
     .process(input, { from: undefined })
-    .catch(e => {
+    .catch((e) => {
       expect(e.message).toContain("Theme 'dark' does not contain key 'color'");
     });
 });
@@ -430,17 +430,17 @@ it('Finds missing default', () => {
   `;
   const config = {
     light: {
-      color: 'purple'
+      color: 'purple',
     },
     dark: {
-      'background-color': 'black'
-    }
+      'background-color': 'black',
+    },
   };
 
   // @ts-ignore
   return postcss([plugin({ config })])
     .process(input, { from: undefined })
-    .catch(e => {
+    .catch((e) => {
       expect(e.message).toContain(
         "Theme 'default' does not contain key 'color'"
       );
@@ -451,16 +451,16 @@ it('multiple themes + theme-root', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
+      width: '10px',
     },
     dark: {
       color: 'black',
-      width: '100px'
-    }
+      width: '100px',
+    },
   };
 
   return run(
@@ -483,7 +483,7 @@ it('multiple themes + theme-root', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -492,14 +492,14 @@ it('multiple themes + fallback', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
-      color: 'white'
+      color: 'white',
     },
     dark: {
-      color: 'black'
-    }
+      color: 'black',
+    },
   };
 
   return run(
@@ -522,7 +522,7 @@ it('multiple themes + fallback', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -530,12 +530,12 @@ it('multiple themes + fallback', () => {
 it('non-default main theme', () => {
   const config = {
     newDefault: {
-      color: 'black'
+      color: 'black',
     },
     shinyNewProduct: {
       color: 'red',
-      width: '1rem'
-    }
+      width: '1rem',
+    },
   };
 
   return run(
@@ -561,12 +561,12 @@ it('non-default main theme', () => {
 it('non-existent default theme', () => {
   const config = {
     newDefault: {
-      color: 'black'
+      color: 'black',
     },
     shinyNewProduct: {
       color: 'red',
-      width: '1rem'
-    }
+      width: '1rem',
+    },
   };
 
   const input = `
@@ -579,7 +579,7 @@ it('non-existent default theme', () => {
   // @ts-ignore
   return postcss([plugin({ config, defaultTheme: 'otherDefaultTheme' })])
     .process(input, { from: undefined })
-    .catch(e => {
+    .catch((e) => {
       expect(e.message).toContain(
         "Theme 'otherDefaultTheme' does not contain key 'color'"
       );
@@ -590,12 +590,12 @@ it('multiple selectors', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
-    }
+      width: '10px',
+    },
   };
 
   return run(
@@ -613,7 +613,7 @@ it('multiple selectors', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -622,13 +622,13 @@ it('multiple selectors - theme root', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
+      width: '10px',
     },
-    mint: {}
+    mint: {},
   };
 
   return run(
@@ -657,7 +657,7 @@ it('multiple selectors - theme root', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -666,23 +666,23 @@ it('dark themes', () => {
   const config = {
     default: {
       light: {
-        color: 'white'
+        color: 'white',
       },
       dark: {
-        color: 'black'
-      }
+        color: 'black',
+      },
     },
     mint: {
       light: {
-        color: 'lightblue'
+        color: 'lightblue',
       },
       dark: {
-        color: 'darkblue'
-      }
+        color: 'darkblue',
+      },
     },
     tto: {
-      color: 'red'
-    }
+      color: 'red',
+    },
   };
 
   return run(
@@ -709,7 +709,7 @@ it('dark themes', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -717,12 +717,12 @@ it('dark themes', () => {
 it('overrides themes to single theme', () => {
   const config = {
     newDefault: {
-      color: 'black'
+      color: 'black',
     },
     shinyNewProduct: {
       color: 'red',
-      width: '1rem'
-    }
+      width: '1rem',
+    },
   };
 
   const input = `
@@ -732,29 +732,31 @@ it('overrides themes to single theme', () => {
   }
   `;
 
-  return postcss([plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: 'true' })])
+  return postcss([
+    plugin({ config, defaultTheme: 'quickBooks', forceSingleTheme: 'true' }),
+  ])
     .process(input, { from: undefined })
-    .catch(e => {
+    .catch((e) => {
       expect(e.message).toContain(
         "Theme 'quickBooks' does not contain key 'color'"
       );
-  });
+    });
 });
 
 it('when theme = light , forceSingleTheme = true, single selector is generated', () => {
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
+      width: '10px',
     },
-    dark : {
+    dark: {
       color: 'black',
-      width: '20px'
-    }
+      width: '20px',
+    },
   };
 
   return run(
@@ -782,16 +784,16 @@ it('when theme = light , forceSingleTheme = false, multiple selectors are genera
   const config = {
     default: {
       color: 'purple',
-      width: '1px'
+      width: '1px',
     },
     light: {
       color: 'white',
-      width: '10px'
+      width: '10px',
     },
-    dark : {
+    dark: {
       color: 'black',
-      width: '20px'
-    }
+      width: '20px',
+    },
   };
 
   return run(
@@ -818,11 +820,11 @@ it('when theme = light , forceSingleTheme = false, multiple selectors are genera
 it('Adding empty selectors to final output. Part of legacy code', () => {
   const config = {
     default: {
-      color: 'purple'
+      color: 'purple',
     },
     light: {
-      color: 'white'
-    }
+      color: 'white',
+    },
   };
 
   return run(
@@ -844,7 +846,7 @@ it('Adding empty selectors to final output. Part of legacy code', () => {
     `,
     {
       config,
-      forceEmptyThemeSelectors: true
+      forceEmptyThemeSelectors: true,
     }
   );
 });

@@ -1,5 +1,5 @@
 export default () => ({
   light: {
-    background: 'yellow'
-  }
+    background: 'yellow',
+  },
 });
