@@ -253,6 +253,80 @@ it('Produces a single theme with variables by default', () => {
   );
 });
 
+it('Gets deep paths', () => {
+  const config = {
+    default: {
+      colors: {
+        purple: 'purple'
+      }
+    },
+    mint: {
+      colors: {
+        purple: 'purple2'
+      }
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme colors.purple;
+      }
+    `,
+    `
+      .test {
+        color: var(--colors-purple, purple);
+      }
+
+      .mint {
+        --colors-purple: purple2;
+      }
+    `,
+    {
+      config,
+    }
+  );
+});
+
+it('Errors on unknown deep paths', () => {
+  const config = {
+    default: {
+      colors: {
+        purple: 'purple'
+      }
+    },
+    mint: {
+      colors: {
+        purple: 'purple2'
+      }
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme colors.black;
+      }
+    `,
+    `
+      .test {
+        color: var(--colors-purple, purple);
+      }
+
+      .mint {
+        --colors-purple: purple2;
+      }
+    `,
+    {
+      config,
+    }
+  ).catch(e => {
+    expect(e.message).toEqual(
+      'postcss-themed: <css input>:3:16: Could not find key colors.black in theme configuration.'
+    );
+  });
+});
+
 it("doesn't hang on $Variable", () => {
   const config = {
     default: {

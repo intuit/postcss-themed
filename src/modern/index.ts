@@ -1,6 +1,9 @@
 import postcss from 'postcss';
 import crypto from 'crypto';
 import fs from 'fs';
+import get from 'dlv';
+import flat from 'flat';
+import { dset as set } from 'dset';
 
 import localizeIdentifier from '../localize-identifier';
 import {
@@ -25,7 +28,7 @@ const createModernTheme = (
   transform: (value: string) => string
 ) => {
   const rule = postcss.rule({ selector });
-  const decls = Object.entries(theme).map(([prop, value]) =>
+  const decls = Object.entries(flat(theme)).map(([prop, value]) =>
     postcss.decl({
       prop: `--${transform(prop)}`,
       value: `${value}`
@@ -115,7 +118,9 @@ export const modernTheme = (
   const optimizeSingleTheme = options.optimizeSingleTheme;
   const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
-  const localize = getLocalizeFunction(options.modules, resourcePath);
+  const localize = (name: string) => {
+    return getLocalizeFunction(options.modules, resourcePath)(name.replace(/\./g, '-'))
+  };
 
   const defaultThemeConfig = Object.entries(componentConfig).find(
     ([theme]) => theme === defaultTheme
@@ -167,14 +172,12 @@ export const modernTheme = (
     rule.walkDecls(decl => {
       while (decl.value.includes('@theme')) {
         const key = parseThemeKey(decl.value);
-
+        const themeValue = get(mergedSingleThemeConfig.light, key);
+        
         if (singleTheme && !hasMergedDarkMode && optimizeSingleTheme) {
           // If we are only building a single theme with light mode, we can optionally insert the value
-          if (mergedSingleThemeConfig.light[key]) {
-            decl.value = replaceTheme(
-              decl.value,
-              mergedSingleThemeConfig.light[key]
-            );
+          if (themeValue) {
+            decl.value = replaceTheme(decl.value, themeValue);
           } else {
             root.warn(
               root.toResult(),
@@ -184,6 +187,9 @@ export const modernTheme = (
             decl.remove();
             break;
           }
+
+        } else if (key && !themeValue) {
+          throw decl.error(`Could not find key ${key} in theme configuration.`, { word: decl.value })
         } else if (
           inlineRootThemeVariables &&
           usage.has(key) &&
@@ -191,9 +197,7 @@ export const modernTheme = (
         ) {
           decl.value = replaceTheme(
             decl.value,
-            `var(--${localize(key)}, ${
-              mergedSingleThemeConfig.light[key]
-            })`
+            `var(--${localize(key)}, ${themeValue})`
           );
         } else if (key) {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
@@ -208,17 +212,25 @@ export const modernTheme = (
   const filterUsed = (
     colorScheme: ColorScheme,
     themeConfig: LightDarkTheme,
-    filterFunction = ([name]: string[]) => usage.has(name)
-  ): SimpleTheme =>
-    Object.entries(themeConfig[colorScheme])
-      .filter(filterFunction)
-      .reduce((acc, [name, value]) => ({ ...acc, [name]: value }), {});
+    filterFunction = (name: string) => usage.has(name)
+  ): SimpleTheme => {
+    const theme = themeConfig[colorScheme];
+    const usedVariables: SimpleTheme = {}
+
+    Array.from(usage.keys()).forEach(key => {
+      if (get(theme, key) && filterFunction(key)) {
+        set(usedVariables, key, get(theme, key))
+      }
+    })
+
+    return usedVariables;
+  }
 
   const addRootTheme = (themConfig: LightDarkTheme) => {
     // If inlineRootThemeVariables then only add vars to root that are used more than once
     const func = inlineRootThemeVariables
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      ? ([name]: string[]) => usage.has(name) && usage.get(name)! > 1
+      ? (name: string) => usage.has(name) && usage.get(name)! > 1
       : undefined;
 
     return createModernTheme(

@@ -10,7 +10,7 @@ import {
   ColorScheme
 } from '../types';
 
-const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9]+)/;
+const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
 
 /** Get the theme variable name from a string */
 export const parseThemeKey = (value: string) => {
@@ -130,18 +130,20 @@ export const resolveThemeExtension = (
     theme: string,
     colorScheme: ColorScheme
   ) => {
+    const extendsTheme = themeConfig[colorScheme].extends;
+
     let extras = {};
 
-    if (themeConfig[colorScheme].extends) {
-      checkThemeExists(themeConfig[colorScheme].extends);
-      checkExtendSelf(theme, themeConfig[colorScheme].extends);
+    if (extendsTheme) {
+      checkThemeExists(extendsTheme);
+      checkExtendSelf(theme, extendsTheme);
       checkCycles(theme, colorScheme);
 
-      if (config[themeConfig[colorScheme].extends][colorScheme].extends) {
+      if (config[extendsTheme][colorScheme].extends) {
         resolveSubTheme(theme);
       }
 
-      extras = config[themeConfig[colorScheme].extends][colorScheme];
+      extras = config[extendsTheme][colorScheme];
       delete themeConfig[colorScheme].extends;
     }
 

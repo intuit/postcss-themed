@@ -1,5 +1,6 @@
 import postcss from 'postcss';
 import debug from 'debug';
+import get from 'dlv';
 
 import { parseThemeKey, replaceTheme, replaceThemeRoot } from '../common';
 import { ColorScheme, PostcssStrictThemeConfig, PostcssThemeOptions } from '../types';
@@ -22,9 +23,9 @@ const replaceThemeVariables = (
 
     // Check for issues with theme
     try {
-      const themeDefault = config[defaultTheme][colorScheme][themeKey];
-      const newValue = config[theme][colorScheme][themeKey];
-
+      const themeDefault: string = get(config[defaultTheme][colorScheme], themeKey);
+      const newValue: string = get(config[theme][colorScheme], themeKey);
+      
       decl.value = replaceTheme(
         decl.value,
         hasMultiple ? newValue || themeDefault : newValue
