@@ -114,10 +114,11 @@ export const modernTheme = (
   const optimizeSingleTheme = options.optimizeSingleTheme;
   const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
   const resourcePath = root.source ? root.source.input.file : '';
-  const localize = (name: string) => getLocalizeFunction(
-    options.modules,
-    resourcePath
-  )(name.replace(/\./g, '-'));
+  const localize = (name: string) =>
+    getLocalizeFunction(
+      options.modules,
+      resourcePath
+    )(name.replace(/\./g, '-'));
 
   const defaultThemeConfig = Object.entries(componentConfig).find(
     ([theme]) => theme === defaultTheme

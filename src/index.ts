@@ -53,7 +53,7 @@ const configForComponent = (
       'default' in componentConfig ? componentConfig.default : componentConfig;
     return fn(rootTheme);
   } catch (error) {
-    if (error instanceof SyntaxError) {
+    if (error instanceof SyntaxError || error instanceof TypeError) {
       throw error;
     } else {
       log(error);
