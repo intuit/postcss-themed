@@ -224,7 +224,7 @@ export const modernTheme = (
     Array.from(usage.keys()).forEach((key) => {
       const value = get(currentThemeConfig, key);
 
-      if (value && filterFunction(key)) {
+      if (value && filterFunction(key) && typeof value !== 'object') {
         // If the dark and light theme have the same value don't include
         if (colorScheme === 'dark' && get(themeConfig.light, key) === value) {
           return;

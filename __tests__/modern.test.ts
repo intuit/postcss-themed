@@ -336,6 +336,39 @@ it('Don\'t produce extra variables for matching values in theme', () => {
   );
 });
 
+it('Don\'t included deep values in theme', () => {
+  const config = {
+    default: {
+      // Component theme defines a "color" variable that clashes
+      // with "color" object on themes
+      color: "red"
+    },
+    someTheme: {
+      // Theme doesn't set a "color" but get the "color" tokens
+      color:  {
+        red: 'red2',
+        green: 'green2',
+      }
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, red);
+      }
+    `,
+    {
+      config
+    }
+  );
+});
+
 it('Produces a single theme with variables by default', () => {
   const config = {
     default: {
