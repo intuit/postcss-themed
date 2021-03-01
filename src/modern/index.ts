@@ -213,17 +213,29 @@ export const modernTheme = (
   // 2. Create variable declaration blocks
   const filterUsed = (
     colorScheme: ColorScheme,
-    themeConfig: LightDarkTheme,
+    theme: string | LightDarkTheme,
     filterFunction = (name: string) => usage.has(name)
   ): SimpleTheme => {
-    const theme = themeConfig[colorScheme];
+    const themeConfig =
+      typeof theme === 'string' ? componentConfig[theme] : theme;
+    const currentThemeConfig = themeConfig[colorScheme];
     const usedVariables: SimpleTheme = {};
 
     Array.from(usage.keys()).forEach((key) => {
-      const value = get(theme, key);
+      const value = get(currentThemeConfig, key);
 
       if (value && filterFunction(key)) {
+        // If the dark and light theme have the same value don't include
         if (colorScheme === 'dark' && get(themeConfig.light, key) === value) {
+          return;
+        }
+
+        // If the theme value matches the base theme don't include
+        if (
+          defaultThemeConfig &&
+          (typeof theme === 'string' && theme !== defaultTheme) &&
+          get(defaultThemeConfig[1][colorScheme], key) === value
+        ) {
           return;
         }
 
@@ -234,7 +246,7 @@ export const modernTheme = (
     return usedVariables;
   };
 
-  const addRootTheme = (themConfig: LightDarkTheme) => {
+  const addRootTheme = (themeConfig: LightDarkTheme) => {
     // If inlineRootThemeVariables then only add vars to root that are used more than once
     const func = inlineRootThemeVariables
       ? // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -243,7 +255,7 @@ export const modernTheme = (
 
     return createModernTheme(
       ':root',
-      filterUsed('light', themConfig, func),
+      filterUsed('light', themeConfig, func),
       localize
     );
   };
@@ -279,26 +291,22 @@ export const modernTheme = (
     if (theme === defaultTheme) {
       rules.push(addRootTheme(themeConfig));
       rules.push(
-        createModernTheme('.dark', filterUsed('dark', themeConfig), localize)
+        createModernTheme('.dark', filterUsed('dark', defaultTheme), localize)
       );
     } else if (hasDarkMode(themeConfig)) {
       rules.push(
         createModernTheme(
           `.${theme}.light`,
-          filterUsed('light', themeConfig),
+          filterUsed('light', theme),
           localize
         ),
-        createModernTheme(
-          `.${theme}.dark`,
-          filterUsed('dark', themeConfig),
-          localize
-        )
+        createModernTheme(`.${theme}.dark`, filterUsed('dark', theme), localize)
       );
     } else {
       rules.push(
         createModernTheme(
           hasRootDarkMode ? `.${theme}.light` : `.${theme}`,
-          filterUsed('light', themeConfig),
+          filterUsed('light', theme),
           localize
         )
       );

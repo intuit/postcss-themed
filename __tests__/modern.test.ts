@@ -225,7 +225,7 @@ it('Produces a single theme with dark mode if default has it', () => {
   );
 });
 
-it('Done produce extra variables for matching values', () => {
+it('Don\'t produce extra variables for matching values', () => {
   const config = {
     default: {
       light: {
@@ -249,8 +249,89 @@ it('Done produce extra variables for matching values', () => {
       }
     `,
     {
-      config,
-      forceSingleTheme: 'mint',
+      config
+    }
+  );
+});
+
+it('Don\'t produce extra variables for matching values in theme', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'black',
+      },
+      dark: {
+        color: 'black',
+      },
+    },
+    someTheme: {
+      light: {
+        color: 'black',
+      },
+      dark: {
+        color2: 'black',
+      },
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, black);
+      }
+    `,
+    {
+      config
+    }
+  );
+});
+
+it('Don\'t produce extra variables for matching values in theme', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'red',
+      },
+      dark: {
+        color: 'black',
+      },
+    },
+    someTheme: {
+      light: {
+        color: 'blue',
+      },
+      dark: {
+        color: 'black',
+      },
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, red);
+      }
+
+      .dark {
+        --color: black;
+      }
+
+      .someTheme.light {
+        --color: blue;
+      }
+    `,
+    {
+      config
     }
   );
 });
