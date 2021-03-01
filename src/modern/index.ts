@@ -220,8 +220,14 @@ export const modernTheme = (
     const usedVariables: SimpleTheme = {};
 
     Array.from(usage.keys()).forEach((key) => {
-      if (get(theme, key) && filterFunction(key)) {
-        set(usedVariables, key, get(theme, key));
+      const value = get(theme, key);
+
+      if (value && filterFunction(key)) {
+        if (colorScheme === 'dark' && get(themeConfig.light, key) === value) {
+          return;
+        }
+
+        set(usedVariables, key, value);
       }
     });
 

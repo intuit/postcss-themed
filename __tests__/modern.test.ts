@@ -225,6 +225,36 @@ it('Produces a single theme with dark mode if default has it', () => {
   );
 });
 
+it('Done produce extra variables for matching values', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'black',
+      },
+      dark: {
+        color: 'black',
+      },
+    }
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+      }
+    `,
+    `
+      .test {
+        color: var(--color, black);
+      }
+    `,
+    {
+      config,
+      forceSingleTheme: 'mint',
+    }
+  );
+});
+
 it('Produces a single theme with variables by default', () => {
   const config = {
     default: {
