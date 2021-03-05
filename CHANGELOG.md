@@ -1,3 +1,15 @@
+# v2.5.0 (Fri Mar 05 2021)
+
+#### 🚀  Enhancement
+
+- Handle themes with objects [#48](https://github.com/intuit/postcss-themed/pull/48) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.4.3 (Tue Feb 23 2021)
 
 #### 🐛  Bug Fix
