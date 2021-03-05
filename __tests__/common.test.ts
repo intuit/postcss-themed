@@ -5,29 +5,29 @@ it('should be able to extend a simple theme', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          color: 'blue'
+          color: 'blue',
         },
         myChildTheme: {
-          extends: 'myTheme'
-        }
+          extends: 'myTheme',
+        },
       })
     )
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
-      dark: {}
+      dark: {},
     },
     myTheme: {
       light: { color: 'blue' },
-      dark: {}
+      dark: {},
     },
     myChildTheme: {
       light: { color: 'blue' },
-      dark: {}
-    }
+      dark: {},
+    },
   });
 });
 
@@ -36,30 +36,30 @@ it('should be able to extend a simple theme', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
           light: { color: 'blue' },
-          dark: { color: 'green' }
+          dark: { color: 'green' },
         },
         myChildTheme: {
-          extends: 'myTheme'
-        }
+          extends: 'myTheme',
+        },
       })
     )
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
-      dark: {}
+      dark: {},
     },
     myTheme: {
       light: { color: 'blue' },
-      dark: { color: 'green' }
+      dark: { color: 'green' },
     },
     myChildTheme: {
       light: { color: 'blue' },
-      dark: { color: 'green' }
-    }
+      dark: { color: 'green' },
+    },
   });
 });
 
@@ -68,31 +68,31 @@ it('should be able to extend a dark/light theme from root', () => {
     resolveThemeExtension({
       default: {
         light: { color: 'white' },
-        dark: { color: 'black' }
+        dark: { color: 'black' },
       },
       myTheme: {
         light: { color: 'blue' },
-        dark: { color: 'red' }
+        dark: { color: 'red' },
       },
       myChildTheme: {
         extends: 'myTheme',
         light: {},
-        dark: {}
-      }
+        dark: {},
+      },
     })
   ).toStrictEqual({
     default: {
       light: { color: 'white' },
-      dark: { color: 'black' }
+      dark: { color: 'black' },
     },
     myTheme: {
       light: { color: 'blue' },
-      dark: { color: 'red' }
+      dark: { color: 'red' },
     },
     myChildTheme: {
       light: { color: 'blue' },
-      dark: { color: 'red' }
-    }
+      dark: { color: 'red' },
+    },
   });
 });
 
@@ -101,36 +101,36 @@ it('should be able to extend a theme that extends another theme', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          color: 'blue'
+          color: 'blue',
         },
         myChildTheme: {
-          extends: 'myTheme'
+          extends: 'myTheme',
         },
         myOtherChildTheme: {
-          extends: 'myChildTheme'
-        }
+          extends: 'myChildTheme',
+        },
       })
     )
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
-      dark: {}
+      dark: {},
     },
     myTheme: {
       light: { color: 'blue' },
-      dark: {}
+      dark: {},
     },
     myChildTheme: {
       light: { color: 'blue' },
-      dark: {}
+      dark: {},
     },
     myOtherChildTheme: {
       light: { color: 'blue' },
-      dark: {}
-    }
+      dark: {},
+    },
   });
 });
 
@@ -139,36 +139,36 @@ it('should be able to extend a theme that extends another theme - out of order',
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          color: 'blue'
+          color: 'blue',
         },
         myOtherChildTheme: {
-          extends: 'myChildTheme'
+          extends: 'myChildTheme',
         },
         myChildTheme: {
-          extends: 'myTheme'
-        }
+          extends: 'myTheme',
+        },
       })
     )
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
-      dark: {}
+      dark: {},
     },
     myTheme: {
       light: { color: 'blue' },
-      dark: {}
+      dark: {},
     },
     myChildTheme: {
       light: { color: 'blue' },
-      dark: {}
+      dark: {},
     },
     myOtherChildTheme: {
       light: { color: 'blue' },
-      dark: {}
-    }
+      dark: {},
+    },
   });
 });
 
@@ -177,14 +177,14 @@ it('should error on unknown themes', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          color: 'blue'
+          color: 'blue',
         },
         myChildTheme: {
-          extends: 'myThemes'
-        }
+          extends: 'myThemes',
+        },
       })
     )
   ).toThrow("Theme to extend from not found! 'myThemes'");
@@ -195,11 +195,11 @@ it('should error when extending itself', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          extends: 'myTheme'
-        }
+          extends: 'myTheme',
+        },
       })
     )
   ).toThrow("A theme cannot extend itself! 'myTheme' extends 'myTheme'");
@@ -210,18 +210,18 @@ it('should error when cycles detected', () => {
     resolveThemeExtension({
       default: {
         light: { color: 'white' },
-        dark: { color: 'black' }
+        dark: { color: 'black' },
       },
       myTheme: {
         extends: 'myChildTheme',
         light: { color: 'blue' },
-        dark: {}
+        dark: {},
       },
       myChildTheme: {
         extends: 'myTheme',
         light: {},
-        dark: {}
-      }
+        dark: {},
+      },
     })
   ).toThrow(
     "Circular theme extension found! 'myTheme' => 'myChildTheme' => 'myTheme'"
@@ -233,14 +233,14 @@ it('should error when cycles detected - subthemes', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         myTheme: {
-          extends: 'myChildTheme'
+          extends: 'myChildTheme',
         },
         myChildTheme: {
-          extends: 'myTheme'
-        }
+          extends: 'myTheme',
+        },
       })
     )
   ).toThrow(
@@ -253,23 +253,23 @@ it('should error when cycles detected - complicated', () => {
     resolveThemeExtension(
       normalizeTheme({
         default: {
-          color: 'red'
+          color: 'red',
         },
         one: {
-          extends: 'five'
+          extends: 'five',
         },
         two: {
-          extends: 'one'
+          extends: 'one',
         },
         three: {
-          extends: 'two'
+          extends: 'two',
         },
         four: {
-          extends: 'three'
+          extends: 'three',
         },
         five: {
-          extends: 'four'
-        }
+          extends: 'four',
+        },
       })
     )
   ).toThrow(

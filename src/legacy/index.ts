@@ -1,8 +1,13 @@
 import postcss from 'postcss';
 import debug from 'debug';
+import get from 'dlv';
 
 import { parseThemeKey, replaceTheme, replaceThemeRoot } from '../common';
-import { ColorScheme, PostcssStrictThemeConfig, PostcssThemeOptions } from '../types';
+import {
+  ColorScheme,
+  PostcssStrictThemeConfig,
+  PostcssThemeOptions,
+} from '../types';
 
 const log = debug('postcss-themed');
 
@@ -12,7 +17,7 @@ const replaceThemeVariables = (
   theme: string,
   decl: postcss.Declaration,
   colorScheme: 'light' | 'dark' = 'light',
-  defaultTheme = 'default',
+  defaultTheme = 'default'
 ) => {
   const hasMultiple = (decl.value.match(/@theme/g) || []).length > 1;
 
@@ -22,8 +27,11 @@ const replaceThemeVariables = (
 
     // Check for issues with theme
     try {
-      const themeDefault = config[defaultTheme][colorScheme][themeKey];
-      const newValue = config[theme][colorScheme][themeKey];
+      const themeDefault: string = get(
+        config[defaultTheme][colorScheme],
+        themeKey
+      );
+      const newValue: string = get(config[theme][colorScheme], themeKey);
 
       decl.value = replaceTheme(
         decl.value,
@@ -36,20 +44,19 @@ const replaceThemeVariables = (
     } catch (error) {
       log(error);
       throw decl.error(`Theme '${theme}' does not contain key '${themeKey}'`, {
-        plugin: 'postcss-themed'
+        plugin: 'postcss-themed',
       });
     }
   }
-}
+};
 
 /** Apply a transformation to a selector */
-const applyToSelectors = (selector: string, fn: (selector: string) => string) => {
-  return selector
-    .replace(/\n/gm, '')
-    .split(',')
-    .map(fn)
-    .join(',');
-}
+const applyToSelectors = (
+  selector: string,
+  fn: (selector: string) => string
+) => {
+  return selector.replace(/\n/gm, '').split(',').map(fn).join(',');
+};
 
 /** Create a new rule by inject injecting theme vars into a class with theme usage */
 const createNewRule = (
@@ -74,23 +81,23 @@ const createNewRule = (
 
   let newSelector = applyToSelectors(
     originalSelector,
-    s => `${themeClass} ${s}`
+    (s) => `${themeClass} ${s}`
   );
 
   if (originalSelector.includes(':theme-root')) {
     rule.selector = replaceThemeRoot(rule.selector);
 
     if (rule.selector === '*') {
-      newSelector = applyToSelectors(rule.selector, s => `${s}${themeClass}`);
+      newSelector = applyToSelectors(rule.selector, (s) => `${s}${themeClass}`);
     } else {
-      newSelector = applyToSelectors(rule.selector, s => `${themeClass}${s}`);
+      newSelector = applyToSelectors(rule.selector, (s) => `${themeClass}${s}`);
     }
   }
 
   if (themedDeclarations.length > 0) {
     // Add theme to selector, clone to retain source maps
     const newRule = rule.clone({
-      selector: newSelector
+      selector: newSelector,
     });
 
     newRule.removeAll();
@@ -150,7 +157,7 @@ const createNewRules = (
   }
 
   return rules;
-}
+};
 
 /** Accomplish theming by creating new classes to override theme values  */
 export const legacyTheme = (
@@ -161,15 +168,15 @@ export const legacyTheme = (
   const {
     defaultTheme = 'default',
     forceSingleTheme = undefined,
-    forceEmptyThemeSelectors
+    forceEmptyThemeSelectors,
   } = options;
   let newRules: postcss.Rule[] = [];
 
-  root.walkRules(rule => {
+  root.walkRules((rule) => {
     const themedDeclarations: postcss.Declaration[] = [];
 
     // Walk each declaration and find themed values
-    rule.walkDecls(decl => {
+    rule.walkDecls((decl) => {
       const { value } = decl;
 
       if (value.includes('@theme')) {
@@ -214,12 +221,12 @@ export const legacyTheme = (
       }
     }
 
-    extra.forEach(selector =>
+    extra.forEach((selector) =>
       newRules.push(postcss.rule({ selector: `.${selector}` }))
     );
   }
 
-  newRules.forEach(r => {
+  newRules.forEach((r) => {
     if (forceEmptyThemeSelectors || (r.nodes && r.nodes.length > 0)) {
       root.append(r);
     }

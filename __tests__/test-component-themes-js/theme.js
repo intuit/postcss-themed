@@ -1,5 +1,5 @@
 module.exports = () => ({
   light: {
-    background: 'yellow'
-  }
+    background: 'yellow',
+  },
 });

@@ -9,7 +9,7 @@ import * as tsNode from 'ts-node';
 import {
   getThemeFilename,
   normalizeTheme,
-  resolveThemeExtension
+  resolveThemeExtension,
 } from './common';
 import { modernTheme } from './modern';
 import { legacyTheme } from './legacy';
@@ -17,14 +17,14 @@ import {
   ComponentTheme,
   PostcssThemeConfig,
   PostcssThemeOptions,
-  ThemeResolver
+  ThemeResolver,
 } from './types';
 
 const log = debug('postcss-themed');
 
 tsNode.register({
   compilerOptions: { module: 'commonjs' },
-  transpileOnly: true
+  transpileOnly: true,
 });
 
 /** Try to load component theme from same directory as css file */
@@ -53,7 +53,7 @@ const configForComponent = (
       'default' in componentConfig ? componentConfig.default : componentConfig;
     return fn(rootTheme);
   } catch (error) {
-    if (error instanceof SyntaxError) {
+    if (error instanceof SyntaxError || error instanceof TypeError) {
       throw error;
     } else {
       log(error);
@@ -108,7 +108,7 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
       result.messages.push({
         plugin: 'postcss-themed',
         type: 'dependency',
-        file: themeFilename
+        file: themeFilename,
       });
     }
   }

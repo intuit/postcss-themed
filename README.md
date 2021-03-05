@@ -48,11 +48,11 @@ yarn test
 ```js
 const config = {
   default: {
-    color: 'white'
+    color: 'white',
   },
   other: {
-    color: 'black'
-  }
+    color: 'black',
+  },
 };
 ```
 
@@ -62,24 +62,24 @@ or for per theme `light` and `dark` modes:
 const config = {
   default: {
     light: {
-      color: 'white'
+      color: 'white',
     },
     dark: {
-      color: 'black'
-    }
+      color: 'black',
+    },
   },
   // Can still just have one level which defaults to light
   other: {
-    color: 'purple'
+    color: 'purple',
   },
   more: {
     light: {
-      color: 'red'
+      color: 'red',
     },
     dark: {
-      color: 'blue'
-    }
-  }
+      color: 'blue',
+    },
+  },
 };
 ```
 
@@ -113,6 +113,45 @@ See [PostCSS] docs for examples for your environment.
 }
 ```
 
+### Theming with Objects
+
+You can even keep theme values in deeply nested objects.
+
+**Input:**
+
+```js
+const config = {
+  default: {
+    colors: {
+      primary: 'white',
+    },
+  },
+  other: {
+    colors: {
+      primary: 'black',
+    },
+  },
+};
+```
+
+```css
+.foo {
+  color: @theme colors.primary;
+}
+```
+
+**Output:**
+
+```css
+.foo {
+  color: white;
+}
+
+.other .foo {
+  color: black;
+}
+```
+
 ### Component themes
 
 Define a component level theme in either commonjs or typescript. A file names `themes.(js|ts)` must be co-located with the themeable CSS file.
@@ -137,11 +176,11 @@ import { Theme } from '@your/themes';
 
 const CardTheme = (theme: Theme): Theme => ({
   default: {
-    border: '1px solid red'
+    border: '1px solid red',
   },
   other: {
-    border: `1px solid ${theme.other.color}`
-  }
+    border: `1px solid ${theme.other.color}`,
+  },
 });
 
 export default CardTheme;
@@ -158,10 +197,10 @@ customize the lookup behavior by supplying your own theme resolution function.
 postcss([
   require('postcss-themed')({
     config,
-    resolveTheme: cssFileName => {
+    resolveTheme: (cssFileName) => {
       // return a function like the ones above
-    }
-  })
+    },
+  }),
 ]);
 ```
 
@@ -178,16 +217,16 @@ This is useful when you are defining a child theme that customizes some stuff bu
 const config = {
   default: {
     color: 'white',
-    background: 'black'
+    background: 'black',
   },
   myTheme: {
     color: 'purple',
-    background: 'green'
+    background: 'green',
   },
   myChildTheme: {
     extends: 'myTheme',
-    background: 'red'
-  }
+    background: 'red',
+  },
 };
 ```
 
@@ -267,8 +306,8 @@ The token `[local]` is also available which is the name of the original theme va
 postcss([
   require('postcss-themed')({
     config,
-    modules: '[folder]-[name]-[local]'
-  })
+    modules: '[folder]-[name]-[local]',
+  }),
 ]);
 ```
 
@@ -280,8 +319,8 @@ To use the default function:
 postcss([
   require('postcss-themed')({
     config,
-    modules: 'default'
-  })
+    modules: 'default',
+  }),
 ]);
 ```
 
@@ -293,11 +332,7 @@ const defaultLocalizeFunction = (
   filePath: string,
   css: string
 ) => {
-  const hash = crypto
-    .createHash('md5')
-    .update(css)
-    .digest('hex')
-    .slice(0, 6);
+  const hash = crypto.createHash('md5').update(css).digest('hex').slice(0, 6);
   return `${filePath || 'default'}-${name}-${hash}`;
 };
 ```
@@ -315,8 +350,8 @@ postcss([
         .digest('hex')
         .slice(0, 3);
       return `${filePath}-${name}-${hash}`;
-    }
-  })
+    },
+  }),
 ]);
 ```
 
@@ -334,7 +369,7 @@ This feature is useful if your are converting your css-modules to typescript and
 
 ```js
 postcss([
-  require('postcss-themed')({ config, forceEmptyThemeSelectors: true })
+  require('postcss-themed')({ config, forceEmptyThemeSelectors: true }),
 ]);
 ```
 
@@ -353,28 +388,28 @@ It is still recommended to set defaultTheme with this option, as any missing var
 const config = {
   default: {
     light: {
-      color: 'purple'
+      color: 'purple',
     },
     dark: {
-      color: 'black'
-    }
+      color: 'black',
+    },
   },
   chair: {
     light: {
-      color: 'beige'
+      color: 'beige',
     },
     dark: {
-      color: 'dark-purple'
-    }
-  }
+      color: 'dark-purple',
+    },
+  },
 };
 
 postcss([
   require('postcss-themed')({
     config,
     defaultTheme: 'default',
-    forceSingleTheme: 'chair'
-  })
+    forceSingleTheme: 'chair',
+  }),
 ]);
 ```
 
@@ -416,11 +451,11 @@ If only a light theme is specified, this config option will just do in-place rep
 ```js
 const config = {
   default: {
-    color: 'purple'
+    color: 'purple',
   },
   chair: {
-    color: 'beige'
-  }
+    color: 'beige',
+  },
 };
 
 postcss([
@@ -428,8 +463,8 @@ postcss([
     config,
     defaultTheme: 'default',
     forceSingleTheme: 'chair',
-    optimizeSingleTheme: true
-  })
+    optimizeSingleTheme: true,
+  }),
 ]);
 ```
 

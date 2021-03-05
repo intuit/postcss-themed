@@ -1,6 +1,13 @@
-export type SimpleTheme = Record<string, string>;
+export interface ThemeObject {
+  [key: string]: string | ThemeObject;
+}
+export type SimpleTheme = Omit<ThemeObject, 'extends'> & {
+  extends?: string;
+};
 export type ColorScheme = 'light' | 'dark';
-export type LightDarkTheme = Record<ColorScheme, SimpleTheme> & Partial<Record<'extends', string>>;
+export type LightDarkTheme = Record<ColorScheme, SimpleTheme> & {
+  extends?: string;
+};
 export type Theme = SimpleTheme | LightDarkTheme;
 
 export interface Config<T> {
