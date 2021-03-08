@@ -114,4 +114,5 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   }
 };
 
+export * from './types';
 export default postcss.plugin('postcss-themed', themeFile);
