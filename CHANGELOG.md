@@ -1,3 +1,15 @@
+# v2.5.1 (Mon Mar 08 2021)
+
+#### ⚠️  Pushed to master
+
+- export all types  ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.5.0 (Fri Mar 05 2021)
 
 #### 🚀  Enhancement
