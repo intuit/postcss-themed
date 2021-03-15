@@ -1,3 +1,15 @@
+# v2.6.0 (Mon Mar 15 2021)
+
+#### 🚀  Enhancement
+
+- Export theme resolution function [#50](https://github.com/intuit/postcss-themed/pull/50) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.5.1 (Mon Mar 08 2021)
 
 #### ⚠️  Pushed to master
