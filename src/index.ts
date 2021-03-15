@@ -28,7 +28,7 @@ tsNode.register({
 });
 
 /** Try to load component theme from same directory as css file */
-const configForComponent = (
+export const configForComponent = (
   cssFile: string | undefined,
   rootTheme: PostcssThemeConfig,
   resolveTheme?: ThemeResolver
