@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import path from 'path';
 
 import { run } from './test-utils';
 
@@ -862,7 +863,7 @@ it('With component Config', () => {
     {
       config,
     },
-    './__tests__/test-modern-themes-ts/test.css'
+    path.resolve(__dirname, './test-modern-themes-ts/test.css')
   );
 });
 

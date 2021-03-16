@@ -1,39 +1,17 @@
 {
-  "name": "postcss-themed",
-  "version": "2.6.0",
-  "main": "dist/index.js",
-  "description": "PostCSS plugin for adding multiple themes to CSS files",
-  "keywords": [
-    "postcss",
-    "css",
-    "postcss-plugin",
-    "theme"
-  ],
-  "scripts": {
-    "build": "tsc -P tsconfig.build.json",
-    "test": "jest",
-    "lint": "eslint src/*.ts --fix",
-    "release": "auto shipit"
-  },
+  "name": "postcss-themed-monorepo",
+  "private": true,
   "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/intuit/postcss-themed",
-  "bugs": {
-    "url": "https://github.com/intuit/postcss-themed/issues"
-  },
-  "homepage": "https://github.com/intuit/postcss-themed",
-  "dependencies": {
-    "browserslist": "^4.7.0",
-    "caniuse-api": "^3.0.0",
-    "cssesc": "^3.0.0",
-    "debug": "^4.1.1",
-    "deepmerge": "^3.2.0",
-    "dlv": "^1.1.3",
-    "dset": "^3.1.0",
-    "flat": "^5.0.2",
-    "loader-utils": "^1.2.3",
-    "postcss": "^7.0.14",
-    "ts-node": "^8.0.3"
+  "repository": "intuit/postcss-themed",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run --stream build",
+    "test": "jest",
+    "lint": "eslint packages/**/src/**/*.ts --fix",
+    "release": "auto shipit"
   },
   "devDependencies": {
     "@auto-it/all-contributors": "^7.2.2",
@@ -48,7 +26,7 @@
     "@types/debug": "^4.1.5",
     "@types/dlv": "^1.1.2",
     "@types/flat": "^5.0.1",
-    "@types/jest": "^24.0.11",
+    "@types/jest": "^26.0.20",
     "@types/loader-utils": "^1.1.3",
     "@types/node": "^11.13.1",
     "@types/postcss-nested": "^4.1.0",
@@ -58,6 +36,7 @@
     "all-contributors-cli": "^6.9.1",
     "auto": "^7.2.2",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^26.6.3",
     "eslint": "^6.6.0",
     "eslint-config-postcss": "^3.0.7",
     "eslint-config-prettier": "^6.5.0",
@@ -73,7 +52,9 @@
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-unicorn": "^12.1.0",
     "husky": "^1.3.1",
-    "jest": "^24.7.1",
+    "jest": "^26.6.3",
+    "jest-preset-stylelint": "^3.0.0",
+    "lerna": "^4.0.0",
     "lint-staged": "^8.1.5",
     "postcss-nested": "^4.1.2",
     "prettier": "^2.2.1",
@@ -115,6 +96,7 @@
     }
   },
   "jest": {
+    "preset": "jest-preset-stylelint",
     "testEnvironment": "node",
     "collectCoverage": true,
     "coverageDirectory": "coverage",
@@ -131,9 +113,6 @@
     "collectCoverageFrom": [
       "src/**/*.ts"
     ]
-  },
-  "engines": {
-    "node": ">=7.5.0"
   },
   "auto": {
     "plugins": [

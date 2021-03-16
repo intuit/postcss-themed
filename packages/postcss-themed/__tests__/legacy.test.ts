@@ -1,4 +1,5 @@
 import postcss from 'postcss';
+import path from 'path';
 
 import plugin from '../src/index';
 import { run } from './test-utils';
@@ -166,7 +167,7 @@ it('finds javascript themes', () => {
     {
       config,
     },
-    './__tests__/test-component-themes-js/test.css'
+    path.resolve(__dirname, './test-component-themes-js/test.css')
   );
 });
 
@@ -194,7 +195,7 @@ it('finds typescript themes', () => {
     {
       config,
     },
-    './__tests__/test-component-themes-ts/test.css'
+    path.resolve(__dirname, './test-component-themes-ts/test.css')
   );
 });
 

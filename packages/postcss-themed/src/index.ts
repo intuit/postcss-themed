@@ -125,5 +125,6 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   }
 };
 
+export { normalizeTheme } from './common';
 export * from './types';
 export default postcss.plugin('postcss-themed', themeFile);

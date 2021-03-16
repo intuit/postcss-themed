@@ -1,0 +1,34 @@
+{
+  "name": "postcss-themed",
+  "version": "2.6.0",
+  "main": "dist/index.js",
+  "description": "PostCSS plugin for adding multiple themes to CSS files",
+  "keywords": [
+    "postcss",
+    "css",
+    "postcss-plugin",
+    "theme"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
+  "license": "MIT",
+  "repository": "https://github.com/intuit/postcss-themed",
+  "dependencies": {
+    "browserslist": "^4.7.0",
+    "caniuse-api": "^3.0.0",
+    "cssesc": "^3.0.0",
+    "debug": "^4.1.1",
+    "deepmerge": "^3.2.0",
+    "dlv": "^1.1.3",
+    "dset": "^3.1.0",
+    "flat": "^5.0.2",
+    "loader-utils": "^1.2.3",
+    "postcss": "^7.0.14",
+    "ts-node": "^8.0.3"
+  },
+  "engines": {
+    "node": ">=7.5.0"
+  }
+}

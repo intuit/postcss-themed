@@ -26,6 +26,7 @@ export const replaceTheme = (value: string, replace: string) => {
 /** Get the location of the theme file */
 export function getThemeFilename(cssFile: string) {
   let themePath = path.join(path.dirname(cssFile), 'theme.ts');
+
   if (!fs.existsSync(themePath)) {
     themePath = path.join(path.dirname(cssFile), 'theme.js');
   }
