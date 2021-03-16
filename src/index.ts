@@ -15,6 +15,7 @@ import { modernTheme } from './modern';
 import { legacyTheme } from './legacy';
 import {
   ComponentTheme,
+  PostcssStrictThemeConfig,
   PostcssThemeConfig,
   PostcssThemeOptions,
   ThemeResolver,
@@ -28,7 +29,7 @@ tsNode.register({
 });
 
 /** Try to load component theme from same directory as css file */
-export const configForComponent = (
+const overrideForComponent = (
   cssFile: string | undefined,
   rootTheme: PostcssThemeConfig,
   resolveTheme?: ThemeResolver
@@ -63,6 +64,28 @@ export const configForComponent = (
   }
 };
 
+/** Try to load component theme from same directory as css file */
+export const configForComponent = (
+  file: string | undefined,
+  options: PostcssThemeOptions
+): PostcssStrictThemeConfig => {
+  const { config, resolveTheme } = options;
+
+  if (!config) {
+    throw Error('No config provided to postcss-themed');
+  }
+
+  const globalConfig = normalizeTheme(config);
+  const componentConfig = normalizeTheme(
+    overrideForComponent(file, config, resolveTheme)
+  );
+  const mergedConfig = merge(globalConfig, componentConfig);
+
+  resolveThemeExtension(mergedConfig);
+
+  return mergedConfig;
+};
+
 /** Generate a theme */
 const themeFile = (options: PostcssThemeOptions = {}) => (
   root: postcss.Root,
@@ -74,23 +97,11 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
     return;
   }
 
-  const { config, resolveTheme } = options;
-
-  if (!config) {
-    throw Error('No config provided to postcss-themed');
-  }
-
   if (!root.source) {
     throw Error('No source found');
   }
 
-  const globalConfig = normalizeTheme(config);
-  const componentConfig = normalizeTheme(
-    configForComponent(root.source.input.file, config, resolveTheme)
-  );
-  const mergedConfig = merge(globalConfig, componentConfig);
-
-  resolveThemeExtension(mergedConfig);
+  const mergedConfig = configForComponent(root.source.input.file, options);
 
   if (caniuse.isSupported('css-variables', browserslist())) {
     modernTheme(root, mergedConfig, options);
@@ -101,7 +112,7 @@ const themeFile = (options: PostcssThemeOptions = {}) => (
   // @ts-ignore
   root.source.processed = true;
 
-  if (!resolveTheme && root.source.input.file) {
+  if (!options.resolveTheme && root.source.input.file) {
     const themeFilename = getThemeFilename(root.source.input.file);
 
     if (fs.existsSync(themeFilename)) {
