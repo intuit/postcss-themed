@@ -42,6 +42,37 @@ it('Creates a simple css variable based theme', () => {
   );
 });
 
+it('Can use alternative theme syntax', () => {
+  const config = {
+    default: {
+      color: 'purple',
+    },
+    mint: {
+      color: 'teal',
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: theme('color');
+      }
+    `,
+    `
+      .test {
+        color: var(--color, purple);
+      }
+
+      .mint {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+    }
+  );
+});
+
 it('inlineRootThemeVariables false', () => {
   const config = {
     default: {
@@ -225,7 +256,7 @@ it('Produces a single theme with dark mode if default has it', () => {
   );
 });
 
-it('Don\'t produce extra variables for matching values', () => {
+it("Don't produce extra variables for matching values", () => {
   const config = {
     default: {
       light: {
@@ -234,7 +265,7 @@ it('Don\'t produce extra variables for matching values', () => {
       dark: {
         color: 'black',
       },
-    }
+    },
   };
 
   return run(
@@ -249,12 +280,12 @@ it('Don\'t produce extra variables for matching values', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
 
-it('Don\'t produce extra variables for matching values in theme', () => {
+it("Don't produce extra variables for matching values in theme", () => {
   const config = {
     default: {
       light: {
@@ -271,7 +302,7 @@ it('Don\'t produce extra variables for matching values in theme', () => {
       dark: {
         color2: 'black',
       },
-    }
+    },
   };
 
   return run(
@@ -286,12 +317,12 @@ it('Don\'t produce extra variables for matching values in theme', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
 
-it('Don\'t produce extra variables for matching values in theme', () => {
+it("Don't produce extra variables for matching values in theme", () => {
   const config = {
     default: {
       light: {
@@ -308,7 +339,7 @@ it('Don\'t produce extra variables for matching values in theme', () => {
       dark: {
         color: 'black',
       },
-    }
+    },
   };
 
   return run(
@@ -331,25 +362,25 @@ it('Don\'t produce extra variables for matching values in theme', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
 
-it('Don\'t included deep values in theme', () => {
+it("Don't included deep values in theme", () => {
   const config = {
     default: {
       // Component theme defines a "color" variable that clashes
       // with "color" object on themes
-      color: "red"
+      color: 'red',
     },
     someTheme: {
       // Theme doesn't set a "color" but get the "color" tokens
-      color:  {
+      color: {
         red: 'red2',
         green: 'green2',
-      }
-    }
+      },
+    },
   };
 
   return run(
@@ -364,7 +395,7 @@ it('Don\'t included deep values in theme', () => {
       }
     `,
     {
-      config
+      config,
     }
   );
 });
@@ -557,7 +588,35 @@ it('should error on missing space', () => {
     }
   ).catch((e) => {
     expect(e.message).toEqual(
-      'postcss-themed: <css input>:3:16: Invalid @theme usage: @themecolor'
+      'postcss-themed: <css input>:3:16: Invalid theme usage: @themecolor'
+    );
+  });
+});
+
+it('should error on invalid alt usage space', () => {
+  const config = {
+    default: {
+      color: 'purple',
+    },
+    mint: {
+      color: 'teal',
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: theme ('color');
+      }
+    `,
+    '',
+    {
+      config,
+      forceSingleTheme: 'mint',
+    }
+  ).catch((e) => {
+    expect(e.message).toEqual(
+      "postcss-themed: <css input>:3:16: Invalid theme usage: theme ('color')"
     );
   });
 });
@@ -787,34 +846,6 @@ it('scoped variable names with default function', () => {
     {
       config,
       modules: 'default',
-    }
-  );
-});
-
-it('Wrong key mentioned in theme configuration', () => {
-  const config = {
-    default: {
-      color: 'purple',
-    },
-    light: {
-      color: 'white',
-    },
-  };
-
-  return run(
-    `
-      .test {
-        background-color: @theme background-color;
-      }
-    `,
-    `
-      .test {
-      }
-    `,
-    {
-      config,
-      forceSingleTheme: 'mint',
-      optimizeSingleTheme: true,
     }
   );
 });

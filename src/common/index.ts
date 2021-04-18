@@ -11,21 +11,38 @@ import {
 } from '../types';
 
 const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
+const ALT_THEME_USAGE_REGEX = /theme\(['"]([a-zA-Z-_0-9.]+)['"]\)/;
 
 /** Get the theme variable name from a string */
 export const parseThemeKey = (value: string) => {
-  const key = value.match(THEME_USAGE_REGEX);
-  return key ? key[1] : '';
+  let key = value.match(THEME_USAGE_REGEX);
+
+  if (key) {
+    return key[1];
+  }
+
+  key = value.match(ALT_THEME_USAGE_REGEX);
+
+  if (key) {
+    return key[1];
+  }
+
+  return '';
 };
 
 /** Replace a theme variable reference with a value */
 export const replaceTheme = (value: string, replace: string) => {
-  return value.replace(THEME_USAGE_REGEX, replace);
+  if (value.match(THEME_USAGE_REGEX)) {
+    return value.replace(THEME_USAGE_REGEX, replace);
+  }
+
+  return value.replace(ALT_THEME_USAGE_REGEX, replace);
 };
 
 /** Get the location of the theme file */
 export function getThemeFilename(cssFile: string) {
   let themePath = path.join(path.dirname(cssFile), 'theme.ts');
+  
   if (!fs.existsSync(themePath)) {
     themePath = path.join(path.dirname(cssFile), 'theme.js');
   }

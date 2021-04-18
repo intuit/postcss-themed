@@ -19,12 +19,14 @@ const replaceThemeVariables = (
   colorScheme: 'light' | 'dark' = 'light',
   defaultTheme = 'default'
 ) => {
-  const hasMultiple = (decl.value.match(/@theme/g) || []).length > 1;
+  const hasMultiple =
+    (decl.value.match(/@theme/g) || decl.value.match(/theme\(['"]/g) || [])
+      .length > 1;
+
+  let themeKey = parseThemeKey(decl.value);
 
   // Found a theme reference
-  while (decl.value.includes('@theme')) {
-    const themeKey = parseThemeKey(decl.value);
-
+  while (themeKey) {
     // Check for issues with theme
     try {
       const themeDefault: string = get(
@@ -47,6 +49,8 @@ const replaceThemeVariables = (
         plugin: 'postcss-themed',
       });
     }
+
+    themeKey = parseThemeKey(decl.value);
   }
 };
 
@@ -179,7 +183,7 @@ export const legacyTheme = (
     rule.walkDecls((decl) => {
       const { value } = decl;
 
-      if (value.includes('@theme')) {
+      if (parseThemeKey(value)) {
         themedDeclarations.push(decl.clone());
         // Replace defaults in original CSS rule
         replaceThemeVariables(
