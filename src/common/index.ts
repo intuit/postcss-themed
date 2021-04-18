@@ -11,7 +11,7 @@ import {
 } from '../types';
 
 const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
-const ALT_THEME_USAGE_REGEX = /theme\(['"]([a-zA-Z-_0-9.]+)['"]\)/;
+const ALT_THEME_USAGE_REGEX = /theme\(\s*['"]([a-zA-Z-_0-9.]+)['"]\s*\)/;
 
 /** Get the theme variable name from a string */
 export const parseThemeKey = (value: string) => {
@@ -42,7 +42,7 @@ export const replaceTheme = (value: string, replace: string) => {
 /** Get the location of the theme file */
 export function getThemeFilename(cssFile: string) {
   let themePath = path.join(path.dirname(cssFile), 'theme.ts');
-  
+
   if (!fs.existsSync(themePath)) {
     themePath = path.join(path.dirname(cssFile), 'theme.js');
   }

@@ -73,6 +73,39 @@ it('Can use alternative theme syntax', () => {
   );
 });
 
+it('Can use alternative theme syntax - multiline', () => {
+  const config = {
+    default: {
+      color: 'purple',
+    },
+    mint: {
+      color: 'teal',
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: theme(
+          'color'
+        );
+      }
+    `,
+    `
+      .test {
+        color: var(--color, purple);
+      }
+
+      .mint {
+        --color: teal;
+      }
+    `,
+    {
+      config,
+    }
+  );
+});
+
 it('inlineRootThemeVariables false', () => {
   const config = {
     default: {
