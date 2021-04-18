@@ -168,8 +168,9 @@ export const modernTheme = (
     rule.selector = replaceThemeRoot(rule.selector);
 
     rule.walkDecls((decl) => {
-      while (decl.value.includes('@theme')) {
-        const key = parseThemeKey(decl.value);
+      let key = parseThemeKey(decl.value);
+
+      while (key) {
         const themeValue = get(mergedSingleThemeConfig.light, key);
 
         if (singleTheme && !hasMergedDarkMode && optimizeSingleTheme) {
@@ -202,10 +203,18 @@ export const modernTheme = (
         } else if (key) {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
         } else {
-          throw decl.error(`Invalid @theme usage: ${decl.value}`, {
+          throw decl.error(`Invalid theme usage: ${decl.value}`, {
             word: decl.value,
           });
         }
+
+        key = parseThemeKey(decl.value);
+      }
+
+      if (decl.value.match(/@theme/g) || decl.value.match(/theme\s+\(['"]/g)) {
+        throw decl.error(`Invalid theme usage: ${decl.value}`, {
+          word: decl.value,
+        });
       }
     });
   });
@@ -233,7 +242,8 @@ export const modernTheme = (
         // If the theme value matches the base theme don't include
         if (
           defaultThemeConfig &&
-          (typeof theme === 'string' && theme !== defaultTheme) &&
+          typeof theme === 'string' &&
+          theme !== defaultTheme &&
           get(defaultThemeConfig[1][colorScheme], key) === value
         ) {
           return;

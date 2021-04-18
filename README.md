@@ -98,6 +98,13 @@ See [PostCSS] docs for examples for your environment.
   color: @theme color;
   border: @theme border-width solid @theme color;
 }
+
+/* OR */
+
+.foo {
+  color: theme('color');
+  border: theme('border-width') solid theme('color');
+}
 ```
 
 **Output:**
