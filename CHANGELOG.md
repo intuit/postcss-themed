@@ -1,3 +1,15 @@
+# v2.7.0 (Sun Apr 18 2021)
+
+#### 🚀  Enhancement
+
+- add alternative theme usage syntax [#53](https://github.com/intuit/postcss-themed/pull/53) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.6.0 (Mon Mar 15 2021)
 
 #### 🚀  Enhancement
