@@ -1,3 +1,15 @@
+# v2.8.0 (Sun Apr 18 2021)
+
+#### 🚀  Enhancement
+
+- add ability to override color scheme classNames [#54](https://github.com/intuit/postcss-themed/pull/54) ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+#### Authors: 1
+
+- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
+
+---
+
 # v2.7.0 (Sun Apr 18 2021)
 
 #### 🚀  Enhancement
