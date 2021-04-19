@@ -207,6 +207,70 @@ it('Creates a simple css variable based theme with light and dark', () => {
   );
 });
 
+it('Can override dark and light class', () => {
+  const config = {
+    default: {
+      light: {
+        color: 'purple',
+      },
+      dark: {
+        color: 'black',
+      },
+    },
+
+    mint: {
+      color: 'teal',
+    },
+    chair: {
+      light: {
+        color: 'beige',
+      },
+      dark: {
+        color: 'darkpurple',
+      },
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    `
+      .test {
+        color: var(--color);
+        background-image: linear-gradient(to right, var(--color), var(--color))
+      }
+      :root {
+        --color: purple
+      }
+
+      .dark-theme {
+        --color: black
+      }
+
+      .mint.light-theme {
+        --color: teal
+      }
+
+      .chair.light-theme {
+        --color: beige
+      }
+
+      .chair.dark-theme {
+        --color: darkpurple
+      }
+    `,
+    {
+      config,
+      lightClass: '.light-theme',
+      darkClass: '.dark-theme',
+    }
+  );
+});
+
 it('Produces a single theme', () => {
   const config = {
     default: {

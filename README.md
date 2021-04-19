@@ -366,6 +366,20 @@ postcss([
 
 An optional parameter to change the name of the _default_ theme (where no extra classes are added to the selector). It defaults to `default`, and also corresponds to the only required key in your `theme.ts` files.
 
+### `lightClass` + `darkClass`
+
+Classes to apply to color scheme overrides.
+
+```js
+postcss([
+  require('postcss-themed')({
+    config,
+    lightClass: '.light-theme',
+    darkClass: '.dark-theme',
+  }),
+]);
+```
+
 ### `forceEmptyThemeSelectors` - only legacy
 
 By default this plugin will not produce class names for theme that have no component level configuration if there are no styles. (ex: you have 3 themes but your component only uses 1, then only 1 extra set of classnames is produced).
