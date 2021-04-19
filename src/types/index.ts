@@ -29,6 +29,10 @@ export type ScopedNameFunction = (
 export interface PostcssThemeOptions {
   /** Configuration given to the postcss plugin */
   config?: PostcssThemeConfig;
+  /** Class to apply to light theme overrides */
+  lightClass?: string;
+  /** Class to apply to dark theme overrides */
+  darkClass?: string;
   /** A function to resolve the theme file */
   resolveTheme?: ThemeResolver;
   /** LEGACY - Put empty selectors in final output */

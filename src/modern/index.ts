@@ -113,6 +113,8 @@ export const modernTheme = (
   const singleTheme = options.forceSingleTheme || undefined;
   const optimizeSingleTheme = options.optimizeSingleTheme;
   const inlineRootThemeVariables = options.inlineRootThemeVariables ?? true;
+  const lightClass = options.lightClass || '.light';
+  const darkClass = options.darkClass || '.dark';
   const resourcePath = root.source ? root.source.input.file : '';
   const localize = (name: string) =>
     getLocalizeFunction(
@@ -278,7 +280,7 @@ export const modernTheme = (
     if (hasMergedDarkMode) {
       rules.push(
         createModernTheme(
-          '.dark',
+          darkClass,
           filterUsed('dark', mergedSingleThemeConfig),
           localize
         )
@@ -301,21 +303,25 @@ export const modernTheme = (
     if (theme === defaultTheme) {
       rules.push(addRootTheme(themeConfig));
       rules.push(
-        createModernTheme('.dark', filterUsed('dark', defaultTheme), localize)
+        createModernTheme(darkClass, filterUsed('dark', defaultTheme), localize)
       );
     } else if (hasDarkMode(themeConfig)) {
       rules.push(
         createModernTheme(
-          `.${theme}.light`,
+          `.${theme}${lightClass}`,
           filterUsed('light', theme),
           localize
         ),
-        createModernTheme(`.${theme}.dark`, filterUsed('dark', theme), localize)
+        createModernTheme(
+          `.${theme}${darkClass}`,
+          filterUsed('dark', theme),
+          localize
+        )
       );
     } else {
       rules.push(
         createModernTheme(
-          hasRootDarkMode ? `.${theme}.light` : `.${theme}`,
+          hasRootDarkMode ? `.${theme}${lightClass}` : `.${theme}`,
           filterUsed('light', theme),
           localize
         )
