@@ -236,9 +236,9 @@ export const modernTheme = (
       const value = get(currentThemeConfig, key);
 
       if (value && filterFunction(key) && typeof value !== 'object') {
-        // If the dark value is the same as light in the default theme, don't include
+        // If the dark and light theme have the same value don't include
         if (theme === defaultTheme) {
-          if (colorScheme === 'dark' && get(themeConfig, key) === value) {
+          if (colorScheme === 'dark' && get(themeConfig.light, key) === value) {
             return;
           }
         }
