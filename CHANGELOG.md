@@ -1,3 +1,15 @@
+# v2.8.1 (Tue Jun 01 2021)
+
+#### 🐛  Bug Fix
+
+- Fix: Dark mode logic [#61](https://github.com/intuit/postcss-themed/pull/61) ([@kharrop](https://github.com/kharrop))
+
+#### Authors: 1
+
+- Kelly Harrop ([@kharrop](https://github.com/kharrop))
+
+---
+
 # v2.8.0 (Sun Apr 18 2021)
 
 #### 🚀  Enhancement
