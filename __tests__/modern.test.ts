@@ -353,7 +353,7 @@ it('Produces a single theme with dark mode if default has it', () => {
   );
 });
 
-it("Don't produce extra variables for matching values", () => {
+it("Don't produce extra variables for matching values in the default theme", () => {
   const config = {
     default: {
       light: {
