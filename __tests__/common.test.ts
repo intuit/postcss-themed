@@ -276,8 +276,6 @@ it('should be able to extend a theme that extends another theme - out of order',
   });
 });
 
-
-
 it('should error on unknown themes', () => {
   expect(() =>
     resolveThemeExtension(
