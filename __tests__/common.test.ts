@@ -134,6 +134,110 @@ it('should be able to extend a theme that extends another theme', () => {
   });
 });
 
+it('should add the light extras if there is an extension in the light theme', () => {
+  expect(
+    resolveThemeExtension({
+      default: {
+        light: { color: 'white' },
+        dark: { color: 'black' },
+      },
+      myTheme: {
+        light: { color: 'blue' },
+        dark: {},
+      },
+      myChildTheme: {
+        light: { extends: 'myTheme' },
+        dark: {},
+      },
+    })
+  ).toStrictEqual({
+    default: {
+      light: { color: 'white' },
+      dark: { color: 'black' },
+    },
+    myChildTheme: {
+      dark: {},
+      light: { color: 'blue' },
+    },
+    myTheme: {
+      dark: {},
+      light: { color: 'blue' },
+    }
+  });
+});
+
+it('should add dark extras if there is an extension in the dark theme', () => {
+  expect(
+    resolveThemeExtension({
+      default: {
+        light: { color: 'white' },
+        dark: { color: 'black' },
+      },
+      myTheme: {
+        light: {},
+        dark: {color: 'blue'},
+      },
+      myChildTheme: {
+        light: {},
+        dark: {extends: 'myTheme'}
+      },
+    })
+  ).toStrictEqual({
+    default: {
+      light: { color: 'white' },
+      dark: { color: 'black' },
+    },
+    myChildTheme: {
+      light: {},
+      dark: { color: 'blue' },
+    },
+    myTheme: {
+      light: {},
+      dark: { color: 'blue' },
+    }
+  });
+});
+
+it('should be able to resolve color scheme theme correctly if there is a chain in the extension ', () => {
+  expect(
+    resolveThemeExtension({
+      default: {
+        light: { color: 'white' },
+        dark: {},
+      },
+      myTheme: {
+        light: {},
+        dark: {color: 'pink', extends: 'myOtherTheme'},
+      },
+      myOtherTheme: {
+        light: { color: 'blue'},
+        dark: {color: 'red', extends: 'yetAnotherTheme'},
+      },
+      yetAnotherTheme: {
+        light: { color: 'red'},
+        dark: { color: 'red'}
+      }
+    })
+  ).toStrictEqual({
+    default: {
+      light: { color: 'white' },
+      dark: {},
+    },
+    myTheme: {
+      light: {},
+      dark: { color: 'pink' }
+    },
+    myOtherTheme: {
+      light: { color: 'blue'},
+      dark: { color: 'red'}
+    },
+    yetAnotherTheme: {
+      light: { color: 'red' },
+      dark: { color: 'red' }
+    }
+  });
+});
+
 it('should be able to extend a theme that extends another theme - out of order', () => {
   expect(
     resolveThemeExtension(

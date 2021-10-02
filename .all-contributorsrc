@@ -121,6 +121,15 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "yoqwerty",
+      "name": "yoqwerty",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26031967?v=4",
+      "profile": "https://github.com/yoqwerty",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7

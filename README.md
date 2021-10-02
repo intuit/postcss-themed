@@ -537,11 +537,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/joshtym"><img src="https://avatars3.githubusercontent.com/u/6886456?v=4" width="100px;" alt="Joshua Tymburski"/><br /><sub><b>Joshua Tymburski</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=joshtym" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=joshtym" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/kendallgassner"><img src="https://avatars3.githubusercontent.com/u/15275462?v=4" width="100px;" alt="Kendall Gassner"/><br /><sub><b>Kendall Gassner</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=kendallgassner" title="Tests">⚠️</a> <a href="https://github.com/intuit/postcss-themed/commits?author=kendallgassner" title="Code">💻</a></td>
     <td align="center"><a href="http://kellyharrop.com"><img src="https://avatars.githubusercontent.com/u/24794756?v=4" width="100px;" alt="Kelly Harrop"/><br /><sub><b>Kelly Harrop</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=kharrop" title="Code">💻</a> <a href="https://github.com/intuit/postcss-themed/commits?author=kharrop" title="Documentation">📖</a> <a href="https://github.com/intuit/postcss-themed/commits?author=kharrop" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/yoqwerty"><img src="https://avatars.githubusercontent.com/u/26031967?v=4" width="100px;" alt="yoqwerty"/><br /><sub><b>yoqwerty</b></sub></a><br /><a href="https://github.com/intuit/postcss-themed/commits?author=yoqwerty" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!

@@ -690,6 +690,36 @@ it('should error on missing space', () => {
   });
 });
 
+it('should error while trying to read invalid/ not available input file provided', () => {
+  const config = {
+    default: {
+      color: 'purple',
+    },
+    light: {
+      color: 'white',
+    },
+  };
+
+  return run(
+    `
+      .test {
+        color: @theme color;
+        background-image: linear-gradient(to right, @theme color, @theme color)
+      }
+    `,
+    '',
+    {
+      config,
+      modules: 'default',
+    },
+    '/qwerty.css'
+  ).catch((e) => {
+    expect(e.message).toEqual(
+      "ENOENT: no such file or directory, open '/qwerty.css'"
+    );
+  });
+});
+
 it('should error on invalid alt usage space', () => {
   const config = {
     default: {
