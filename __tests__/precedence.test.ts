@@ -1,6 +1,12 @@
+import { vi, it } from 'vitest';
+
 import { run } from './test-utils';
 
-jest.mock('browserslist', () => () => ['chrome 76']);
+vi.mock('browserslist', () => {
+  return {
+    default: () => ['chrome 76'],
+  };
+});
 
 it('Overrides all themes from default', () => {
   const config = {
@@ -28,7 +34,7 @@ it('Overrides all themes from default', () => {
         color: var(--color, red);
       }
 
-      
+
       .dark {
         --color: blue;
       }
@@ -74,7 +80,7 @@ it('Overrides dark themes from default', () => {
         color: var(--color, red);
       }
 
-      
+
       .dark {
         --color: blue;
       }
@@ -122,7 +128,7 @@ it('Merges missing variables from single theme', () => {
         color: var(--color, teal);
         background-color: var(--bgColor, orange);
       }
-      
+
       .dark {
         --color: blue;
         --bgColor: magenta;

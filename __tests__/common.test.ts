@@ -1,3 +1,5 @@
+import { it, expect } from 'vitest';
+
 import { resolveThemeExtension, normalizeTheme } from '../src/common';
 
 it('should be able to extend a simple theme', () => {
@@ -162,7 +164,7 @@ it('should add the light extras if there is an extension in the light theme', ()
     myTheme: {
       dark: {},
       light: { color: 'blue' },
-    }
+    },
   });
 });
 
@@ -175,11 +177,11 @@ it('should add dark extras if there is an extension in the dark theme', () => {
       },
       myTheme: {
         light: {},
-        dark: {color: 'blue'},
+        dark: { color: 'blue' },
       },
       myChildTheme: {
         light: {},
-        dark: {extends: 'myTheme'}
+        dark: { extends: 'myTheme' },
       },
     })
   ).toStrictEqual({
@@ -194,7 +196,7 @@ it('should add dark extras if there is an extension in the dark theme', () => {
     myTheme: {
       light: {},
       dark: { color: 'blue' },
-    }
+    },
   });
 });
 
@@ -207,16 +209,16 @@ it('should be able to resolve color scheme theme correctly if there is a chain i
       },
       myTheme: {
         light: {},
-        dark: {color: 'pink', extends: 'myOtherTheme'},
+        dark: { color: 'pink', extends: 'myOtherTheme' },
       },
       myOtherTheme: {
-        light: { color: 'blue'},
-        dark: {color: 'red', extends: 'yetAnotherTheme'},
+        light: { color: 'blue' },
+        dark: { color: 'red', extends: 'yetAnotherTheme' },
       },
       yetAnotherTheme: {
-        light: { color: 'red'},
-        dark: { color: 'red'}
-      }
+        light: { color: 'red' },
+        dark: { color: 'red' },
+      },
     })
   ).toStrictEqual({
     default: {
@@ -225,16 +227,16 @@ it('should be able to resolve color scheme theme correctly if there is a chain i
     },
     myTheme: {
       light: {},
-      dark: { color: 'pink' }
+      dark: { color: 'pink' },
     },
     myOtherTheme: {
-      light: { color: 'blue'},
-      dark: { color: 'red'}
+      light: { color: 'blue' },
+      dark: { color: 'red' },
     },
     yetAnotherTheme: {
       light: { color: 'red' },
-      dark: { color: 'red' }
-    }
+      dark: { color: 'red' },
+    },
   });
 });
 

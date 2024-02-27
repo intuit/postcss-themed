@@ -1,8 +1,13 @@
 import crypto from 'crypto';
+import { vi, it, expect } from 'vitest';
 
 import { run } from './test-utils';
 
-jest.mock('browserslist', () => () => ['chrome 76']);
+vi.mock('browserslist', () => {
+  return {
+    default: () => ['chrome 76'],
+  };
+});
 
 it('Creates a simple css variable based theme', () => {
   const config = {

@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import postcss from 'postcss';
 import nested from 'postcss-nested';
 

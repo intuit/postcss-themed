@@ -1,4 +1,5 @@
 import postcss from 'postcss';
+import { it, expect } from 'vitest';
 
 import plugin from '../src/index';
 import { run } from './test-utils';
