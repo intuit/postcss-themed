@@ -33,7 +33,7 @@ it('Creates theme override', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -75,7 +75,7 @@ it('Creates multiple theme overrides', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -109,7 +109,7 @@ it('Only overrides what it needs to', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -139,7 +139,7 @@ it('replaces partial values', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -167,7 +167,7 @@ it('finds javascript themes', () => {
     {
       config,
     },
-    './__tests__/test-component-themes-js/test.css'
+    './__tests__/test-component-themes-js/test.css',
   );
 });
 
@@ -195,7 +195,7 @@ it('finds typescript themes', () => {
     {
       config,
     },
-    './__tests__/test-component-themes-ts/test.css'
+    './__tests__/test-component-themes-ts/test.css',
   );
 });
 
@@ -226,7 +226,7 @@ it('custom theme resolver', () => {
         // eslint-disable-next-line global-require, node/no-missing-require
         require('./test-component-themes-ts/theme'),
     },
-    './test.css'
+    './test.css',
   );
 });
 
@@ -254,7 +254,7 @@ it('works when no theme found', () => {
     {
       config,
     },
-    './__tests__/test.css'
+    './__tests__/test.css',
   );
 });
 
@@ -285,7 +285,7 @@ it('omits undefined values', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -315,7 +315,7 @@ it('process :theme-root', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -357,7 +357,7 @@ it('process :theme-root - nested', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -389,7 +389,7 @@ it('multiple values in one declaration', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -443,7 +443,7 @@ it('Finds missing default', () => {
     .process(input, { from: undefined })
     .catch((e) => {
       expect(e.message).toContain(
-        "Theme 'default' does not contain key 'color'"
+        "Theme 'default' does not contain key 'color'",
       );
     });
 });
@@ -485,7 +485,7 @@ it('multiple themes + theme-root', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -524,7 +524,7 @@ it('multiple themes + fallback', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -555,7 +555,7 @@ it('non-default main theme', () => {
       background-color: red;
       width: 1rem;
     }`,
-    { config, defaultTheme: 'newDefault' }
+    { config, defaultTheme: 'newDefault' },
   );
 });
 
@@ -582,7 +582,7 @@ it('non-existent default theme', () => {
     .process(input, { from: undefined })
     .catch((e) => {
       expect(e.message).toContain(
-        "Theme 'otherDefaultTheme' does not contain key 'color'"
+        "Theme 'otherDefaultTheme' does not contain key 'color'",
       );
     });
 });
@@ -615,7 +615,7 @@ it('multiple selectors', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -659,7 +659,7 @@ it('multiple selectors - theme root', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -711,7 +711,7 @@ it('dark themes', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -739,7 +739,7 @@ it('overrides themes to single theme', () => {
     .process(input, { from: undefined })
     .catch((e) => {
       expect(e.message).toContain(
-        "Theme 'quickBooks' does not contain key 'color'"
+        "Theme 'quickBooks' does not contain key 'color'",
       );
     });
 });
@@ -777,7 +777,7 @@ it('when theme = light , forceSingleTheme = true, single selector is generated',
       config,
       defaultTheme: 'light',
       forceSingleTheme: 'true',
-    }
+    },
   );
 });
 
@@ -814,7 +814,7 @@ it('when theme = light , forceSingleTheme = false, multiple selectors are genera
       config,
       defaultTheme: 'light',
       forceSingleTheme: 'false',
-    }
+    },
   );
 });
 
@@ -848,6 +848,6 @@ it('Adding empty selectors to final output. Part of legacy code', () => {
     {
       config,
       forceEmptyThemeSelectors: true,
-    }
+    },
   );
 });

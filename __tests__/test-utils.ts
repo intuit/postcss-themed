@@ -16,7 +16,7 @@ export function run(
   input: string,
   output: string,
   opts: PostcssThemeOptions,
-  inputPath?: string
+  inputPath?: string,
 ) {
   return postcss([nested, plugin(opts)])
     .process(input, { from: inputPath })

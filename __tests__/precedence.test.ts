@@ -45,7 +45,7 @@ it('Overrides all themes from default', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -95,7 +95,7 @@ it('Overrides dark themes from default', () => {
     `,
     {
       config,
-    }
+    },
   );
 });
 
@@ -137,7 +137,7 @@ it('Merges missing variables from single theme', () => {
     {
       config,
       forceSingleTheme: 'mint',
-    }
+    },
   );
 });
 
@@ -169,7 +169,7 @@ it('Merges single theme but leaves variables by default', () => {
     {
       config,
       forceSingleTheme: 'mint',
-    }
+    },
   );
 });
 
@@ -201,6 +201,6 @@ it('Merges single theme but omits variables when optimized', () => {
       config,
       forceSingleTheme: 'mint',
       optimizeSingleTheme: true,
-    }
+    },
   );
 });

@@ -25,14 +25,14 @@ import {
 const createModernTheme = (
   selector: string,
   theme: SimpleTheme,
-  transform: (value: string) => string
+  transform: (value: string) => string,
 ) => {
   const rule = postcss.rule({ selector });
   const decls = Object.entries(flat(theme)).map(([prop, value]) =>
     postcss.decl({
       prop: `--${transform(prop)}`,
       value: `${value}`,
-    })
+    }),
   );
 
   if (decls.length === 0) {
@@ -64,7 +64,7 @@ const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
 const defaultLocalizeFunction = (
   name: string,
   filePath: string,
-  css: string
+  css: string,
 ) => {
   const hash = crypto.createHash('md5').update(css).digest('hex').slice(0, 6);
   return `${filePath || 'default'}-${name}-${hash}`;
@@ -72,7 +72,7 @@ const defaultLocalizeFunction = (
 
 const getLocalizeFunction = (
   modules: string | ScopedNameFunction | undefined,
-  resourcePath: string | undefined
+  resourcePath: string | undefined,
 ) => {
   if (typeof modules === 'function' || modules === 'default') {
     let fileContents = '';
@@ -106,7 +106,7 @@ const declarationsAsString = ({ nodes }: postcss.Rule) => {
 export const modernTheme = (
   root: postcss.Root,
   componentConfig: PostcssStrictThemeConfig,
-  options: PostcssThemeOptions
+  options: PostcssThemeOptions,
 ) => {
   const usage = new Map<string, number>();
   const defaultTheme = options.defaultTheme || 'default';
@@ -119,11 +119,11 @@ export const modernTheme = (
   const localize = (name: string) =>
     getLocalizeFunction(
       options.modules,
-      resourcePath
+      resourcePath,
     )(name.replace(/\./g, '-'));
 
   const defaultThemeConfig = Object.entries(componentConfig).find(
-    ([theme]) => theme === defaultTheme
+    ([theme]) => theme === defaultTheme,
   );
   const hasRootDarkMode =
     defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
@@ -131,7 +131,7 @@ export const modernTheme = (
   // For single theme mode, we need to handle themes that may be incomplete
   // In that case, we merge the theme with default so all variables are present
   const singleThemeConfig = Object.entries(componentConfig).find(
-    ([theme]) => theme === singleTheme
+    ([theme]) => theme === singleTheme,
   );
 
   let mergedSingleThemeConfig = defaultThemeConfig
@@ -141,7 +141,7 @@ export const modernTheme = (
   if (defaultThemeConfig && singleThemeConfig && defaultTheme !== singleTheme) {
     mergedSingleThemeConfig = mergeConfigs(
       singleThemeConfig[1],
-      defaultThemeConfig[1]
+      defaultThemeConfig[1],
     );
   }
 
@@ -183,7 +183,7 @@ export const modernTheme = (
             root.warn(
               root.toResult(),
               `Could not find key ${key} in theme configuration. Removing declaration.`,
-              { node: decl }
+              { node: decl },
             );
             decl.remove();
             break;
@@ -191,7 +191,7 @@ export const modernTheme = (
         } else if (key && !themeValue) {
           throw decl.error(
             `Could not find key ${key} in theme configuration.`,
-            { word: decl.value }
+            { word: decl.value },
           );
         } else if (
           inlineRootThemeVariables &&
@@ -200,7 +200,7 @@ export const modernTheme = (
         ) {
           decl.value = replaceTheme(
             decl.value,
-            `var(--${localize(key)}, ${themeValue})`
+            `var(--${localize(key)}, ${themeValue})`,
           );
         } else if (key) {
           decl.value = replaceTheme(decl.value, `var(--${localize(key)})`);
@@ -225,7 +225,7 @@ export const modernTheme = (
   const filterUsed = (
     colorScheme: ColorScheme,
     theme: string | LightDarkTheme,
-    filterFunction = (name: string) => usage.has(name)
+    filterFunction = (name: string) => usage.has(name),
   ): SimpleTheme => {
     const themeConfig =
       typeof theme === 'string' ? componentConfig[theme] : theme;
@@ -270,7 +270,7 @@ export const modernTheme = (
     return createModernTheme(
       ':root',
       filterUsed('light', themeConfig, func),
-      localize
+      localize,
     );
   };
 
@@ -284,8 +284,8 @@ export const modernTheme = (
         createModernTheme(
           darkClass,
           filterUsed('dark', mergedSingleThemeConfig),
-          localize
-        )
+          localize,
+        ),
       );
       rules.push(rootRules);
     }
@@ -305,28 +305,32 @@ export const modernTheme = (
     if (theme === defaultTheme) {
       rules.push(addRootTheme(themeConfig));
       rules.push(
-        createModernTheme(darkClass, filterUsed('dark', defaultTheme), localize)
+        createModernTheme(
+          darkClass,
+          filterUsed('dark', defaultTheme),
+          localize,
+        ),
       );
     } else if (hasDarkMode(themeConfig)) {
       rules.push(
         createModernTheme(
           `.${theme}${lightClass}`,
           filterUsed('light', theme),
-          localize
+          localize,
         ),
         createModernTheme(
           `.${theme}${darkClass}`,
           filterUsed('dark', theme),
-          localize
-        )
+          localize,
+        ),
       );
     } else {
       rules.push(
         createModernTheme(
           hasRootDarkMode ? `.${theme}${lightClass}` : `.${theme}`,
           filterUsed('light', theme),
-          localize
-        )
+          localize,
+        ),
       );
     }
   });
@@ -340,7 +344,7 @@ export const modernTheme = (
 
     const defined = definedRules.find(
       (definedRule) =>
-        declarationsAsString(definedRule) === declarationsAsString(rule)
+        declarationsAsString(definedRule) === declarationsAsString(rule),
     );
 
     if (defined) {

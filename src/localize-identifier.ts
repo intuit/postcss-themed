@@ -11,19 +11,19 @@ const reRelativePath = /^\.+/;
 export default function localizeIdentifier(
   loaderContext: Partial<loader.LoaderContext>,
   localIdentName: string,
-  name: string
+  name: string,
 ) {
   return cssesc(
     loaderUtils
       .interpolateName(
         loaderContext as Required<loader.LoaderContext>,
         localIdentName,
-        { content: name }
+        { content: name },
       ) // For `[hash]` placeholder
       .replace(/^((-?\d)|--)/, '_$1')
       .replace(filenameReservedRegex, '-')
       .replace(reControlChars, '-')
       .replace(reRelativePath, '-')
-      .replace(/\./g, '-')
+      .replace(/\./g, '-'),
   ).replace(/\[local\]/gi, name);
 }

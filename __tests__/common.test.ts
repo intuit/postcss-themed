@@ -15,8 +15,8 @@ it('should be able to extend a simple theme', () => {
         myChildTheme: {
           extends: 'myTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
@@ -47,8 +47,8 @@ it('should be able to extend a simple theme', () => {
         myChildTheme: {
           extends: 'myTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
@@ -81,7 +81,7 @@ it('should be able to extend a dark/light theme from root', () => {
         light: {},
         dark: {},
       },
-    })
+    }),
   ).toStrictEqual({
     default: {
       light: { color: 'white' },
@@ -114,8 +114,8 @@ it('should be able to extend a theme that extends another theme', () => {
         myOtherChildTheme: {
           extends: 'myChildTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
@@ -151,7 +151,7 @@ it('should add the light extras if there is an extension in the light theme', ()
         light: { extends: 'myTheme' },
         dark: {},
       },
-    })
+    }),
   ).toStrictEqual({
     default: {
       light: { color: 'white' },
@@ -183,7 +183,7 @@ it('should add dark extras if there is an extension in the dark theme', () => {
         light: {},
         dark: { extends: 'myTheme' },
       },
-    })
+    }),
   ).toStrictEqual({
     default: {
       light: { color: 'white' },
@@ -219,7 +219,7 @@ it('should be able to resolve color scheme theme correctly if there is a chain i
         light: { color: 'red' },
         dark: { color: 'red' },
       },
-    })
+    }),
   ).toStrictEqual({
     default: {
       light: { color: 'white' },
@@ -256,8 +256,8 @@ it('should be able to extend a theme that extends another theme - out of order',
         myChildTheme: {
           extends: 'myTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toStrictEqual({
     default: {
       light: { color: 'red' },
@@ -291,8 +291,8 @@ it('should error on unknown themes', () => {
         myChildTheme: {
           extends: 'myThemes',
         },
-      })
-    )
+      }),
+    ),
   ).toThrow("Theme to extend from not found! 'myThemes'");
 });
 
@@ -306,8 +306,8 @@ it('should error when extending itself', () => {
         myTheme: {
           extends: 'myTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toThrow("A theme cannot extend itself! 'myTheme' extends 'myTheme'");
 });
 
@@ -328,9 +328,9 @@ it('should error when cycles detected', () => {
         light: {},
         dark: {},
       },
-    })
+    }),
   ).toThrow(
-    "Circular theme extension found! 'myTheme' => 'myChildTheme' => 'myTheme'"
+    "Circular theme extension found! 'myTheme' => 'myChildTheme' => 'myTheme'",
   );
 });
 
@@ -347,10 +347,10 @@ it('should error when cycles detected - subthemes', () => {
         myChildTheme: {
           extends: 'myTheme',
         },
-      })
-    )
+      }),
+    ),
   ).toThrow(
-    "Circular theme extension found! 'myTheme' => 'myChildTheme' => 'myTheme'"
+    "Circular theme extension found! 'myTheme' => 'myChildTheme' => 'myTheme'",
   );
 });
 
@@ -376,9 +376,9 @@ it('should error when cycles detected - complicated', () => {
         five: {
           extends: 'four',
         },
-      })
-    )
+      }),
+    ),
   ).toThrow(
-    "Circular theme extension found! 'one' => 'five' => 'four' => 'three' => 'two' => 'one'"
+    "Circular theme extension found! 'one' => 'five' => 'four' => 'three' => 'two' => 'one'",
   );
 });

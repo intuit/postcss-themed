@@ -23,7 +23,7 @@ export type ThemeResolver = (path: string) => ComponentTheme;
 export type ScopedNameFunction = (
   name: string,
   filename: string,
-  css: string
+  css: string,
 ) => string;
 
 export interface PostcssThemeOptions {

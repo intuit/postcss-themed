@@ -7,8 +7,8 @@ it('should not do anything to identifier', () => {
     localizeIdentifier(
       { resourcePath: '/app/foo.css' },
       '[local]',
-      'background'
-    )
+      'background',
+    ),
   ).toBe('background');
 });
 
@@ -17,8 +17,8 @@ it('should add file name', () => {
     localizeIdentifier(
       { resourcePath: '/app/foo.css' },
       '[name]-[local]',
-      'background'
-    )
+      'background',
+    ),
   ).toBe('foo-background');
 });
 
@@ -27,8 +27,8 @@ it('should hash', () => {
     localizeIdentifier(
       { resourcePath: '/app/foo.css' },
       '[hash:base64:7]',
-      'background'
-    )
+      'background',
+    ),
   ).toBe('JAUIJsV');
 });
 
@@ -37,7 +37,7 @@ it('should use folder', () => {
     localizeIdentifier(
       { resourcePath: '/app/foo.css' },
       '[folder]-[name]-[local]',
-      'background'
-    )
+      'background',
+    ),
   ).toBe('app-foo-background');
 });

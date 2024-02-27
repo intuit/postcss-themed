@@ -56,7 +56,7 @@ export const replaceThemeRoot = (selector: string) =>
 
 /** Make a SimpleTheme into a LightDarkTheme */
 export const normalizeTheme = (
-  config: PostcssThemeConfig | {}
+  config: PostcssThemeConfig | {},
 ): PostcssStrictThemeConfig => {
   return Object.assign(
     {},
@@ -80,18 +80,18 @@ export const normalizeTheme = (
       }
 
       return { [theme]: { light: themeConfig, dark: {} } };
-    })
+    }),
   );
 };
 
 /** Resolve any "extends" fields for a theme */
 export const resolveThemeExtension = (
-  config: PostcssStrictThemeConfig
+  config: PostcssStrictThemeConfig,
 ): PostcssStrictThemeConfig => {
   const checkExtendSelf = (theme: string, extendsTheme: string) => {
     if (extendsTheme === theme) {
       throw new Error(
-        `A theme cannot extend itself! '${theme}' extends '${extendsTheme}'`
+        `A theme cannot extend itself! '${theme}' extends '${extendsTheme}'`,
       );
     }
   };
@@ -114,7 +114,7 @@ export const resolveThemeExtension = (
         throw new Error(
           `Circular theme extension found! ${chain
             .map((i) => `'${i}'`)
-            .join(' => ')}`
+            .join(' => ')}`,
         );
       }
 
@@ -145,7 +145,7 @@ export const resolveThemeExtension = (
   const resolveColorSchemeTheme = (
     themeConfig: LightDarkTheme,
     theme: string,
-    colorScheme: ColorScheme
+    colorScheme: ColorScheme,
   ) => {
     const extendsTheme = themeConfig[colorScheme].extends;
 
@@ -204,5 +204,5 @@ export const resolveThemeExtension = (
 /** Determine if a theme has dark mode enabled */
 export const hasDarkMode = (theme: Theme) =>
   Boolean(
-    Object.keys(theme.dark).length > 0 && Object.keys(theme.light).length > 0
+    Object.keys(theme.dark).length > 0 && Object.keys(theme.light).length > 0,
   );
