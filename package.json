@@ -15,7 +15,7 @@
     "lint": "eslint src/*.ts --fix",
     "release": "auto shipit"
   },
-  "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
+  "author": "Tyler Krupicka <5761061+tylerkrupicka@users.noreply.github.com>",
   "license": "MIT",
   "repository": "https://github.com/intuit/postcss-themed",
   "bugs": {
