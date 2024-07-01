@@ -1,4 +1,4 @@
-import { Root, Result } from 'postcss';
+import postcss from 'postcss';
 import fs from 'fs';
 import debug from 'debug';
 import merge from 'deepmerge';
@@ -64,9 +64,9 @@ export const configForComponent = (
 };
 
 /** Generate a theme */
-const themeFile = (options: PostcssThemeOptions = {}) => async (
-  root: Root,
-  result: Result
+const themeFile = (options: PostcssThemeOptions = {}) => (
+  root: postcss.Root,
+  result: postcss.Result
 ) => {
   // Postcss-modules runs twice and we only ever want to process the CSS once
   // @ts-ignore
@@ -93,13 +93,13 @@ const themeFile = (options: PostcssThemeOptions = {}) => async (
   resolveThemeExtension(mergedConfig);
 
   if (caniuse.isSupported('css-variables', browserslist())) {
-    await modernTheme(root, mergedConfig, options);
+    modernTheme(root, mergedConfig, options);
   } else {
-    await legacyTheme(root, mergedConfig, options);
+    legacyTheme(root, mergedConfig, options);
   }
 
   // @ts-ignore
-  root.source.input.css = result.css;
+  root.source.processed = true;
 
   if (!resolveTheme && root.source.input.file) {
     const themeFilename = getThemeFilename(root.source.input.file);
@@ -114,16 +114,6 @@ const themeFile = (options: PostcssThemeOptions = {}) => async (
   }
 };
 
-export const plugin = (options: PostcssThemeOptions = {}) => {
-  return {
-    postcssPlugin: 'postcss-themed',
-    Once(root: Root, { result }: { result: Result }) {
-      return themeFile(options)(root, result);
-    },
-  };
-};
-
-plugin.postcss = true;
-
-export default plugin;
 export * from './types';
+// @ts-ignore
+export default postcss.plugin('postcss-themed', themeFile);
