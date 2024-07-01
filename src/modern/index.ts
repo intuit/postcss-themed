@@ -28,6 +28,7 @@ const createModernTheme = (
   transform: (value: string) => string
 ) => {
   const rule = postcss.rule({ selector });
+  // @ts-ignore
   const decls = Object.entries(flat(theme)).map(([prop, value]) =>
     postcss.decl({
       prop: `--${transform(prop)}`,
