@@ -1,11 +1,11 @@
+import crypto from 'node:crypto';
 import postcss from 'postcss';
-import crypto from 'crypto';
-import fs from 'fs';
+import fs from 'node:fs';
 import get from 'dlv';
 import flat from 'flat';
 import { dset as set } from 'dset';
 
-import localizeIdentifier from '../localize-identifier';
+import localizeIdentifier from './localize-identifier';
 import {
   ColorScheme,
   LightDarkTheme,
@@ -13,13 +13,13 @@ import {
   PostcssThemeOptions,
   ScopedNameFunction,
   SimpleTheme,
-} from '../types';
+} from './types';
 import {
   hasDarkMode,
   parseThemeKey,
   replaceTheme,
   replaceThemeRoot,
-} from '../common';
+} from './common';
 
 /** Create a CSS variable override block for a given selector */
 const createModernTheme = (
@@ -46,7 +46,7 @@ const createModernTheme = (
 
 /** Merge a given theme with a base theme */
 const mergeConfigs = (theme: LightDarkTheme, defaultTheme: LightDarkTheme) => {
-  const merged = defaultTheme;
+  const merged = { ...defaultTheme };
 
   for (const [colorScheme, values] of Object.entries(theme)) {
     if (!values) {
@@ -125,6 +125,7 @@ export const modernTheme = (
   const defaultThemeConfig = Object.entries(componentConfig).find(
     ([theme]) => theme === defaultTheme,
   );
+
   const hasRootDarkMode =
     defaultThemeConfig && hasDarkMode(defaultThemeConfig[1]);
 

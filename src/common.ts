@@ -1,5 +1,5 @@
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
 import merge from 'deepmerge';
 
 import {
@@ -8,7 +8,7 @@ import {
   Theme,
   LightDarkTheme,
   ColorScheme,
-} from '../types';
+} from './types';
 
 const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
 const ALT_THEME_USAGE_REGEX = /theme\(\s*['"]([a-zA-Z-_0-9.]+)['"]\s*\)/;
