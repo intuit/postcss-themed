@@ -3,26 +3,25 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/postcss-themed
   docker:
-    - image: circleci/node:20-browsers
+    - image: node:20
   environment:
     TZ: '/usr/share/zoneinfo/America/Los_Angeles'
 
 aliases:
-  # # Circle related commands
-  # - &restore-cache
-  #   keys:
-  #     # Find a cache corresponding to this specific package.json checksum
-  #     # when this file is changed, this key will fail
-  #     - auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-  #     - auto-{{ checksum "yarn.lock" }}
-  #     # Find the most recent cache used from any branch
-  #     - auto-
-  # - &save-cache
-  #   key: auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-  #   paths:
-  #     - ~/.cache/yarn
-  #     - node_modules
-  # Yarn commands
+  # Circle related commands
+  - &restore-cache
+    keys:
+      - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+  - &save-cache
+    key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+    paths:
+      - .pnpm-store
+  - &setup
+    name: Install pnpm package manager
+    command: |
+      corepack enable
+      corepack prepare pnpm@latest-9 --activate
+      pnpm config set store-dir .pnpm-store
   - &pnpm
     name: Install Dependencies
     command: pnpm install
@@ -41,9 +40,10 @@ jobs:
     <<: *defaults
     steps:
       - checkout
-      # - restore_cache: *restore-cache
+      - restore_cache: *restore-cache
+      - run: *setup
       - run: *pnpm
-      # - save_cache: *save-cache
+      - save_cache: *save-cache
       - persist_to_workspace:
           root: .
           paths:
