@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import type { PluginCreator, Result, Rule } from 'postcss';
+import type { PluginCreator, Rule } from 'postcss';
 import { setAutoFreeze } from 'immer';
 import get from 'dlv';
 
@@ -15,6 +15,7 @@ import {
   createLocalizer,
   parseCssVariable,
   replaceCssVariable,
+  generateThemeCss,
 } from './utils';
 
 setAutoFreeze(false);
@@ -46,14 +47,18 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
     prepare(result) {
       let theme: PostcssStrictThemeConfig;
       let baseTheme: LightDarkTheme;
+      let alternateThemes: PostcssStrictThemeConfig | undefined;
 
       const localize = createLocalizer(options.modules, result);
 
-      const tokenUsage = new Map<string, number>();
       const selectors = new Map<string, Rule>();
       const variableNames = new Map<string, string>();
+      const multiUseKeys = new Set<string>();
 
       return {
+        /**
+         * Remove any CSS variable defaults for tokens that are used more than once
+         */
         DeclarationExit(decl) {
           if (!decl.value) {
             return;
@@ -67,8 +72,7 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
 
           if (
             variableNames.has(key) &&
-            tokenUsage.has(variableNames.get(key)!) &&
-            tokenUsage.get(variableNames.get(key)!)! > 1
+            multiUseKeys.has(variableNames.get(key)!)
           ) {
             decl.value = replaceCssVariable(decl.value, `var(--${key})`);
           }
@@ -82,11 +86,8 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
 
           if (key) {
             const variableName = localize(key);
-            variableNames.set(variableName, key);
             const themeValueLight = get(baseTheme.light, key);
             const themeValueDark = get(baseTheme.dark, key);
-
-            // console.log(key, variableName, themeValueLight);
 
             if (!themeValueLight) {
               throw decl.error(
@@ -95,7 +96,16 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
               );
             }
 
-            if (tokenUsage.has(key) && options.inlineRootThemeVariables) {
+            if (typeof themeValueLight !== 'string') {
+              return;
+            }
+
+            if (options.forceSingleTheme && options.optimizeSingleTheme) {
+              decl.value = themeValueLight;
+            } else if (
+              multiUseKeys.has(key) &&
+              options.inlineRootThemeVariables
+            ) {
               decl.value = replaceTheme(decl.value, `var(--${variableName})`);
             } else {
               decl.value = replaceTheme(
@@ -104,8 +114,10 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
               );
             }
 
-            if (!tokenUsage.has(key)) {
-              tokenUsage.set(key, 1);
+            if (variableNames.has(variableName)) {
+              multiUseKeys.add(key);
+            } else {
+              variableNames.set(variableName, key);
 
               if (themeValueDark && themeValueDark !== themeValueLight) {
                 const darkModeSelector = selectors.get(options.darkClass)!;
@@ -116,33 +128,25 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
                 darkModeSelector.append(darkDeclaration);
                 selectors.set(options.darkClass, darkModeSelector);
               }
-
-              return;
             }
-
-            const count = tokenUsage.get(key) as number;
-            tokenUsage.set(key, count + 1);
           }
         },
         OnceExit(root, helpers) {
           /**
-           * First, handle adding root
+           * First, handle adding :root
            */
-          const multiuseKeys = [...tokenUsage]
-            .filter(([_, count]) => count > 1)
-            .map(([key]) => key);
-
-          if (multiuseKeys.length > 0) {
+          if (options?.inlineRootThemeVariables && multiUseKeys.size > 0) {
             const rootSelector = new helpers.Rule({ selector: ':root' });
-            const declarations = multiuseKeys.map(
-              (key) =>
-                new helpers.Declaration({
-                  prop: `--${localize(key)}`,
-                  value: `${get(baseTheme.light, key)}`,
-                }),
-            );
 
-            rootSelector.append(...declarations);
+            for (const key of multiUseKeys) {
+              const declaration = new helpers.Declaration({
+                prop: `--${localize(key)}`,
+                value: `${get(baseTheme.light, key)}`,
+              });
+
+              rootSelector.append(declaration);
+            }
+
             // TODO: convert to prepend
             root.append(rootSelector);
           }
@@ -157,6 +161,21 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
           if (darkModeSelector?.nodes?.length > 0) {
             root.append(darkModeSelector);
           }
+
+          /**
+           * Lastly, walk through the remaining themes and create rules
+           */
+          if (alternateThemes) {
+            generateThemeCss({
+              baseTheme,
+              alternateThemes,
+              variableNames,
+              root,
+              helpers,
+              options,
+              localize,
+            });
+          }
         },
         async Once(root, helpers) {
           if (!root.source) {
@@ -166,6 +185,7 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
           const configs = await createThemeConfigs(options, result);
           theme = configs.theme;
           baseTheme = configs.baseTheme;
+          alternateThemes = configs.alternateThemes;
 
           /**
            * Setup dark class name selector to allow appending of declarations
@@ -176,10 +196,6 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
               selector: options.darkClass,
             }),
           );
-
-          // instead of combining common classnames, just let cssnano do that for the end user
-
-          // modernTheme(root, configs.theme, options);
 
           if (!resolveTheme && root.source.input.file) {
             const themeFilename = getThemeFilename(root.source.input.file);

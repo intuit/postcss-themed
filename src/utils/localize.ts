@@ -31,6 +31,10 @@ function localizeIdentifier(
   ).replace(/\[local\]/gi, name);
 }
 
+function cleanupName(name: string) {
+  return name.replace(/\./g, '-');
+}
+
 export function createLocalizer(
   modules: PostcssThemeOptions['modules'],
   result: Result,
@@ -41,7 +45,7 @@ export function createLocalizer(
 
   if (typeof modules === 'function') {
     return (name: string) => {
-      return modules(name, filePath, fileContents);
+      return modules(cleanupName(name), filePath, fileContents);
     };
   } else if (modules === 'default') {
     return (name: string) => {
@@ -50,7 +54,7 @@ export function createLocalizer(
         .update(fileContents)
         .digest('hex')
         .slice(0, 6);
-      return `${filePath || 'default'}-${name}-${hash}`;
+      return `${filePath || 'default'}-${cleanupName(name)}-${hash}`;
     };
   }
 
@@ -58,7 +62,7 @@ export function createLocalizer(
     return localizeIdentifier(
       { resourcePath: filePath },
       modules ?? '[local]',
-      name,
+      cleanupName(name),
     );
   };
 }

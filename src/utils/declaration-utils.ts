@@ -1,3 +1,5 @@
+import { Helpers } from 'postcss';
+
 const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
 const CSS_VARIABLE_REGEX = /var\(--([a-zA-Z-_0-9.]+),\s([a-zA-Z-_0-9.]+)\)/;
 
@@ -39,4 +41,15 @@ export function replaceTheme(value: string, replace: string) {
  */
 export function replaceCssVariable(value: string, replace: string) {
   return value.replace(CSS_VARIABLE_REGEX, replace);
+}
+
+export function createCssVariable(
+  helpers: Helpers,
+  key: string,
+  value: string,
+) {
+  return new helpers.Declaration({
+    prop: `--${key}`,
+    value: `${value}`,
+  });
 }
