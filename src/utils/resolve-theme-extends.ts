@@ -1,6 +1,10 @@
 import { produce } from 'immer';
 import merge from 'deepmerge';
-import type { PostcssStrictThemeConfig, ColorScheme } from '../types';
+import {
+  type PostcssStrictThemeConfig,
+  type ColorScheme,
+  LightDarkTheme,
+} from '../types';
 
 export function resolveThemeExtends(theme: PostcssStrictThemeConfig) {
   const themeKeys = Object.keys(theme);
@@ -45,7 +49,10 @@ export function resolveThemeExtends(theme: PostcssStrictThemeConfig) {
           }
 
           const chainThemes = chain.reverse().map((key) => theme[key][scheme]);
-          const mergedTheme = merge.all([...chainThemes, themeConfig[scheme]]);
+          const mergedTheme = merge.all<LightDarkTheme>([
+            ...chainThemes,
+            themeConfig[scheme],
+          ]);
           draft[themeKey][scheme] = mergedTheme;
           delete draft[themeKey][scheme].extends;
         }
