@@ -1,6 +1,6 @@
 import cssesc from 'cssesc';
 import loaderUtils from 'loader-utils';
-import { loader } from 'webpack';
+import type { loader } from 'webpack';
 
 // eslint-disable-next-line no-control-regex
 const filenameReservedRegex = /[<>:"/\\|?*\x00-\x1F]/g;

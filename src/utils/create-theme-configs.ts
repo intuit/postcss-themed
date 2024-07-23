@@ -4,6 +4,7 @@ import { normalizeTheme } from './normalize-theme';
 import { loadComponentConfig } from './load-component-config';
 import { resolveThemeExtends } from './resolve-theme-extends';
 import type { PostcssThemeOptions } from '../types';
+import { produce } from 'immer';
 
 export async function createThemeConfigs(
   options: PostcssThemeOptions,
@@ -39,9 +40,13 @@ export async function createThemeConfigs(
   const singleTheme = options.forceSingleTheme
     ? merge(defaultTheme, resolvedTheme[options.forceSingleTheme])
     : undefined;
+  const alternateThemes = produce(resolvedTheme, (draft) => {
+    delete draft[options.defaultTheme];
+  });
 
   return {
     theme: resolvedTheme,
     baseTheme: singleTheme ?? defaultTheme,
+    alternateThemes: !options.forceSingleTheme ? alternateThemes : undefined,
   };
 }

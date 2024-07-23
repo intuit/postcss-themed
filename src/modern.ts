@@ -80,12 +80,16 @@ const getLocalizeFunction = (
       fileContents = fs.readFileSync(resourcePath, 'utf8');
     }
 
+    console.log('fileContents', fileContents);
+
     const localize =
       typeof modules === 'function' ? modules : defaultLocalizeFunction;
     return (name: string) => {
       return localize(name, resourcePath || '', fileContents);
     };
   }
+
+  console.log(modules, resourcePath);
 
   return (name: string) =>
     localizeIdentifier({ resourcePath }, modules || '[local]', name);
