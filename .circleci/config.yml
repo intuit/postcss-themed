@@ -3,47 +3,47 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/postcss-themed
   docker:
-    - image: circleci/node:10-browsers
+    - image: circleci/node:20-browsers
   environment:
     TZ: '/usr/share/zoneinfo/America/Los_Angeles'
 
 aliases:
-  # Circle related commands
-  - &restore-cache
-    keys:
-      # Find a cache corresponding to this specific package.json checksum
-      # when this file is changed, this key will fail
-      - auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-      - auto-{{ checksum "yarn.lock" }}
-      # Find the most recent cache used from any branch
-      - auto-
-  - &save-cache
-    key: auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-    paths:
-      - ~/.cache/yarn
-      - node_modules
+  # # Circle related commands
+  # - &restore-cache
+  #   keys:
+  #     # Find a cache corresponding to this specific package.json checksum
+  #     # when this file is changed, this key will fail
+  #     - auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+  #     - auto-{{ checksum "yarn.lock" }}
+  #     # Find the most recent cache used from any branch
+  #     - auto-
+  # - &save-cache
+  #   key: auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+  #   paths:
+  #     - ~/.cache/yarn
+  #     - node_modules
   # Yarn commands
-  - &yarn
+  - &pnpm
     name: Install Dependencies
-    command: yarn install --frozen-lockfile --non-interactive --cache-folder=~/.cache/yarn
+    command: pnpm install
   - &lint
     name: Lint
-    command: yarn lint
+    command: pnpm lint
   - &test
     name: Test
-    command: yarn test
+    command: pnpm test
   - &build
     name: Build
-    command: yarn build
+    command: pnpm build
 
 jobs:
   install:
     <<: *defaults
     steps:
       - checkout
-      - restore_cache: *restore-cache
-      - run: *yarn
-      - save_cache: *save-cache
+      # - restore_cache: *restore-cache
+      - run: *pnpm
+      # - save_cache: *save-cache
       - persist_to_workspace:
           root: .
           paths:
@@ -85,7 +85,7 @@ jobs:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run:
           name: Release
-          command: yarn run release
+          command: pnpm run release
 
 workflows:
   version: 2
