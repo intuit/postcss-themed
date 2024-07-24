@@ -1,8 +1,8 @@
 import { produce } from 'immer';
 import merge from 'deepmerge';
-import {
-  type PostcssStrictThemeConfig,
-  type ColorScheme,
+import type {
+  PostcssStrictThemeConfig,
+  ColorScheme,
   LightDarkTheme,
 } from '../types';
 
@@ -10,7 +10,7 @@ export function resolveThemeExtends(theme: PostcssStrictThemeConfig) {
   const themeKeys = Object.keys(theme);
 
   const resolver = (themeKey: string, colorScheme: ColorScheme) => {
-    return theme[themeKey][colorScheme]?.extends;
+    return theme[themeKey]![colorScheme]?.extends;
   };
 
   const resolvedTheme = produce(theme, (draft) => {
@@ -48,13 +48,13 @@ export function resolveThemeExtends(theme: PostcssStrictThemeConfig) {
             next = resolver(next, scheme);
           }
 
-          const chainThemes = chain.reverse().map((key) => theme[key][scheme]);
+          const chainThemes = chain.reverse().map((key) => theme[key]![scheme]);
           const mergedTheme = merge.all<LightDarkTheme>([
             ...chainThemes,
             themeConfig[scheme],
           ]);
-          draft[themeKey][scheme] = mergedTheme;
-          delete draft[themeKey][scheme].extends;
+          draft[themeKey]![scheme] = mergedTheme;
+          delete draft[themeKey]![scheme].extends;
         }
       }
     }

@@ -4,7 +4,7 @@ import { setAutoFreeze } from 'immer';
 import get from 'dlv';
 
 import { getThemeFilename, parseThemeKey } from './common';
-import {
+import type {
   PostcssThemeOptions,
   PostcssStrictThemeConfig,
   LightDarkTheme,
@@ -214,6 +214,7 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
           const key = parseCssVariable(decl.value);
 
           if (
+            key &&
             variableNames.has(key) &&
             multiUseKeys.has(variableNames.get(key)!)
           ) {

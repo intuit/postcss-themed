@@ -1,7 +1,7 @@
 import { Helpers } from 'postcss';
 
-const THEME_USAGE_REGEX = /@theme\s+\$?([a-zA-Z-_0-9.]+)/;
-const CSS_VARIABLE_REGEX = /var\(--([a-zA-Z-_0-9.]+),\s([a-zA-Z-_0-9.]+)\)/;
+const THEME_USAGE_REGEX = /@theme\s+\$?([\w.-]+)/;
+const CSS_VARIABLE_REGEX = /var\(--([\w.-]+),\s([\w.-]+)\)/;
 
 /**
  * Get the value for @theme

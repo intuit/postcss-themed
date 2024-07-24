@@ -49,12 +49,11 @@ export function generateThemeCss({
        * theme or the themes own light color, while also ensuring it's not a
        * deeply nested object.
        */
-      if (typeof themeValueLight === 'string') {
-        /**
+      if (typeof themeValueLight === 'string' && /**
          * None of these apply if the themes light value matches the default
          * themes light value, leaving only the dark value
          */
-        if (themeValueLight !== baseThemeValueLight) {
+        themeValueLight !== baseThemeValueLight) {
           /**
            * Apply to simplier specificity theme selector if:
            *
@@ -79,15 +78,12 @@ export function generateThemeCss({
             );
           }
         }
-      }
 
-      if (!themeValueLight && typeof themeValueDark === 'string') {
-        if (themeValueDark !== baseThemeValueDark) {
+      if (!themeValueLight && typeof themeValueDark === 'string' && themeValueDark !== baseThemeValueDark) {
           darkSelector.append(
             createCssVariable(helpers, variableName, themeValueDark),
           );
         }
-      }
     }
 
     for (const sel of [baseSelector, lightSelector, darkSelector]) {

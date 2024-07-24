@@ -1,8 +1,6 @@
 {
   "name": "postcss-themed",
   "version": "2.8.1",
-  "main": "dist/index.js",
-  "type": "module",
   "description": "PostCSS plugin for adding multiple themes to CSS files",
   "keywords": [
     "postcss",
@@ -10,12 +8,23 @@
     "postcss-plugin",
     "theme"
   ],
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "default": "./dist/index.cjs.js"
+    }
+  },
   "scripts": {
-    "build": "tsc -P tsconfig.build.json",
+    "build": "tsup",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "lint": "eslint src/**/*.ts --no-ignore",
-    "lint:fix": "yarn lint --fix",
+    "lint:fix": "pnpm lint --fix",
     "release": "auto shipit"
   },
   "author": "Tyler Krupicka <tylerkrupicka@gmail.com>",
@@ -26,72 +35,40 @@
   },
   "homepage": "https://github.com/intuit/postcss-themed",
   "dependencies": {
-    "browserslist": "^4.23.0",
-    "caniuse-api": "^3.0.0",
     "cssesc": "^3.0.0",
-    "debug": "^4.1.1",
-    "deepmerge": "^3.2.0",
+    "debug": "^4.3.5",
+    "deepmerge": "^3.3.0",
     "dlv": "^1.1.3",
-    "dset": "^3.1.0",
+    "dset": "^3.1.3",
     "esbuild": "^0.23.0",
-    "flat": "^5.0.2",
     "immer": "^10.1.1",
-    "loader-utils": "^1.2.3",
-    "ts-node": "^8.0.3"
+    "loader-utils": "^1.4.2"
   },
   "devDependencies": {
-    "@auto-it/all-contributors": "^7.2.2",
-    "@babel/core": "^7.6.2",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-typescript": "^7.7.7",
-    "@types/browserslist": "^4.4.0",
-    "@types/caniuse-api": "^3.0.0",
-    "@types/cssesc": "^3.0.0",
-    "@types/debug": "^4.1.5",
-    "@types/dlv": "^1.1.2",
-    "@types/flat": "^5.0.1",
-    "@types/loader-utils": "^1.1.3",
-    "@types/postcss-nested": "^4.1.0",
-    "@types/webpack": "^4.39.2",
-    "all-contributors-cli": "^6.9.1",
-    "auto": "^7.2.2",
+    "@auto-it/all-contributors": "^7.17.0",
+    "@eslint/js": "^9.7.0",
+    "@types/cssesc": "^3.0.2",
+    "@types/debug": "^4.1.12",
+    "@types/dlv": "^1.1.4",
+    "@types/eslint__js": "^8.42.3",
+    "@types/loader-utils": "^1.1.9",
+    "@types/postcss-nested": "^4.2.3",
+    "@types/webpack": "^4.41.38",
+    "all-contributors-cli": "^6.26.1",
+    "auto": "^7.17.0",
     "eslint": "^8.57.0",
     "eslint-plugin-unicorn": "^51.0.1",
-    "husky": "^1.3.1",
-    "lint-staged": "^8.1.5",
-    "oxlint": "^0.2.11",
-    "postcss": "^8.4.35",
-    "postcss-nested": "^4.1.2",
-    "prettier": "^3.2.5",
-    "tapable": "^1.1.3",
-    "typescript": "^5.3.3",
-    "typescript-eslint": "^7.1.0",
-    "vitest": "^1.3.1"
+    "postcss": "^8.4.39",
+    "postcss-nested": "^4.2.3",
+    "prettier": "^3.3.3",
+    "simple-git-hooks": "2.11.1",
+    "tsup": "^8.2.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0",
+    "vitest": "^1.6.0"
   },
   "peerDependencies": {
     "postcss": "^8.0.0"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "collectCoverage": true,
-    "coverageDirectory": "coverage",
-    "coverageReporters": [
-      "text",
-      "lcov"
-    ],
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "test-component-themes",
-      "test-modern-themes",
-      "test-utils"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ]
-  },
-  "engines": {
-    "node": ">=7.5.0"
   },
   "auto": {
     "plugins": [
@@ -100,19 +77,16 @@
       "all-contributors"
     ]
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
     "*.{js,json,css,md}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "volta": {
     "node": "20.15.1",
-    "pnpm": "8.15.4"
+    "pnpm": "9.6.0"
   }
 }

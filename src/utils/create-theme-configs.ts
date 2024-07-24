@@ -1,10 +1,10 @@
 import merge from 'deepmerge';
 import type { Result } from 'postcss';
+import { produce } from 'immer';
 import { normalizeTheme } from './normalize-theme';
 import { loadComponentConfig } from './load-component-config';
 import { resolveThemeExtends } from './resolve-theme-extends';
-import type { PostcssThemeOptions } from '../types';
-import { produce } from 'immer';
+import type { LightDarkTheme, PostcssThemeOptions } from '../types';
 
 export async function createThemeConfigs(
   options: PostcssThemeOptions,
@@ -36,9 +36,12 @@ export async function createThemeConfigs(
   );
 
   const resolvedTheme = resolveThemeExtends(mergedGlobalConfig);
-  const defaultTheme = resolvedTheme[options.defaultTheme];
+  const defaultTheme = resolvedTheme[options.defaultTheme] as LightDarkTheme;
   const singleTheme = options.forceSingleTheme
-    ? merge(defaultTheme, resolvedTheme[options.forceSingleTheme])
+    ? merge(
+        defaultTheme,
+        resolvedTheme[options.forceSingleTheme] as LightDarkTheme,
+      )
     : undefined;
   const alternateThemes = produce(resolvedTheme, (draft) => {
     delete draft[options.defaultTheme];
@@ -47,6 +50,6 @@ export async function createThemeConfigs(
   return {
     theme: resolvedTheme,
     baseTheme: singleTheme ?? defaultTheme,
-    alternateThemes: !options.forceSingleTheme ? alternateThemes : undefined,
+    alternateThemes: options.forceSingleTheme ? undefined : alternateThemes,
   };
 }

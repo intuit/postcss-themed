@@ -8,7 +8,12 @@ export default [
     rules: {
       'unicorn/prevent-abbreviations': 0,
       '@typescript-eslint/consistent-type-exports': 'error',
-      '@typescript-eslint/consistent-type-imports': 'error',
+    },
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
   },
 ];

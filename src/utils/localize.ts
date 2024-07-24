@@ -3,12 +3,12 @@ import { Result } from 'postcss';
 import cssesc from 'cssesc';
 import loaderUtils from 'loader-utils';
 import type { loader } from 'webpack';
-import { PostcssThemeOptions } from '../types';
+import type { PostcssThemeOptions } from '../types';
 
 // eslint-disable-next-line no-control-regex
-const filenameReservedRegex = /[<>:"/\\|?*\x00-\x1F]/g;
+const filenameReservedRegex = /[\u0000-\u001F"*/:<>?\\|]/g;
 // eslint-disable-next-line no-control-regex
-const reControlChars = /[\u0000-\u001f\u0080-\u009f]/g;
+const reControlChars = /[\u0000-\u001F\u0080-\u009F]/g;
 const reRelativePath = /^\.+/;
 
 function localizeIdentifier(
@@ -24,15 +24,15 @@ function localizeIdentifier(
         { content: name },
       ) // For `[hash]` placeholder
       .replace(/^((-?\d)|--)/, '_$1')
-      .replace(filenameReservedRegex, '-')
-      .replace(reControlChars, '-')
+      .replaceAll(filenameReservedRegex, '-')
+      .replaceAll(reControlChars, '-')
       .replace(reRelativePath, '-')
-      .replace(/\./g, '-'),
-  ).replace(/\[local\]/gi, name);
+      .replaceAll('.', '-'),
+  ).replaceAll(/\[local]/gi, name);
 }
 
 function cleanupName(name: string) {
-  return name.replace(/\./g, '-');
+  return name.replaceAll('.', '-');
 }
 
 export function createLocalizer(
