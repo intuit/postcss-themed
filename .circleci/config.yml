@@ -88,6 +88,9 @@ jobs:
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
       - run: *setup
       - run:
+          name: Git Status
+          command: git diff
+      - run:
           name: Release
           command: pnpm run release
 
