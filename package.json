@@ -8,19 +8,18 @@
     "postcss-plugin",
     "theme"
   ],
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.esm.js",
-      "default": "./dist/index.cjs.js"
+      "import": "./dist/index.mjs",
+      "default": "./dist/index.cjs"
     }
   },
   "scripts": {
-    "build": "tsup",
+    "build": "unbuild",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "lint": "eslint src/**/*.ts --no-ignore",
@@ -65,6 +64,7 @@
     "tsup": "^8.2.2",
     "typescript": "^5.5.4",
     "typescript-eslint": "^7.17.0",
+    "unbuild": "^2.0.0",
     "vitest": "^1.6.0"
   },
   "peerDependencies": {

@@ -14,6 +14,31 @@ const CONFIG_FILES = [
   'theme.cts',
 ] as const;
 
+export function getThemeFilename(cssPath?: string) {
+  if (!cssPath) {
+    return;
+  }
+
+  const rootPath = path.dirname(cssPath);
+
+  let resolvedPath: string | undefined;
+
+  for (const filename of CONFIG_FILES) {
+    const filepath = path.resolve(rootPath, filename);
+
+    if (!fs.existsSync(filepath)) {
+      continue;
+    }
+
+    resolvedPath = filepath;
+    break;
+  }
+
+  if (resolvedPath) {
+    return resolvedPath;
+  }
+}
+
 export async function loadComponentConfig(
   rootTheme: PostcssThemeConfig,
   cssPath?: string,
@@ -58,7 +83,9 @@ export async function loadComponentConfig(
     const tmpFolderpath = fs.mkdtempSync(path.join(tmpdir(), 'postcss-themed'));
     const tmpPath = path.join(tmpFolderpath, tmpFilepath);
 
-    fs.writeFileSync(tmpPath, result.outputFiles[0].text, { encoding: 'utf8' });
+    fs.writeFileSync(tmpPath, result.outputFiles[0]!.text, {
+      encoding: 'utf8',
+    });
 
     try {
       const imported = await import(tmpPath);

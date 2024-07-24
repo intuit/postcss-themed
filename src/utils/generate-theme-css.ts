@@ -1,6 +1,6 @@
-import { Helpers, Root } from 'postcss';
+import type { Helpers, Root } from 'postcss';
 import get from 'dlv';
-import {
+import type {
   LightDarkTheme,
   PostcssStrictThemeConfig,
   PostcssThemeOptions,
@@ -49,41 +49,47 @@ export function generateThemeCss({
        * theme or the themes own light color, while also ensuring it's not a
        * deeply nested object.
        */
-      if (typeof themeValueLight === 'string' && /**
+      if (
+        typeof themeValueLight === 'string' /**
          * None of these apply if the themes light value matches the default
          * themes light value, leaving only the dark value
+         */ &&
+        themeValueLight !== baseThemeValueLight
+      ) {
+        /**
+         * Apply to simplier specificity theme selector if:
+         *
+         * 1. There is no dark value for this key
+         * 2. The light and dark values are equal for this key
          */
-        themeValueLight !== baseThemeValueLight) {
-          /**
-           * Apply to simplier specificity theme selector if:
-           *
-           * 1. There is no dark value for this key
-           * 2. The light and dark values are equal for this key
-           */
-          if (
-            !themeValueDark ||
-            themeValueLight === themeValueDark ||
-            themeValueDark === baseThemeValueDark
-          ) {
-            baseSelector.append(
-              createCssVariable(helpers, variableName, themeValueLight),
-            );
-          } else if (themeValueDark && themeValueDark !== baseThemeValueDark) {
-            lightSelector.append(
-              createCssVariable(helpers, variableName, themeValueLight),
-            );
+        if (
+          !themeValueDark ||
+          themeValueLight === themeValueDark ||
+          themeValueDark === baseThemeValueDark
+        ) {
+          baseSelector.append(
+            createCssVariable(helpers, variableName, themeValueLight),
+          );
+        } else if (themeValueDark && themeValueDark !== baseThemeValueDark) {
+          lightSelector.append(
+            createCssVariable(helpers, variableName, themeValueLight),
+          );
 
-            darkSelector.append(
-              createCssVariable(helpers, variableName, themeValueDark),
-            );
-          }
-        }
-
-      if (!themeValueLight && typeof themeValueDark === 'string' && themeValueDark !== baseThemeValueDark) {
           darkSelector.append(
             createCssVariable(helpers, variableName, themeValueDark),
           );
         }
+      }
+
+      if (
+        !themeValueLight &&
+        typeof themeValueDark === 'string' &&
+        themeValueDark !== baseThemeValueDark
+      ) {
+        darkSelector.append(
+          createCssVariable(helpers, variableName, themeValueDark),
+        );
+      }
     }
 
     for (const sel of [baseSelector, lightSelector, darkSelector]) {

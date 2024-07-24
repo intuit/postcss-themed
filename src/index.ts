@@ -1,9 +1,7 @@
-import fs from 'node:fs';
 import type { PluginCreator, Rule } from 'postcss';
 import { setAutoFreeze } from 'immer';
 import get from 'dlv';
 
-import { getThemeFilename, parseThemeKey } from './common';
 import type {
   PostcssThemeOptions,
   PostcssStrictThemeConfig,
@@ -13,10 +11,14 @@ import {
   createThemeConfigs,
   replaceTheme,
   createLocalizer,
+  parseThemeKey,
   parseCssVariable,
   replaceCssVariable,
   generateThemeCss,
+  getThemeFilename,
 } from './utils';
+
+// export * from './types';
 
 setAutoFreeze(false);
 
@@ -82,7 +84,7 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
           if (!resolveTheme && root.source.input.file) {
             const themeFilename = getThemeFilename(root.source.input.file);
 
-            if (fs.existsSync(themeFilename)) {
+            if (themeFilename) {
               result.messages.push({
                 plugin: 'postcss-themed',
                 type: 'dependency',
@@ -225,9 +227,6 @@ const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
     },
   };
 };
-
-export * from './types';
-// export default postcss.plugin('postcss-themed', themeFile);
 
 plugin.postcss = true;
 export default plugin;

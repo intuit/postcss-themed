@@ -1,4 +1,4 @@
-import { Helpers } from 'postcss';
+import type { Helpers } from 'postcss';
 
 const THEME_USAGE_REGEX = /@theme\s+\$?([\w.-]+)/;
 const CSS_VARIABLE_REGEX = /var\(--([\w.-]+),\s([\w.-]+)\)/;
@@ -13,7 +13,7 @@ export function parseThemeKey(value: string) {
     return key[1];
   }
 
-  return 'here';
+  return;
 }
 
 /**
@@ -26,7 +26,7 @@ export function parseCssVariable(value: string) {
     return keys[1];
   }
 
-  return '';
+  return;
 }
 
 /**
