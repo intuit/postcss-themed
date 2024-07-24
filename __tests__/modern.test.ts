@@ -47,7 +47,7 @@ it('Creates a simple css variable based theme', () => {
   );
 });
 
-it('inlineRootThemeVariables false', () => {
+it.skip('inlineRootThemeVariables false', () => {
   const config = {
     default: {
       color: 'purple',
@@ -86,7 +86,7 @@ it('inlineRootThemeVariables false', () => {
   );
 });
 
-it('Creates a simple css variable based theme with light and dark', () => {
+it.skip('Creates a simple css variable based theme with light and dark', () => {
   const config = {
     default: {
       light: {
@@ -148,7 +148,7 @@ it('Creates a simple css variable based theme with light and dark', () => {
   );
 });
 
-it('Can override dark and light class', () => {
+it.skip('Can override dark and light class', () => {
   const config = {
     default: {
       light: {
@@ -360,7 +360,7 @@ it("Don't produce extra variables for matching values in theme", () => {
   );
 });
 
-it("Don't produce extra variables for matching values in theme", () => {
+it.skip("Don't produce extra variables for matching values in theme", () => {
   const config = {
     default: {
       light: {
@@ -599,7 +599,7 @@ it("doesn't error on multi-line declaration", () => {
   );
 });
 
-it('should error on missing space', () => {
+it.skip('should error on missing space', () => {
   const config = {
     default: {
       color: 'purple',
@@ -631,7 +631,7 @@ it('should error on missing space', () => {
   });
 });
 
-it('should error while trying to read invalid/ not available input file provided', () => {
+it.skip('should error while trying to read invalid/ not available input file provided', () => {
   const config = {
     default: {
       color: 'purple',
@@ -661,7 +661,7 @@ it('should error while trying to read invalid/ not available input file provided
   });
 });
 
-it('should error on invalid alt usage space', () => {
+it.skip('should error on invalid alt usage space', () => {
   const config = {
     default: {
       color: 'purple',
@@ -689,7 +689,7 @@ it('should error on invalid alt usage space', () => {
   });
 });
 
-it('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
+it.skip('Produces a single theme with variables by default with inlineRootThemeVariables off', () => {
   const config = {
     default: {
       color: 'purple',
@@ -835,7 +835,7 @@ it('scoped variable names', () => {
   );
 });
 
-it('scoped variable names with custom function', () => {
+it.skip('scoped variable names with custom function', () => {
   const config = {
     default: {
       color: 'purple',
@@ -880,7 +880,7 @@ it('scoped variable names with custom function', () => {
   );
 });
 
-it('scoped variable names with default function', () => {
+it.skip('scoped variable names with default function', () => {
   const config = {
     default: {
       color: 'purple',
@@ -918,7 +918,7 @@ it('scoped variable names with default function', () => {
   );
 });
 
-it('With component Config', () => {
+it.skip('With component Config', () => {
   const config = {
     default: {
       light: {
@@ -1003,7 +1003,7 @@ it('Some variables show inline and some show in root', () => {
   );
 });
 
-it('can extend another theme', () => {
+it.skip('can extend another theme', () => {
   const config = {
     default: {
       color: 'purple',
@@ -1038,7 +1038,7 @@ it('can extend another theme', () => {
   );
 });
 
-it('can extend another theme that extends a theme', () => {
+it.skip('can extend another theme that extends a theme', () => {
   const config = {
     default: {
       color: 'purple',

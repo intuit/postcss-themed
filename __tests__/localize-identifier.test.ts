@@ -1,6 +1,6 @@
 import { it, expect } from 'vitest';
 
-import localizeIdentifier from '../src/localize-identifier';
+import { localizeIdentifier } from '../src/utils/localize';
 
 it('should not do anything to identifier', () => {
   expect(

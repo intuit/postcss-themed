@@ -11,7 +11,7 @@ const filenameReservedRegex = /[\u0000-\u001F"*/:<>?\\|]/g;
 const reControlChars = /[\u0000-\u001F\u0080-\u009F]/g;
 const reRelativePath = /^\.+/;
 
-function localizeIdentifier(
+export function localizeIdentifier(
   loaderContext: Partial<loader.LoaderContext>,
   localIdentName: string,
   name: string,
