@@ -62,22 +62,20 @@ export function generateThemeCss({
          * 1. There is no dark value for this key
          * 2. The light and dark values are equal for this key
          */
-        if (
-          !themeValueDark ||
-          themeValueLight === themeValueDark ||
-          themeValueDark === baseThemeValueDark
-        ) {
+        if (!themeValueDark || themeValueLight === themeValueDark) {
           baseSelector.append(
             createCssVariable(helpers, variableName, themeValueLight),
           );
-        } else if (themeValueDark && themeValueDark !== baseThemeValueDark) {
+        } else if (themeValueDark) {
           lightSelector.append(
             createCssVariable(helpers, variableName, themeValueLight),
           );
 
-          darkSelector.append(
-            createCssVariable(helpers, variableName, themeValueDark),
-          );
+          if (themeValueDark !== baseThemeValueDark) {
+            darkSelector.append(
+              createCssVariable(helpers, variableName, themeValueDark),
+            );
+          }
         }
       }
 
