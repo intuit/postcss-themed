@@ -43,14 +43,21 @@ export function generateThemeCss({
       const baseThemeValueLight = get(baseTheme.light, key);
       const baseThemeValueDark = get(baseTheme.dark, key);
       const variableName = localize(key);
+      const hasDarkTheme = themeValueDark || baseThemeValueDark;
 
       if (
         typeof themeValueLight === 'string' &&
         themeValueLight !== baseThemeValueLight
       ) {
-        lightSelector.append(
-          createCssVariable(helpers, variableName, themeValueLight),
-        );
+        if (hasDarkTheme) {
+          lightSelector.append(
+            createCssVariable(helpers, variableName, themeValueLight),
+          );
+        } else {
+          baseSelector.append(
+            createCssVariable(helpers, variableName, themeValueLight),
+          );
+        }
       }
 
       if (
