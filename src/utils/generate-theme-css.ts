@@ -44,11 +44,6 @@ export function generateThemeCss({
       const baseThemeValueDark = get(baseTheme.dark, key);
       const variableName = localize(key);
 
-      /**
-       * Ugly, but cleans up variables declarations that match either the base
-       * theme or the themes own light color, while also ensuring it's not a
-       * deeply nested object.
-       */
       if (
         typeof themeValueLight === 'string' &&
         themeValueLight !== baseThemeValueLight
