@@ -1,18 +1,9 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true,
-    "outDir": "dist",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "declaration": true,
-    "noUnusedLocals": true,
-    "preserveConstEnums": true,
-    "removeComments": false,
-    "sourceMap": true,
-    "strict": true,
-    "target": "es2017"
-  }
+    "skipLibCheck": true,
+    "rootDir": ".",
+    "baseUrl": "."
+  },
+  "include": ["."]
 }

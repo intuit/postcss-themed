@@ -1,118 +1,232 @@
-import postcss from 'postcss';
-import fs from 'fs';
-import debug from 'debug';
-import merge from 'deepmerge';
-import * as caniuse from 'caniuse-api';
-import browserslist from 'browserslist';
-import * as tsNode from 'ts-node';
+import type { PluginCreator, Rule } from 'postcss';
+import { setAutoFreeze } from 'immer';
+import get from 'dlv';
 
-import {
-  getThemeFilename,
-  normalizeTheme,
-  resolveThemeExtension,
-} from './common';
-import { modernTheme } from './modern';
-import { legacyTheme } from './legacy';
-import {
-  ComponentTheme,
-  PostcssThemeConfig,
+import type {
   PostcssThemeOptions,
-  ThemeResolver,
+  PostcssStrictThemeConfig,
+  LightDarkTheme,
 } from './types';
+import {
+  createThemeConfigs,
+  replaceTheme,
+  createLocalizer,
+  parseThemeKey,
+  parseCssVariable,
+  replaceCssVariable,
+  generateThemeCss,
+  getThemeFilename,
+} from './utils';
 
-const log = debug('postcss-themed');
+// export * from './types';
 
-tsNode.register({
-  compilerOptions: { module: 'commonjs' },
-  transpileOnly: true,
-});
+setAutoFreeze(false);
 
-/** Try to load component theme from same directory as css file */
-export const configForComponent = (
-  cssFile: string | undefined,
-  rootTheme: PostcssThemeConfig,
-  resolveTheme?: ThemeResolver
-): PostcssThemeConfig | {} => {
-  if (!cssFile) {
-    return {};
-  }
-
-  try {
-    let componentConfig: ComponentTheme | { default: ComponentTheme };
-
-    if (resolveTheme) {
-      componentConfig = resolveTheme(cssFile);
-    } else {
-      const theme = getThemeFilename(cssFile);
-      delete require.cache[require.resolve(theme)];
-      // eslint-disable-next-line security/detect-non-literal-require, global-require
-      componentConfig = require(theme);
-    }
-
-    const fn =
-      'default' in componentConfig ? componentConfig.default : componentConfig;
-    return fn(rootTheme);
-  } catch (error) {
-    if (error instanceof SyntaxError || error instanceof TypeError) {
-      throw error;
-    } else {
-      log(error);
-    }
-
-    return {};
-  }
+const DEFAULT_OPTIONS: PostcssThemeOptions = {
+  config: {},
+  defaultTheme: 'default',
+  lightClass: '.light',
+  darkClass: '.dark',
+  inlineRootThemeVariables: true,
 };
 
-/** Generate a theme */
-const themeFile = (options: PostcssThemeOptions = {}) => (
-  root: postcss.Root,
-  result: postcss.Result
+const plugin: PluginCreator<Partial<PostcssThemeOptions>> = (
+  opts: Partial<PostcssThemeOptions> = {},
 ) => {
-  // Postcss-modules runs twice and we only ever want to process the CSS once
-  // @ts-ignore
-  if (root.source.processed) {
-    return;
-  }
+  const options: PostcssThemeOptions = {
+    ...DEFAULT_OPTIONS,
+    ...opts,
+  };
 
   const { config, resolveTheme } = options;
 
   if (!config) {
-    throw Error('No config provided to postcss-themed');
+    throw new Error('No config provided to postcss-themed');
   }
 
-  if (!root.source) {
-    throw Error('No source found');
-  }
+  return {
+    postcssPlugin: 'postcss-themed',
+    prepare(result) {
+      let baseTheme: LightDarkTheme;
+      let alternateThemes: PostcssStrictThemeConfig | undefined;
 
-  const globalConfig = normalizeTheme(config);
-  const componentConfig = normalizeTheme(
-    configForComponent(root.source.input.file, config, resolveTheme)
-  );
-  const mergedConfig = merge(globalConfig, componentConfig);
+      const localize = createLocalizer(options.modules, result);
 
-  resolveThemeExtension(mergedConfig);
+      const selectors = new Map<string, Rule>();
+      const variableNames = new Map<string, string>();
+      const multiUseKeys = new Set<string>();
 
-  if (caniuse.isSupported('css-variables', browserslist())) {
-    modernTheme(root, mergedConfig, options);
-  } else {
-    legacyTheme(root, mergedConfig, options);
-  }
+      return {
+        /**
+         * Setup and normalization of the theme object that is shared. Applies
+         * the user provided `theme.ts` files if present, done async so that
+         * filesystem and esbuild can handle things cleaner.
+         */
+        async Once(root, helpers) {
+          if (!root.source) {
+            throw new Error('No source found');
+          }
 
-  // @ts-ignore
-  root.source.processed = true;
+          const configs = await createThemeConfigs(options, result);
+          baseTheme = configs.baseTheme;
+          alternateThemes = configs.alternateThemes;
 
-  if (!resolveTheme && root.source.input.file) {
-    const themeFilename = getThemeFilename(root.source.input.file);
+          /**
+           * Setup dark class name selector to allow appending of declarations
+           */
+          selectors.set(
+            options.darkClass,
+            new helpers.Rule({
+              selector: options.darkClass,
+            }),
+          );
 
-    if (fs.existsSync(themeFilename)) {
-      result.messages.push({
-        plugin: 'postcss-themed',
-        type: 'dependency',
-        file: themeFilename,
-      });
-    }
-  }
+          if (!resolveTheme && root.source.input.file) {
+            const themeFilename = getThemeFilename(root.source.input.file);
+
+            if (themeFilename) {
+              result.messages.push({
+                plugin: 'postcss-themed',
+                type: 'dependency',
+                file: themeFilename,
+              });
+            }
+          }
+        },
+        /**
+         * Based on the tokens leveraged in the Declaration usage, create the
+         * remaining values for the theme.
+         */
+        OnceExit(root, helpers) {
+          /**
+           * First, handle adding :root
+           */
+          if (options?.inlineRootThemeVariables && multiUseKeys.size > 0) {
+            const rootSelector = new helpers.Rule({ selector: ':root' });
+
+            for (const key of multiUseKeys) {
+              const declaration = new helpers.Declaration({
+                prop: `--${localize(key)}`,
+                value: `${get(baseTheme.light, key)}`,
+              });
+
+              rootSelector.append(declaration);
+            }
+
+            // TODO: convert to prepend
+            root.append(rootSelector);
+          }
+
+          /**
+           * Second, append dark mode if there were declarations added
+           *
+           * This selector was created in Once
+           */
+          const darkModeSelector = selectors.get(options.darkClass)!;
+
+          if (darkModeSelector?.nodes?.length > 0) {
+            root.append(darkModeSelector);
+          }
+
+          /**
+           * Lastly, walk through the remaining themes and create rules
+           */
+          if (alternateThemes) {
+            generateThemeCss({
+              baseTheme,
+              alternateThemes,
+              variableNames,
+              root,
+              helpers,
+              options,
+              localize,
+            });
+          }
+        },
+        /**
+         * The main functionality. Replace any @theme values with their respective
+         * CSS variable and create it's .darkClass counterparts.
+         */
+        Declaration(decl, helpers) {
+          if (!decl.value) {
+            return;
+          }
+
+          const key = parseThemeKey(decl.value);
+
+          if (key) {
+            const variableName = localize(key);
+            const themeValueLight = get(baseTheme.light, key);
+            const themeValueDark = get(baseTheme.dark, key);
+
+            if (!themeValueLight) {
+              throw decl.error(
+                `Could not find key ${key} in theme configuration.`,
+                { word: decl.value },
+              );
+            }
+
+            if (typeof themeValueLight !== 'string') {
+              return;
+            }
+
+            if (options.forceSingleTheme && options.optimizeSingleTheme) {
+              decl.value = themeValueLight;
+            } else if (
+              multiUseKeys.has(key) &&
+              options.inlineRootThemeVariables
+            ) {
+              decl.value = replaceTheme(decl.value, `var(--${variableName})`);
+            } else {
+              decl.value = replaceTheme(
+                decl.value,
+                `var(--${variableName}, ${themeValueLight})`,
+              );
+            }
+
+            if (variableNames.has(variableName)) {
+              multiUseKeys.add(key);
+            } else {
+              variableNames.set(variableName, key);
+
+              if (themeValueDark && themeValueDark !== themeValueLight) {
+                const darkModeSelector = selectors.get(options.darkClass)!;
+                const darkDeclaration = new helpers.Declaration({
+                  prop: `--${variableName}`,
+                  value: `${themeValueDark}`,
+                });
+                darkModeSelector.append(darkDeclaration);
+                selectors.set(options.darkClass, darkModeSelector);
+              }
+            }
+          }
+        },
+        /**
+         * Remove any CSS variable defaults for tokens that are used more than once
+         */
+        DeclarationExit(decl) {
+          if (!decl.value) {
+            return;
+          }
+
+          if (!options.inlineRootThemeVariables) {
+            return;
+          }
+
+          const key = parseCssVariable(decl.value);
+
+          if (
+            key &&
+            variableNames.has(key) &&
+            multiUseKeys.has(variableNames.get(key)!)
+          ) {
+            decl.value = replaceCssVariable(decl.value, `var(--${key})`);
+          }
+        },
+      };
+    },
+  };
 };
 
-export * from './types';
-export default postcss.plugin('postcss-themed', themeFile);
+plugin.postcss = true;
+export default plugin;

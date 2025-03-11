@@ -4,6 +4,7 @@ export interface ThemeObject {
 export type SimpleTheme = Omit<ThemeObject, 'extends'> & {
   extends?: string;
 };
+
 export type ColorScheme = 'light' | 'dark';
 export type LightDarkTheme = Record<ColorScheme, SimpleTheme> & {
   extends?: string;
@@ -23,22 +24,18 @@ export type ThemeResolver = (path: string) => ComponentTheme;
 export type ScopedNameFunction = (
   name: string,
   filename: string,
-  css: string
+  css: string,
 ) => string;
 
 export interface PostcssThemeOptions {
   /** Configuration given to the postcss plugin */
-  config?: PostcssThemeConfig;
+  config: PostcssThemeConfig;
   /** Class to apply to light theme overrides */
-  lightClass?: string;
+  lightClass: string;
   /** Class to apply to dark theme overrides */
-  darkClass?: string;
-  /** A function to resolve the theme file */
-  resolveTheme?: ThemeResolver;
-  /** LEGACY - Put empty selectors in final output */
-  forceEmptyThemeSelectors?: boolean;
+  darkClass: string;
   /** The name of the default theme */
-  defaultTheme?: string;
+  defaultTheme: string;
   /** Attempt to substitute only a single theme */
   forceSingleTheme?: string;
   /** Remove CSS Variables when possible */
@@ -47,4 +44,6 @@ export interface PostcssThemeOptions {
   inlineRootThemeVariables?: boolean;
   /** Transform CSS variable names similar to CSS-Modules */
   modules?: string | ScopedNameFunction;
+  /** A function to resolve the theme file */
+  resolveTheme?: ThemeResolver;
 }

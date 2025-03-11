@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 import postcss from 'postcss';
 import nested from 'postcss-nested';
 
@@ -15,7 +16,7 @@ export function run(
   input: string,
   output: string,
   opts: PostcssThemeOptions,
-  inputPath?: string
+  inputPath?: string,
 ) {
   return postcss([nested, plugin(opts)])
     .process(input, { from: inputPath })

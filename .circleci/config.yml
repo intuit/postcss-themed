@@ -3,7 +3,7 @@ version: 2.1
 defaults: &defaults
   working_directory: ~/postcss-themed
   docker:
-    - image: circleci/node:10-browsers
+    - image: node:20
   environment:
     TZ: '/usr/share/zoneinfo/America/Los_Angeles'
 
@@ -11,30 +11,30 @@ aliases:
   # Circle related commands
   - &restore-cache
     keys:
-      # Find a cache corresponding to this specific package.json checksum
-      # when this file is changed, this key will fail
-      - auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
-      - auto-{{ checksum "yarn.lock" }}
-      # Find the most recent cache used from any branch
-      - auto-
+      - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
   - &save-cache
-    key: auto-{{ checksum "yarn.lock" }}-{{ checksum ".circleci/config.yml" }}
+    key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
     paths:
-      - ~/.cache/yarn
-      - node_modules
-  # Yarn commands
-  - &yarn
+      - .pnpm-store
+  - &setup
+    name: Install pnpm package manager
+    command: |
+      npm install --global corepack@latest
+      corepack enable
+      corepack prepare pnpm@latest-10 --activate
+      pnpm config set store-dir .pnpm-store
+  - &pnpm
     name: Install Dependencies
-    command: yarn install --frozen-lockfile --non-interactive --cache-folder=~/.cache/yarn
+    command: pnpm install
   - &lint
     name: Lint
-    command: yarn lint
+    command: pnpm lint
   - &test
     name: Test
-    command: yarn test
+    command: pnpm test
   - &build
     name: Build
-    command: yarn build
+    command: pnpm build
 
 jobs:
   install:
@@ -42,7 +42,8 @@ jobs:
     steps:
       - checkout
       - restore_cache: *restore-cache
-      - run: *yarn
+      - run: *setup
+      - run: *pnpm
       - save_cache: *save-cache
       - persist_to_workspace:
           root: .
@@ -54,6 +55,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/postcss-themed
+      - run: *setup
       - run: *build
       - persist_to_workspace:
           root: .
@@ -65,6 +67,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/postcss-themed
+      - run: *setup
       - run: *lint
 
   test:
@@ -72,6 +75,7 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/postcss-themed
+      - run: *setup
       - run: *test
       - run:
           name: Send CodeCov Results
@@ -83,9 +87,10 @@ jobs:
       - attach_workspace:
           at: ~/postcss-themed
       - run: mkdir ~/.ssh/ && echo -e "Host github.com\n\tStrictHostKeyChecking no\n" > ~/.ssh/config
+      - run: *setup
       - run:
           name: Release
-          command: yarn run release
+          command: pnpm run release
 
 workflows:
   version: 2
