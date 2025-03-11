@@ -50,37 +50,15 @@ export function generateThemeCss({
        * deeply nested object.
        */
       if (
-        typeof themeValueLight === 'string' /**
-         * None of these apply if the themes light value matches the default
-         * themes light value, leaving only the dark value
-         */ &&
+        typeof themeValueLight === 'string' &&
         themeValueLight !== baseThemeValueLight
       ) {
-        /**
-         * Apply to simplier specificity theme selector if:
-         *
-         * 1. There is no dark value for this key
-         * 2. The light and dark values are equal for this key
-         */
-        if (!themeValueDark || themeValueLight === themeValueDark) {
-          baseSelector.append(
-            createCssVariable(helpers, variableName, themeValueLight),
-          );
-        } else if (themeValueDark) {
-          lightSelector.append(
-            createCssVariable(helpers, variableName, themeValueLight),
-          );
-
-          if (themeValueDark !== baseThemeValueDark) {
-            darkSelector.append(
-              createCssVariable(helpers, variableName, themeValueDark),
-            );
-          }
-        }
+        lightSelector.append(
+          createCssVariable(helpers, variableName, themeValueLight),
+        );
       }
 
       if (
-        !themeValueLight &&
         typeof themeValueDark === 'string' &&
         themeValueDark !== baseThemeValueDark
       ) {
