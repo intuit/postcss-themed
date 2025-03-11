@@ -19,8 +19,9 @@ aliases:
   - &setup
     name: Install pnpm package manager
     command: |
+      npm install --global corepack@latest
       corepack enable
-      corepack prepare pnpm@latest --activate
+      corepack prepare pnpm@latest-10 --activate
       pnpm config set store-dir .pnpm-store
   - &pnpm
     name: Install Dependencies
